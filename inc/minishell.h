@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/02 20:50:36 by rriyas            #+#    #+#             */
-/*   Updated: 2022/10/21 18:20:17 by rriyas           ###   ########.fr       */
+/*   Updated: 2022/10/22 20:37:12 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,12 @@ struct command
 	char **argv;
 	char **envp;
 };
+
+//exec.c
+int search_absolute_path(char *cmd, char **argv, char **envp);
+int search_relative_path(char *cmd, char **argv, char **envp);
+int execute_cmd(char *cmd, char **argv, char **envp);
+//main.c
+void sig_handler(int sig);
 
 #endif

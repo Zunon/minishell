@@ -6,7 +6,7 @@
 #    By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/02 20:38:43 by rriyas            #+#    #+#              #
-#    Updated: 2022/09/03 18:46:51 by rriyas           ###   ########.fr        #
+#    Updated: 2022/10/23 17:45:56 by rriyas           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME		=	minishell
 LIB			=	./lib/libft/libft.a
 CC			=	gcc
 RM			=	rm -rf
-SRCS		=	srcs/main.c
+SRCS		=	srcs/main.c srcs/exec.c srcs/builtins1.c srcs/builtins2.c
 OBJS		=	${SRCS:.c=.o}
 HEADER		=	./lib/libft/libft.h
 CFLAGS	=	# -Wall -Wextra -Werror
