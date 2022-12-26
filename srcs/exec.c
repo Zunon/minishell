@@ -25,11 +25,12 @@ int search_absolute_path(char *cmd, char **argv, char **envp)
 	int i;
 	DIR *d;
 	struct dirent *dir;
+
 	char *exec_path;
 	char *path = getenv("PATH");
 	char **paths = ft_split(path, ':');
 	i = 0;
-	while (paths[i])
+	while (i < 10)
 	{
 		d = opendir(paths[i]);
 		dir = readdir(d);
@@ -40,7 +41,6 @@ int search_absolute_path(char *cmd, char **argv, char **envp)
 				exec_path = ft_strjoin(ft_strjoin(paths[i], "/"), cmd);
 				if (execve(exec_path, argv, envp) == -1)
 					perror("Error during execution of program!");
-				return 1;
 			}
 			dir = readdir(d);
 		}
@@ -79,7 +79,6 @@ int execute_cmd(char *cmd, char **argv, char **envp)
 	int child_status;
 
 	pid = fork();
-	waitpid(-1, &child_status, 0);
 	if (pid == -1)
 	{
 		ft_printf("Error while forking\n");
@@ -96,5 +95,7 @@ int execute_cmd(char *cmd, char **argv, char **envp)
 			}
 		}
 	}
+	else
+		waitpid(pid, &child_status, WUNTRACED);
 	return child_status;
 }

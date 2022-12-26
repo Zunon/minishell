@@ -23,8 +23,9 @@ void sig_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		ft_lstclear(&freeable, free);
-		exit(0);
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_redisplay();
 	}
 }
 
@@ -39,10 +40,10 @@ int main(int argc, char **argv, char **envp)
 	while (2)
 	{
 		s = readline("minishell ^-^ : ");
-		ft_lstadd_back(&freeable, ft_lstnew(s));
 		add_history(s);
 		argv = ft_split(s, ' ');
 		execute_cmd(argv[0], argv, envp);
+		free(s);
 	}
 	return (0);
 }
