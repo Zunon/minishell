@@ -25,12 +25,11 @@ int search_absolute_path(char *cmd, char **argv, char **envp)
 	int i;
 	DIR *d;
 	struct dirent *dir;
-
 	char *exec_path;
 	char *path = getenv("PATH");
 	char **paths = ft_split(path, ':');
 	i = 0;
-	while (i < 10)
+	while (paths[i])
 	{
 		d = opendir(paths[i]);
 		dir = readdir(d);
@@ -65,6 +64,16 @@ int search_relative_path(char *cmd, char **argv, char **envp)
 	return 0;
 }
 
+
+int piper(char *cmd, char **argv, char **envp)
+{
+	pipe(zundra.pipes);
+	test_cmd1(cmd, argv, envp);
+	test_cmd2(cmd, argv, envp);
+	return 0;
+}
+
+
 /**
  * @brief Execute a terminal command in a child process
  *
@@ -73,7 +82,7 @@ int search_relative_path(char *cmd, char **argv, char **envp)
  * @param envp	Environment variables
  * @return int Status code of child process
  */
-int execute_cmd(char *cmd, char **argv, char **envp)
+int execute_cmd(char *cmd, char **argv, char **envp, int input)
 {
 	pid_t pid;
 	int child_status;
@@ -86,7 +95,12 @@ int execute_cmd(char *cmd, char **argv, char **envp)
 	}
 	if (pid == 0)
 	{
-		if (!search_absolute_path(cmd, argv, envp))
+		if (input == 1)
+			dup2(zundra.pipes[0], STDIN_FILENO);
+		else
+			dup2(zundra.pipes[1], STDOUT_FILENO);
+		close(zundra.pipes[input]);
+		if (search_absolute_path(cmd, argv, envp) == 0)
 		{
 			if (!search_relative_path(cmd, argv, envp))
 			{
@@ -96,6 +110,10 @@ int execute_cmd(char *cmd, char **argv, char **envp)
 		}
 	}
 	else
-		waitpid(pid, &child_status, WUNTRACED);
-	return child_status;
+	{
+		close(zundra.pipes[!input]);
+		waitpid(pid, &child_status, 0);
+	}
+	zundra.status_code = WEXITSTATUS(child_status);
+	return WEXITSTATUS(child_status);
 }
