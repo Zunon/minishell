@@ -71,22 +71,7 @@ int search_relative_path(char *cmd, char **argv)
  */
 void close_fd_if_needed(t_command *cmd)
 {
-	if (cmd->fd_in != -1)
-	{
-		close(cmd->fd_in);
-		write(1, "fd close test", 14);
-		cmd->fd_in = -1;
-	}
-	if (cmd->fd_out != -1)
-	{
-		write(1, "fd close test", 14);
-		close(cmd->fd_out);
-		cmd->fd_out = -1;
-	}
-	// dup2(cmd->stdin_old, STDIN_FILENO);
-	// dup2(cmd->stdout_old, STDOUT_FILENO);
-	// close(cmd->stdin_old);
-	// close(cmd->stdout_old);
+	/* Close any files if needed */
 }
 
 /**
@@ -119,7 +104,6 @@ int perform_redirections(t_command *cmd)
 			close_fd_if_needed(cmd);
 			cmd->stdout_old = dup(STDOUT_FILENO);
 			dup2(cmd->fd_out, STDOUT_FILENO);
-			write(cmd->fd_out, "hey", 3);
 			close(cmd->fd_out);
 		}
 		else if (iterator->direction == r_output_append)

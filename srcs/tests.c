@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 16:18:19 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/02 23:16:27 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/02 23:26:48 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ int c1 ()
 	av[1] = ft_strdup("Makefile");
 	av[2] = NULL;
 	t_command *command = malloc(sizeof (t_command));
-	command->fd_in = command->fd_out = -1;
+	command->fd_in = -1;
+	command->fd_out = -1;
 	command->redirects = malloc(sizeof (t_redirect));
 	command->redirects->id = 0;
 	command->redirects->direction = r_output;
