@@ -12,23 +12,9 @@
 
 #include "../inc/minishell.h"
 
-int ft_env()
-{
-	int i;
-
-	i = 0;
-	while (zundra.envp[i])
-	{
-		write(1, zundra.envp[i], ft_strlen(zundra.envp[i]));
-		write(1, "\n", 1);
-		i++;
-	}
-	return (0);
-}
-
 int ft_exit()
 {
-	exit(42);
+	exit(0);
 }
 
 int status_code()
@@ -51,5 +37,9 @@ int exec_builtin(char **cmd)
 		return ft_exit();
 	if (!cmd[1] && ft_strncmp(cmd[0], "env", 3) == 0)
 		return ft_env();
+	if (!cmd[1] && ft_strncmp(cmd[0], "export", 6) == 0)
+		return ft_export(cmd[1], cmd[2]);
+	if (!cmd[1] && ft_strncmp(cmd[0], "unset", 5) == 0)
+		return ft_unset(cmd[1]);
 	return 2;
 }

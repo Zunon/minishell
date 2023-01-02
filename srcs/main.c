@@ -43,10 +43,7 @@ int main(int argc, char **argv, char **envp)
 		s = readline("minishell ^-^ : ");
 		add_history(s);
 		argv = ft_split(s, ' ');
-		if (exec_builtin(argv) == 2)
-			status_code = piper(argv[0], argv, envp);
-		// status_code = parse_cmd(argv[0], argv, envp);
-		// status_code = execute_cmd(argv[0], argv, envp);
+		c1();
 		free(s);
 	}
 	return (0);

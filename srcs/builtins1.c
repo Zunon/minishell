@@ -69,13 +69,3 @@ int ft_pwd()
 	free(path);
 	return 0;
 }
-
-int ft_export()
-{
-	return (0);
-}
-
-int ft_unset()
-{
-	return (0);
-}
