@@ -12,7 +12,6 @@
 
 #include "../inc/minishell.h"
 
-
 /**
  * @brief Function to handle various signals in the program
  *

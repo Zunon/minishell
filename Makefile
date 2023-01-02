@@ -18,13 +18,13 @@ RM			=	rm -rf
 SRCS		=	srcs/main.c srcs/exec.c srcs/builtins1.c srcs/builtins2.c srcs/tests.c
 OBJS		=	${SRCS:.c=.o}
 HEADER		=	./lib/libft/libft.h
-CFLAGS		=	-lreadline # -L /usr/local/Cellar/readline/8.1/lib -I /usr/local/Cellar/readline/8.1/include# -Wall -Wextra -Werror
+CFLAGS		=	-lreadline #-L /usr/local/Cellar/readline/8.1/lib -I /usr/local/Cellar/readline/8.1/include # -Wall -Wextra -Werror
 
 all:	${NAME}
 
 
 $(NAME):	${OBJS} ${LIB}
-		$(CC) -g $(CFLAGS) ${OBJS} ${LIB} -o minishell
+		$(CC) -g $(CFLAGS) -I ../inc/minishell.h ${OBJS} ${LIB} -o minishell
 
 $(LIB):
 		make -C ./lib/libft/

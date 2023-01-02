@@ -35,8 +35,7 @@ typedef struct s_shell
 } t_shell;
 
 t_shell zundra;
-
-/* A structure which represents a word. */
+// /* A structure which represents a word. */
 typedef struct s_word_desc
 {
 	char *word;			/* Zero terminated string. */
