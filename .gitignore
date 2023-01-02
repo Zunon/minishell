@@ -54,3 +54,4 @@ dkms.conf
 
 #Custom Folders
 minishell
+.DS_Store

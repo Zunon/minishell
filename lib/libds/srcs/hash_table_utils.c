@@ -6,12 +6,17 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 12:33:22 by rriyas            #+#    #+#             */
-/*   Updated: 2022/12/31 12:33:22 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/02 11:10:10 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../hashtable.h"
 
+/**
+ * @brief 					Function to free allocated memory of a given key-value pair
+ *
+ * @param p
+ */
 void destroy_pair(t_pair *p)
 {
     if (!p)
@@ -23,6 +28,11 @@ void destroy_pair(t_pair *p)
     free(p);
 }
 
+/**
+ * @brief					Function to free all allocated memory of a hash table
+ *
+ * @param t					Hash table to destroy
+ */
 void destroy_ht(t_hash_table *t)
 {
     int i;
@@ -41,6 +51,11 @@ void destroy_ht(t_hash_table *t)
     free(t);
 }
 
+/**
+ * @brief					Function to print a key-value pair
+ *
+ * @param p					{key : value} pair to print
+ */
 void print_pair(t_pair *p)
 {
     if (!p)
@@ -50,6 +65,12 @@ void print_pair(t_pair *p)
     ft_putstr_fd(p->value, STDOUT_FILENO);
     ft_putstr_fd("\n", STDOUT_FILENO);
 }
+
+/**
+ * @brief					Function to print all entries in a hash table
+ *
+ * @param t					Hash table to print
+ */
 void print_ht(t_hash_table *t)
 {
     int i;
@@ -64,17 +85,26 @@ void print_ht(t_hash_table *t)
     }
 }
 
-t_hash_table * resize_ht(t_hash_table *t, int newSize)
+/**
+ * @brief					Function to resize a hash tabel on reaching full capacity
+ * 							Not to be called by user - will be indirectly called whenever needed
+ * 							automatically.
+ *
+ * @param t
+ * @param newCapacity		New capacity of hash table
+ * @return t_hash_table*	New hash table after resizing
+ */
+t_hash_table * resize_ht(t_hash_table *t, int newCapacity)
 {
     int i;
 
     t_hash_table *new_table;
     i = 0;
     write(1, "sup", 3);
-    if (newSize < 0 || newSize <= t->capacity)
+    if (newCapacity < 0 || newCapacity <= t->capacity)
         return (NULL);
-    t->capacity = newSize;
-    new_table = create_ht(newSize);
+    t->capacity = newCapacity;
+    new_table = create_ht(newCapacity);
     if (!new_table)
         return (NULL);
     while (i < t->size)

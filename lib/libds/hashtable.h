@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 11:58:02 by rriyas            #+#    #+#             */
-/*   Updated: 2022/12/31 11:58:02 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/02 10:35:29 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ typedef struct s_hash_table{
 
 t_hash_table *create_ht(int s);
 void destroy_ht(t_hash_table *t);
-t_hash_table * resize_ht(t_hash_table *t, int);
+void destroy_pair(t_pair *p);
+t_hash_table *resize_ht(t_hash_table *t, int);
 t_pair *retrieve_from_ht(t_hash_table *t, char *key);
 void insert_into_ht(t_hash_table **t, char* key, char *value);
 void remove_from_ht(t_hash_table *t, char *key);

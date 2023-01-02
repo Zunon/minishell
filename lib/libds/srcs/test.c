@@ -6,9 +6,20 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 16:27:36 by rriyas            #+#    #+#             */
-/*   Updated: 2022/12/31 16:27:36 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/02 11:09:52 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @file test.c
+ * @author Radi Aman Riyas (radiriyas@gmail.com)
+ * @brief	Test code to test hashtable implementation
+ * @version 0.1
+ * @date 2023-01-02
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
 
 #include "../hashtable.h"
 
@@ -53,7 +64,7 @@ int find_pos(char *s, char c)
 	}
 	return (-1);
 }
-unsigned int x = 0;
+
 int main(int argc, char **argv, char **envp)
 {
     t_hash_table *ht;
@@ -63,33 +74,60 @@ int main(int argc, char **argv, char **envp)
     ht = create_ht(5);
     int pos;
     char *key, *value;
-	int fd = open("sup.txt", O_WRONLY | O_CREAT, 0777);
-
     while (envp[i])
     {
         pos = find_pos(envp[i], '=');
         key = ft_substr(envp[i], 0, pos);
-        value = ft_substr(envp[i], pos+1, 10000000);
-        ft_putstr_fd(envp[i], fd);
-        write(fd, "\n", 1);
+        value = ft_substr(envp[i], pos + 1, 10000000);
         insert_into_ht(&ht, key, value);
         free(key);
         free(value);
         i++;
     }
-    close(fd);
-    print_ht(ht);
+	print_ht(ht);
     i = 0;
-    char *lookfor = malloc(25);
-    // while (i < 6)
-    // {
-    //     scanf("%s", lookfor);
-    //     t_pair *p = retrieve_from_ht(ht, lookfor);
-    //     if (p)
-    //         printf("\nkey = %s and value = %s", p->key, p->value);
-    //     i++;
-    // }
-    destroy_ht(ht);
-    free(lookfor);
+    char *strr = malloc(25);
+	printf("Retrieve tests - enter 6 env vars to look for:\n");
+    while (i < 6)
+    {
+        scanf("%s", strr);
+        t_pair *p = retrieve_from_ht(ht, strr);
+        if (p)
+            printf("key = %s and value = %s\n", p->key, p->value);
+        i++;
+    }
+	free(strr);
+	key = malloc(20);
+	value = malloc(20);
+	i = 0;
+	printf("Insert tests - enter 6 env vars to add to ht:\n");
+	while (i < 6)
+	{
+		scanf("%s", key);
+		scanf("%s", value);
+		insert_into_ht(&ht, key, value);
+		t_pair *p = retrieve_from_ht(ht, strr);
+		if (p)
+			printf("\nnew key = %s and value = %s\n\n", p->key, p->value);
+		i++;
+	}
+	print_ht(ht);
+	printf("Deletion tests - enter 4 env vars to delete from ht:\n");
+	i = 0;
+	while (i < 4)
+	{
+		scanf("%s", key);
+		remove_from_ht(ht, key);
+		t_pair *p = retrieve_from_ht(ht, strr);
+		if (p)
+			printf("\nnew key = %s and value = %s\n\n", p->key, p->value);
+		else
+			printf("\nSuccesfully deleted!\n");
+		i++;
+	}
+	print_ht(ht);
+	destroy_ht(ht);
+	free(key);
+	free(value);
     return 0;
 }
