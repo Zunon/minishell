@@ -25,7 +25,7 @@ all:	$(NAME)
 
 
 $(NAME):	$(OBJS) $(LIB)
-		$(CC) -g $(CFLAGS) -I ../inc/minishell.h $(OBJS) libft.a -o minishell
+		$(CC) -g $(CFLAGS) -I ../inc/minishell.h $(OBJS) $(LIB) -o minishell
 
 $(LIB):
 		make -C ./lib/libft/
