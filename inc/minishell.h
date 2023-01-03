@@ -14,7 +14,7 @@
 #define MINISHELL_H
 
 #include "../lib/libft/libft.h"
-#include "../lib/libds/hashtable.h"
+#include "hashtable.h"
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -88,7 +88,7 @@ typedef struct s_shell
 	char **envp;
 } t_shell;
 
-t_shell zundra;
+extern t_shell zundra;
 
 //builtins1.c
 int	ft_echo(char **cmd);

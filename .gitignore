@@ -2,6 +2,11 @@
 *.pdf
 *.d
 .idea
+app
+d
+e
+*.a
+minishell
 
 # Object files
 *.o

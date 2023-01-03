@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../hashtable.h"
+#include "../inc/hashtable.h"
 
 /**
  * @brief					Create a hash table and allocate necessary memory

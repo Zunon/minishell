@@ -82,14 +82,12 @@ int perform_redirections(t_command *cmd)
 		if (iterator->direction == r_input)
 		{
 			cmd->fd_in = open(iterator->redirectee.word, iterator->flags, 0777);
-			close_fd_if_needed(cmd);
 			dup2(cmd->fd_in, STDIN_FILENO);
 			close(cmd->fd_in);
 		}
 		else if (iterator->direction == r_output || r_output_append)
 		{
 			cmd->fd_out = open(iterator->redirectee.word, iterator->flags, 0777);
-			close_fd_if_needed(cmd);
 			dup2(cmd->fd_out, STDOUT_FILENO);
 			close(cmd->fd_out);
 		}

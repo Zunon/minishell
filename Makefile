@@ -15,7 +15,8 @@ NAME		=	minishell
 LIB			=	./lib/libft/libft.a
 CC			=	gcc
 RM			=	rm -rf
-SRCS		=	srcs/main.c srcs/exec.c srcs/builtins1.c srcs/builtins2.c srcs/tests.c srcs/env.c
+SRCS		=	srcs/main.c srcs/exec.c srcs/builtins1.c srcs/builtins2.c srcs/tests.c srcs/env.c srcs/hash_table.c \
+				srcs/hash_table_utils.c
 OBJS		=	${SRCS:.c=.o}
 HEADER		=	./lib/libft/libft.h
 CFLAGS		=	-lreadline #-L /usr/local/Cellar/readline/8.1/lib -I /usr/local/Cellar/readline/8.1/include # -Wall -Wextra -Werror
@@ -24,13 +25,13 @@ all:	$(NAME)
 
 
 $(NAME):	$(OBJS) $(LIB)
-		$(CC) -g $(CFLAGS) -I ../inc/minishell.h ${OBJS} ${LIB} ./lib/libds/hash_table.a -o minishell
+		$(CC) -g $(CFLAGS) -I ../inc/minishell.h $(OBJS) libft.a -o minishell
 
 $(LIB):
 		make -C ./lib/libft/
 
 clean:
-		${RM} ${OBJS}
+		${RM} $(OBJS)
 
 fclean:	clean
 		${RM} ${NAME} ${LIB}
