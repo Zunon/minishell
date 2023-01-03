@@ -1,6 +1,7 @@
 # Prerequisites
 *.pdf
 *.d
+.idea
 
 # Object files
 *.o

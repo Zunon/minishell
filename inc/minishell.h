@@ -94,8 +94,6 @@ t_shell zundra;
 int	ft_echo(char **cmd);
 int ft_cd(char **cmd);
 int ft_pwd();
-int ft_export();
-int ft_unset();
 
 //builtins2.c
 int exec_builtin(char **cmd);

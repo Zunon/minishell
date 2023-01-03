@@ -20,10 +20,10 @@ OBJS		=	${SRCS:.c=.o}
 HEADER		=	./lib/libft/libft.h
 CFLAGS		=	-lreadline #-L /usr/local/Cellar/readline/8.1/lib -I /usr/local/Cellar/readline/8.1/include # -Wall -Wextra -Werror
 
-all:	${NAME}
+all:	$(NAME)
 
 
-$(NAME):	${OBJS} ${LIB}
+$(NAME):	$(OBJS) $(LIB)
 		$(CC) -g $(CFLAGS) -I ../inc/minishell.h ${OBJS} ${LIB} ./lib/libds/hash_table.a -o minishell
 
 $(LIB):
