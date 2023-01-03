@@ -43,7 +43,7 @@ int main(int argc, char **argv, char **envp)
 		s = readline("minishell ^-^ : ");
 		add_history(s);
 		argv = ft_split(s, ' ');
-		c1();
+		c2();
 		free(s);
 	}
 	return (0);

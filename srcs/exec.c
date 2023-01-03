@@ -65,16 +65,6 @@ int search_relative_path(char *cmd, char **argv)
 }
 
 /**
- * @brief		Closes any previously opened fds while iterating the linked list of redirections
- *
- * @param cmd	Currently executing command
- */
-void close_fd_if_needed(t_command *cmd)
-{
-	/* Close any files if needed */
-}
-
-/**
  * @brief		Function to open necessary files and perform all redirections from left->right.
  * 				Handles inout, output, output append, and heredoc
  *
@@ -86,30 +76,20 @@ int perform_redirections(t_command *cmd)
 	int fd;
 	t_redirect *iterator;
 
-	cmd->stdin_old = -1;
-	cmd->stdout_old = -1;
 	iterator = cmd->redirects;
 	while (iterator)
 	{
-		cmd->fd_out = open(iterator->redirectee.word, iterator->flags, 0777);
 		if (iterator->direction == r_input)
 		{
+			cmd->fd_in = open(iterator->redirectee.word, iterator->flags, 0777);
 			close_fd_if_needed(cmd);
-			cmd->stdin_old = dup(STDIN_FILENO);
 			dup2(cmd->fd_in, STDIN_FILENO);
 			close(cmd->fd_in);
 		}
-		else if (iterator->direction == r_output)
+		else if (iterator->direction == r_output || r_output_append)
 		{
+			cmd->fd_out = open(iterator->redirectee.word, iterator->flags, 0777);
 			close_fd_if_needed(cmd);
-			cmd->stdout_old = dup(STDOUT_FILENO);
-			dup2(cmd->fd_out, STDOUT_FILENO);
-			close(cmd->fd_out);
-		}
-		else if (iterator->direction == r_output_append)
-		{
-			close_fd_if_needed(cmd);
-			cmd->stdout_old = dup(STDOUT_FILENO);
 			dup2(cmd->fd_out, STDOUT_FILENO);
 			close(cmd->fd_out);
 		}
@@ -131,16 +111,10 @@ int perform_redirections(t_command *cmd)
  */
 int undo_redirections(t_command *cmd)
 {
-	if (cmd->fd_in != -1)
-	{
-		dup2(cmd->stdin_old, STDIN_FILENO);
-		close(cmd->stdin_old);
-	}
-	if (cmd->fd_out != -1)
-	{
-		dup2(cmd->stdout_old, STDOUT_FILENO);
-		close(cmd->stdout_old);
-	}
+	dup2(cmd->stdout_old, STDOUT_FILENO);
+	close(cmd->stdout_old);
+	dup2(cmd->stdin_old, STDIN_FILENO);
+	close(cmd->stdin_old);
 	return 0;
 }
 
@@ -176,10 +150,7 @@ int cmd_executor(t_command *cmd, char *c, char **av)
 		}
 	}
 	else
-	{
 		waitpid(pid, &child_status, 0);
-	}
-	undo_redirections(cmd);
 	zundra.status_code = WEXITSTATUS(child_status);
 	return WEXITSTATUS(child_status);
 }

@@ -109,6 +109,7 @@ int search_relative_path(char *cmd, char **argv);
 int execute_cmd(char *cmd, char **argv, char **envp, int input);
 int parse_cmd();
 int cmd_executor(t_command *cmd, char *c, char **av);
+int undo_redirections(t_command *cmd);
 
 // env.c
 int ft_env();
@@ -122,5 +123,6 @@ int test_cmd2(char *cmd, char **argv, char **envp);
 int test_cmd3(char *cmd, char **argv, char **envp);
 int piper(char *cmd, char **argv, char **envp);
 int c1();
+int c2();
 
 #endif
