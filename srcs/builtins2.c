@@ -12,17 +12,33 @@
 
 #include "../inc/minishell.h"
 
-int ft_exit()
+/**
+ * @brief		Exit from minishell safely
+ *
+ */
+void ft_exit()
 {
 	exit(0);
 }
 
+/**
+ * @brief		Return status code of last executed command
+ *
+ * @return int	status code
+ */
 int status_code()
 {
 	printf("%d\n", zundra.status_code);
 	return 0;
 }
 
+/**
+ * @brief		Builtin function handler for cd, echo, pwd, exit, env, export, unset
+ *
+ * @param cmd	Currently executimg command
+ * @return int	Status code of child process after executing builtin OR ERROR_CODE 2
+ * 				if not a builtin
+ */
 int exec_builtin(char **cmd)
 {
 	if (ft_strncmp(cmd[0], "cd", 2) == 0)
@@ -34,7 +50,7 @@ int exec_builtin(char **cmd)
 	if (!cmd[1] && ft_strncmp(cmd[0], "pwd", 3) == 0)
 		return ft_pwd();
 	if (!cmd[1] && ft_strncmp(cmd[0], "exit", 4) == 0)
-		return ft_exit();
+		ft_exit();
 	if (!cmd[1] && ft_strncmp(cmd[0], "env", 3) == 0)
 		return ft_env();
 	if (!cmd[1] && ft_strncmp(cmd[0], "export", 6) == 0)

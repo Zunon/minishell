@@ -6,13 +6,13 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 16:18:19 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/04 11:13:42 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/04 14:37:19 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int c1 (/* cat Makefile > a >> b >> c*/)
+int t1 (/* cat Makefile > a >> b >> c*/)
 {
 	char *cmd = ft_strdup("cat");
 	char **av = malloc (sizeof (char *) * 3);
@@ -47,11 +47,10 @@ int c1 (/* cat Makefile > a >> b >> c*/)
 	command->redirects->next->next->redirectee.word = ft_strdup("c");
 	command->redirects->next->next->next = NULL;
 
-	undo_redirections(command);
 	return 0;
 }
 
-int c2(/* <d grep a > e >> app */)
+int t2(/* <d grep a > e >> app */)
 {
 	char *cmd = ft_strdup("grep");
 	char **av = malloc(sizeof(char *) * 3);
@@ -86,12 +85,11 @@ int c2(/* <d grep a > e >> app */)
 	command->redirects->next->next->next = NULL;
 
 	cmd_executor(command, cmd, av);
-	undo_redirections(command);
 
 	return 0;
 }
 
-int c3(/* cat Makefile > b| grep b | <infile grep b > outfile*/)
+int t3(/* cat Makefile > b| grep b | <infile grep b > outfile*/)
 {
 	//CMD 1:
 	char *cmd1 = ft_strdup("cat");
@@ -122,8 +120,8 @@ int c3(/* cat Makefile > b| grep b | <infile grep b > outfile*/)
 	command2->id = 1;
 	command2->fd_in = -1;
 	command2->fd_out = -1;
-	command2->stdout_old = STDOUT_FILENO; //dup(STDOUT_FILENO);
-	command2->stdin_old = STDIN_FILENO; //dup(STDIN_FILENO);
+	command2->stdout_old = STDOUT_FILENO;
+	command2->stdin_old = STDIN_FILENO;
 	command2->redirects = NULL;
 
 	// CMD 3:
@@ -136,8 +134,8 @@ int c3(/* cat Makefile > b| grep b | <infile grep b > outfile*/)
 	command3->id = 2;
 	command3->fd_in = -1;
 	command3->fd_out = -1;
-	command3->stdout_old = STDOUT_FILENO; // dup(STDOUT_FILENO);
-	command3->stdin_old = STDIN_FILENO;	  // dup(STDIN_FILENO);
+	command3->stdout_old = STDOUT_FILENO;
+	command3->stdin_old = STDIN_FILENO;
 	command3->redirects = malloc(sizeof(t_redirect));
 	command3->redirects->direction = r_input;
 	command3->redirects->redirector = STDIN_FILENO;
@@ -154,7 +152,7 @@ int c3(/* cat Makefile > b| grep b | <infile grep b > outfile*/)
 	command1->next = command2;
 	command2->next = command3;
 	command3->next = NULL;
-
+	zundra.num_of_cmds = 3;
 	zundra.pipes[0][0] = STDIN_FILENO;
 	zundra.pipes[0][1] = STDOUT_FILENO;
 	zundra.pipes[3][0] = STDIN_FILENO;
@@ -167,17 +165,13 @@ int c3(/* cat Makefile > b| grep b | <infile grep b > outfile*/)
 	cmd_executor(command2, cmd2, av2);
 	cmd_executor(command3, cmd3, av3);
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < zundra.num_of_cmds; i++)
 	{
-		if (i != 0 && i != 3)
-		{
-			close(zundra.pipes[i][0]);
-			close(zundra.pipes[i][1]);
-		}
+		close(zundra.pipes[i][0]);
+		close(zundra.pipes[i][1]);
 	}
-	wait(0);
-	wait(0);
-	wait(0);
+	for (int i = 0; i< zundra.num_of_cmds; i++)
+		wait(0);
 
 	return 0;
 }

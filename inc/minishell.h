@@ -85,6 +85,7 @@ typedef struct s_shell
 {
 	t_command *cmds;
 	int status_code;
+	int num_of_cmds;
 	int pipes[4][2];
 	t_hash_table *env_mngr;
 	char **envp;
@@ -106,10 +107,9 @@ void sig_handler(int sig);
 // exec.c
 int search_absolute_path(char *cmd, char **argv);
 int search_relative_path(char *cmd, char **argv);
-int execute_cmd(char *cmd, char **argv, char **envp, int input);
-int parse_cmd();
 int cmd_executor(t_command *cmd, char *c, char **av);
-int undo_redirections(t_command *cmd);
+int piper(t_command *cmd);
+int perform_IO_redirections(t_command *cmd);
 
 // env.c
 int ft_env();
@@ -117,12 +117,7 @@ int ft_export(char *key, char *value);
 int ft_unset(char *key);
 
 // tests.c
-int test_output_redirect(char *cmd, char **argv, char **envp);
-int test_cmd1(char *cmd, char **argv, char **envp);
-int test_cmd2(char *cmd, char **argv, char **envp);
-int test_cmd3(char *cmd, char **argv, char **envp);
-int piper(char *cmd, char **argv, char **envp);
-int c1();
-int c2();
-int c3();
+int t1();
+int t2();
+int t3();
 #endif

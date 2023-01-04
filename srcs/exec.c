@@ -13,12 +13,12 @@
 #include "../inc/minishell.h"
 
 /**
- * @brief Find and execute commands from the PATH environment variable
+ * @brief			Find and execute commands from the PATH environment variable
  *
- * @param cmd	The command to be executed
- * @param argv	The parameters to the command
- * @param envp	Environment variables
- * @return int	Status code of execution (1 on SUCCESS, 0 on 'CMD NOT FOUND')
+ * @param cmd		The command to be executed
+ * @param argv		The parameters to the command
+ * @param envp		Environment variables
+ * @return int		Status code of execution (1 on SUCCESS, 0 on 'CMD NOT FOUND')
  */
 int search_absolute_path(char *cmd, char **argv)
 {
@@ -50,12 +50,12 @@ int search_absolute_path(char *cmd, char **argv)
 }
 
 /**
- * @brief Find and execute commands based on current directory (Eg. run executables)
+ * @brief 			Find and execute commands based on current directory (Eg. run executables)
  *
- * @param cmd	The command to be executed
- * @param argv	The parameters to the command
- * @param envp	Environment variables
- * @return int	Status code of execution (1 on SUCCESS, 0 on 'CMD NOT FOUND')
+ * @param cmd		The command to be executed
+ * @param argv		The parameters to the command
+ * @param envp		Environment variables
+ * @return int		Status code of execution (1 on SUCCESS, 0 on 'CMD NOT FOUND')
  */
 int search_relative_path(char *cmd, char **argv)
 {
@@ -65,74 +65,141 @@ int search_relative_path(char *cmd, char **argv)
 }
 
 /**
- * @brief		Function to open necessary files and perform all redirections from left->right.
- * 				Handles inout, output, output append, and heredoc
+ * @brief			Redirect input to a specific file for a command
  *
- * @param cmd	Currently executing command
- * @return int	Status code (discard if not needed)
+ * @param cmd		Currently executing command
+ * @param current	Current redirector in the list of redirections of the command cmd
+ * @return int		Error code of operation (0 on SUCCESS, -1 on ERROR)
  */
-int perform_redirections(t_command *cmd)
+int redirect_input(t_command *cmd, t_redirect *current)
+{
+	cmd->fd_in = open(current->redirectee.word, current->flags, 0777);
+	if (cmd->fd_in == -1)
+	{
+		perror("File does not exist!");
+		return (-1);
+	}
+	if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
+	{
+		perror("Error while duping pipe to STDIN: ");
+		return (-1);
+	}
+	if (close(cmd->fd_in) == -1)
+	{
+		perror("Error while closing file: ");
+		return (-1);
+	}
+	return (0);
+}
+
+/**
+ * @brief			Redirect output to a specific file for a command
+ *
+ * @param cmd		Currently executing command
+ * @param current	Current redirector in the list of redirections of the command cmd
+ * @return int		Error code of operation (0 on SUCCESS, -1 on ERROR)
+ */
+int redirect_output(t_command *cmd, t_redirect *current)
+{
+	cmd->fd_out = open(current->redirectee.word, current->flags, 0777);
+	if (cmd->fd_out == -1)
+	{
+		perror("File does not exist!");
+		return -1;
+	}
+	if (dup2(cmd->fd_out, STDOUT_FILENO) == -1)
+	{
+		perror("Error while duping pipe to STDIN: ");
+		return (-1);
+	}
+	if (close(cmd->fd_out) == -1)
+	{
+		perror("Error while closing file: ");
+		return (-1);
+	}
+	return (0);
+}
+
+/**
+ * @brief			Function to open necessary files and perform all redirections from left->right.
+ * 					If there are pipes, then the necessary piping is handled as well.
+ * 					Handles input, output, output append, and heredoc
+ *
+ * @param cmd		Currently executing command
+ * @return int		Status code (discard if not needed)
+ */
+int perform_IO_redirections(t_command *cmd)
 {
 	int fd;
 	t_redirect *iterator;
 
 	iterator = cmd->redirects;
-	dup2(zundra.pipes[cmd->id][0], STDIN_FILENO);
-	dup2(zundra.pipes[cmd->id + 1][1], STDOUT_FILENO);
-	for (int i = 0; i< 4 ;i++)
-	{
-		if (i != 0 && i != 3 ) /*  Ignore first and last pipe */
-		{
-			close (zundra.pipes[i][0]);
-			close(zundra.pipes[i][1]);
-		}
-	}
+	if (piper(cmd) == -1)
+		return (-1);
 	while (iterator) /* Iterate through redireciton list */
 	{
 		if (iterator->direction == r_input)
-		{
-			cmd->fd_in = open(iterator->redirectee.word, iterator->flags, 0777);
-			dup2(cmd->fd_in, STDIN_FILENO);
-			close(cmd->fd_in);
-		}
+			redirect_input(cmd, iterator);
 		else if (iterator->direction == r_output || r_output_append)
-		{
-			cmd->fd_out = open(iterator->redirectee.word, iterator->flags, 0777);
-			dup2(cmd->fd_out, STDOUT_FILENO);
-			close(cmd->fd_out);
-		}
+			redirect_output(cmd, iterator);
 		else
 		{
 			// heredoc
 		}
 		iterator = iterator->next;
 	}
-
-	return 0;
+	return (0);
 }
 
 /**
- * @brief		Function to undo redirections back to stdout OR pipe for use by next command
+ * @brief			Function to pipe input and output to and from commands following and
+ *					preceding the currently executing command. command[i] reads from pipe i and writes
+					to pipe[i+1]. To account for all varieties of commands, 2 artificial pipes are
+					created before the first command and after the last command mimicking STDIN & STDOUT
  *
- * @param cmd	Currently executing command
- * @return int	Status code (discard if not needed)
+ * @param cmd		Currently executing command
+ * @return int		Status code of the closing pipes and dupes done
  */
-int undo_redirections(t_command *cmd)
+int piper(t_command *cmd)
 {
-	dup2(cmd->stdout_old, STDOUT_FILENO);
-	close(cmd->stdout_old);
-	dup2(cmd->stdin_old, STDIN_FILENO);
-	close(cmd->stdin_old);
-	return 0;
+	int i;
+	int error_code;
+
+	i = 1;
+	if (dup2(zundra.pipes[cmd->id][0], STDIN_FILENO))
+	{
+		perror("Error while duping pipe to STDIN: ");
+		return (-1);
+	}
+	if (dup2(zundra.pipes[cmd->id + 1][1], STDOUT_FILENO) == -1)
+	{
+		perror("Error while duping pipe to STDOUT: ");
+		return (-1);
+	}
+	while (i < zundra.num_of_cmds)
+	{
+		if (close(zundra.pipes[i][0]) == -1)
+		{
+			perror("Error while closing pipe: ");
+			return (-1);
+		}
+		if (close(zundra.pipes[i][1]) == -1)
+		{
+			perror("Error while closing pipe: ");
+			return (-1);
+		}
+		i++;
+	}
+	return (1);
 }
 
 /**
- * @brief		Function to execute a simple command
+ * @brief			Function to execute a simple command
  *
- * @param cmd	Command struct to execute
- * @param c		command as a char *
- * @param av	command and its parameters for use by execve
- * @return int	Status code of child process after execution
+ * @param cmd		Command struct to execute
+ * @param c			command as a char *
+ * @param av		command and its parameters for use by execve
+ * @return int		Status code of child process after execution
  */
 int cmd_executor(t_command *cmd, char *c, char **av)
 {
@@ -147,7 +214,7 @@ int cmd_executor(t_command *cmd, char *c, char **av)
 	}
 	if (pid == 0)
 	{
-		if (perform_redirections(cmd) == -1)
+		if (perform_IO_redirections(cmd) == -1)
 			return -1;
 		if (search_absolute_path(c, av) == 0)
 		{
