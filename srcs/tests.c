@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 16:18:19 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/04 22:50:42 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/05 01:19:46 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int t2(/* <d grep a > e >> app */)
 	command->redirects->next->next->redirectee.word = ft_strdup("app");
 	command->redirects->next->next->next = NULL;
 
-	cmd_executor(command, cmd, av);
+	cmd_executor(command, av);
 
 	return 0;
 }
@@ -161,9 +161,9 @@ int t3(/* cat Makefile > b| grep b | <infile grep b > outfile*/)
 		if (i != 0 && i != 3)
 			pipe(zundra.pipes[i]);
 
-	cmd_executor(command1, cmd1, av1);
-	cmd_executor(command2, cmd2, av2);
-	cmd_executor(command3, cmd3, av3);
+	cmd_executor(command1, av1);
+	cmd_executor(command2, av2);
+	cmd_executor(command3, av3);
 
 	for (int i = 1; i < zundra.num_of_cmds; i++)
 	{
@@ -178,11 +178,6 @@ int t3(/* cat Makefile > b| grep b | <infile grep b > outfile*/)
 
 int t4()
 {
-	char *cmd1 = ft_strdup("cat");
-	char **av1 = malloc(sizeof(char *) * 3);
-	av1[0] = ft_strdup("cat");
-	av1[1] = ft_strdup("Makefile");
-	av1[2] = NULL;
 	t_command *command1 = malloc(sizeof(t_command));
 	command1->fd_in = -1;
 	command1->fd_out = -1;
@@ -191,9 +186,18 @@ int t4()
 	command1->id = 0;
 	command1->redirects = NULL;
 	command1->next = NULL;
-	// cmd_executor(command1, cmd1, av1);
 	zundra.num_of_cmds = 1;
+
+	t_word_list *wd = malloc(sizeof(t_word_list));
+	wd->curr_word_desc = malloc(sizeof(t_word_desc));
+	wd->curr_word_desc->word = ft_strdup("cat");
+
+	wd->next = malloc(sizeof(t_word_list));
+	wd->next->curr_word_desc = malloc(sizeof(t_word_desc));
+	wd->next->curr_word_desc->word = ft_strdup("Makefile");
+	wd->next->next = NULL;
+
+	command1->words = wd;
 	executor(command1);
-	// wait(0);
 	return (0);
 }

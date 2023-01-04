@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 22:00:33 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/04 22:52:01 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/05 01:14:12 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ int redirect_output(t_command *cmd, t_redirect *current)
  */
 int perform_IO_redirections(t_command *cmd)
 {
-	int fd;
 	t_redirect *iterator;
 
 	iterator = cmd->redirects;
@@ -99,12 +98,18 @@ int perform_IO_redirections(t_command *cmd)
 	return (0);
 }
 
+/**
+ * @brief			Allocate memory for required number of pipes & open necessary file
+ * 					descriptors.
+ * 					First and last pipe are dummy pipes with STDIN and STDOUT
+ *
+ */
 void prepare_pipes()
 {
 	int i;
 
 	i = 0;
-	zundra.pipes = malloc(sizeof(int *) * zundra.num_of_cmds);
+	zundra.pipes = malloc(sizeof(int *) * (zundra.num_of_cmds + 1));
 	while (i <= zundra.num_of_cmds)
 	{
 		zundra.pipes[i] = malloc(sizeof(int) * 2);
@@ -130,7 +135,6 @@ void prepare_pipes()
 int piper(t_command *cmd)
 {
 	int i;
-	int error_code;
 
 	i = 1;
 	if (dup2(zundra.pipes[cmd->id][0], STDIN_FILENO) == -1)

@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 22:04:06 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/04 22:08:15 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/05 00:47:51 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ void free_word_list(t_word_list *word_list)
 	{
 		temp = word_list;
 		word_list = word_list->next;
-		free(temp->word->word);
-		free(temp->word);
+		free(temp->curr_word_desc->word);
+		free(temp->curr_word_desc);
 		free(temp);
 	}
 }

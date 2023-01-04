@@ -40,7 +40,7 @@ typedef struct s_word_desc
 typedef struct s_word_list
 {
 	struct s_word_list *next;
-	t_word_desc *word;
+	t_word_desc *curr_word_desc;
 } t_word_list;
 
 /* Instructions describing what kind of thing to do for a redirection. */
@@ -133,7 +133,7 @@ int ft_unset(char **argv);
 
 // main.c
 void sig_handler(int sig);
-void lexer();
+void lexer(char **argv);
 t_command *parser();
 int executor(t_command *cmd);
 
@@ -141,7 +141,7 @@ int executor(t_command *cmd);
 int search_absolute_path(char *cmd, char **argv);
 int search_relative_path(char *cmd, char **argv);
 char **prepare_cmd_args(t_word_list *word_lst);
-int cmd_executor(t_command *cmd, char *c, char **av);
+int cmd_executor(t_command *cmd, char **argv);
 
 //redirect.c
 int redirect_input(t_command *cmd, t_redirect *current);
@@ -152,8 +152,5 @@ int piper(t_command *cmd);
 
 // tests.c
 int t1();
-int t2();
-int t3();
-int t4();
 
 #endif

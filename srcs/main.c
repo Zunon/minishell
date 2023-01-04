@@ -33,7 +33,7 @@ void sig_handler(int sig)
  * @brief				Phase 1 of the shell - commands typed by th user are split into tokens
  *
  */
-void lexer()
+void lexer(char **argv)
 {
 
 }
@@ -61,13 +61,12 @@ int executor(t_command *cmd)
 	int i;
 
 	prepare_pipes();
-	iterator = cmd;
 	while (iterator)
 	{
+		iterator = cmd;
 		zundra.cmds = iterator;
 		cmd_argv = prepare_cmd_args(iterator->words);
-		cmd_executor(iterator, cmd_argv[0], cmd_argv);
-		free(cmd_argv);
+		cmd_executor(iterator, cmd_argv);
 		iterator = iterator->next;
 	}
 	i = 0;
@@ -83,11 +82,9 @@ int executor(t_command *cmd)
 int main(int argc, char **argv, char **envp)
 {
 	char *s;
-	int status_code;
 	t_command *cmd;
 	(void)argc;
 	(void)argv;
-	(void)envp;
 
 	signal(SIGINT, &sig_handler);
 	signal(SIGQUIT, &sig_handler);
@@ -96,10 +93,9 @@ int main(int argc, char **argv, char **envp)
 	{
 		s = readline("minishell ^-^ : ");
 		add_history(s);
-		// lexer();
-		// cmd = parser();
-		// executor(cmd);
-		t4();
+		lexer(argv);
+		cmd = parser();
+		executor(cmd);
 		free(s);
 	}
 	return (0);

@@ -28,8 +28,7 @@ void ft_exit()
  */
 int status_code()
 {
-	printf("%d\n", zundra.status_code);
-	return 0;
+	return (zundra.status_code);
 }
 
 /**
@@ -41,6 +40,8 @@ int status_code()
  */
 int exec_builtin(char **cmd)
 {
+	if (!cmd || !cmd[0])
+		return 0;
 	if (ft_strncmp(cmd[0], "cd", 2) == 0)
 		return ft_cd(cmd);
 	if (ft_strncmp(cmd[0], "echo", 4) == 0 && cmd[1] && ft_strncmp(cmd[1], "$?", 2) == 0)
@@ -57,5 +58,5 @@ int exec_builtin(char **cmd)
 		return ft_export(cmd);
 	if (!cmd[1] && ft_strncmp(cmd[0], "unset", 5) == 0)
 		return ft_unset(cmd);
-	return 2;
+	return (2);
 }

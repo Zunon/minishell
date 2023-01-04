@@ -77,11 +77,10 @@ char **prepare_cmd_args(t_word_list *word_lst)
 	int i;
 
 	i = 0;
-	ret = malloc(sizeof(char *) * zundra.num_of_cmds);
+	ret = malloc(sizeof(char *) * (zundra.num_of_cmds + 1));
 	while (word_lst)
 	{
-		ret[i] = word_lst->word->word;
-		ft_printf("%s\n", ret[i]);
+		ret[i] = word_lst->curr_word_desc->word;
 		word_lst = word_lst->next;
 		i++;
 	}
@@ -97,7 +96,7 @@ char **prepare_cmd_args(t_word_list *word_lst)
  * @param av		command and its parameters for use by execve
  * @return int		Status code of child process after execution
  */
-int cmd_executor(t_command *cmd, char *c, char **av)
+int cmd_executor(t_command *cmd, char **argv)
 {
 	pid_t pid;
 	int child_status;
@@ -112,7 +111,7 @@ int cmd_executor(t_command *cmd, char *c, char **av)
 	{
 		if (perform_IO_redirections(cmd) == -1)
 			return -1;
-		if (exec_builtin(av) != 2 && !search_absolute_path(c, av) && !search_relative_path(c, av))
+		if (exec_builtin(argv) == 2 && !search_absolute_path(argv[0], argv) && !search_relative_path(argv[0], argv))
 		{
 			ft_printf("minishell: command not found\n");
 			return 0;
