@@ -23,6 +23,7 @@ void sig_handler(int sig)
 	{
 		write(1, "\n", 1);
 		rl_on_new_line();
+		exit(0);
 	}
 }
 
@@ -43,7 +44,7 @@ int main(int argc, char **argv, char **envp)
 		s = readline("minishell ^-^ : ");
 		add_history(s);
 		argv = ft_split(s, ' ');
-		c2();
+		c3();
 		free(s);
 	}
 	return (0);

@@ -77,19 +77,37 @@ int perform_redirections(t_command *cmd)
 	t_redirect *iterator;
 
 	iterator = cmd->redirects;
-	while (iterator)
+	dup2(zundra.pipes[cmd->id][0], STDIN_FILENO);
+	dup2(zundra.pipes[cmd->id + 1][1], STDOUT_FILENO);
+	for (int i = 0; i< 4 ;i++)
+	{
+		if (i != 0 && i != 3 ) /*  Ignore first and last pipe */
+		{
+			close (zundra.pipes[i][0]);
+			close(zundra.pipes[i][1]);
+		}
+	}
+	while (iterator) /* Iterate through redireciton list */
 	{
 		if (iterator->direction == r_input)
 		{
 			cmd->fd_in = open(iterator->redirectee.word, iterator->flags, 0777);
-			close_fd_if_needed(cmd);
+			if (cmd->fd_in == -1)
+			{
+				perror("File does not exist!");
+				return -1;
+			}
 			dup2(cmd->fd_in, STDIN_FILENO);
 			close(cmd->fd_in);
 		}
 		else if (iterator->direction == r_output || r_output_append)
 		{
 			cmd->fd_out = open(iterator->redirectee.word, iterator->flags, 0777);
-			close_fd_if_needed(cmd);
+			if (cmd->fd_out == -1)
+			{
+				perror("File does not exist!");
+				return -1;
+			}
 			dup2(cmd->fd_out, STDOUT_FILENO);
 			close(cmd->fd_out);
 		}
@@ -97,9 +115,9 @@ int perform_redirections(t_command *cmd)
 		{
 			// heredoc
 		}
-
 		iterator = iterator->next;
 	}
+
 	return 0;
 }
 
@@ -131,7 +149,6 @@ int cmd_executor(t_command *cmd, char *c, char **av)
 	pid_t pid;
 	int child_status;
 
-	perform_redirections(cmd);
 	pid = fork();
 	if (pid == -1)
 	{
@@ -140,6 +157,8 @@ int cmd_executor(t_command *cmd, char *c, char **av)
 	}
 	if (pid == 0)
 	{
+		if (perform_redirections(cmd) == -1)
+			return -1;
 		if (search_absolute_path(c, av) == 0)
 		{
 			if (!search_relative_path(c, av))
@@ -149,8 +168,6 @@ int cmd_executor(t_command *cmd, char *c, char **av)
 			}
 		}
 	}
-	else
-		waitpid(pid, &child_status, 0);
 	zundra.status_code = WEXITSTATUS(child_status);
 	return WEXITSTATUS(child_status);
 }

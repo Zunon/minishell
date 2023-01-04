@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 16:18:19 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/03 11:07:01 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/04 11:13:42 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,21 +29,18 @@ int c1 (/* cat Makefile > a >> b >> c*/)
 	command->stdin_old = dup(STDIN_FILENO);
 
 	command->redirects = malloc(sizeof (t_redirect));
-	command->redirects->id = 0;
 	command->redirects->direction = r_output;
 	command->redirects->redirector = STDIN_FILENO;
 	command->redirects->flags = O_CREAT | O_WRONLY | O_TRUNC;
 	command->redirects->redirectee.word = ft_strdup("a");
 
 	command->redirects->next = malloc(sizeof (t_redirect));
-	command->redirects->next->id = 0;
 	command->redirects->next->direction = r_output;
 	command->redirects->next->redirector = STDIN_FILENO;
 	command->redirects->next->flags = O_CREAT | O_WRONLY | O_APPEND;
 	command->redirects->next->redirectee.word = ft_strdup("b");
 
 	command->redirects->next->next = malloc(sizeof(t_redirect));
-	command->redirects->next->next->id = 0;
 	command->redirects->next->next->direction = r_output;
 	command->redirects->next->next->redirector = STDIN_FILENO;
 	command->redirects->next->next->flags = O_CREAT | O_WRONLY | O_APPEND;
@@ -70,21 +67,18 @@ int c2(/* <d grep a > e >> app */)
 	command->stdin_old = dup(STDIN_FILENO);
 
 	command->redirects = malloc(sizeof(t_redirect));
-	command->redirects->id = 0;
 	command->redirects->direction = r_input;
 	command->redirects->redirector = STDIN_FILENO;
-	command->redirects->flags = O_CREAT | O_RDONLY;
+	command->redirects->flags = O_RDONLY;
 	command->redirects->redirectee.word = ft_strdup("d");
 
 	command->redirects->next = malloc(sizeof(t_redirect));
-	command->redirects->next->id = 1;
 	command->redirects->next->direction = r_output;
 	command->redirects->next->redirector = STDIN_FILENO;
 	command->redirects->next->flags = O_CREAT | O_WRONLY;
 	command->redirects->next->redirectee.word = ft_strdup("e");
 
 	command->redirects->next->next = malloc(sizeof(t_redirect));
-	command->redirects->next->next->id = 2;
 	command->redirects->next->next->direction = r_output_append;
 	command->redirects->next->next->redirector = STDIN_FILENO;
 	command->redirects->next->next->flags = O_CREAT | O_WRONLY | O_APPEND;
@@ -93,6 +87,97 @@ int c2(/* <d grep a > e >> app */)
 
 	cmd_executor(command, cmd, av);
 	undo_redirections(command);
+
+	return 0;
+}
+
+int c3(/* cat Makefile > b| grep b | <infile grep b > outfile*/)
+{
+	//CMD 1:
+	char *cmd1 = ft_strdup("cat");
+	char **av1 = malloc(sizeof(char *) * 3);
+	av1[0] = ft_strdup("cat");
+	av1[1] = ft_strdup("Makefile");
+	av1[2] = NULL;
+	t_command *command1 = malloc(sizeof(t_command));
+	command1->fd_in = -1;
+	command1->fd_out = -1;
+	command1->stdout_old = STDOUT_FILENO;//dup(STDOUT_FILENO);
+	command1->stdin_old = STDIN_FILENO; //dup(STDIN_FILENO);
+	command1->id = 0;
+	command1->redirects = malloc(sizeof(t_redirect));
+	command1->redirects->direction = r_output;
+	command1->redirects->redirector = STDIN_FILENO;
+	command1->redirects->flags = O_CREAT | O_WRONLY;
+	command1->redirects->redirectee.word = ft_strdup("b");
+	command1->redirects->next = NULL;
+
+	// CMD 2:
+	char *cmd2 = ft_strdup("grep");
+	char **av2 = malloc(sizeof(char *) * 3);
+	av2[0] = ft_strdup("grep");
+	av2[1] = ft_strdup("b");
+	av2[2] = NULL;
+	t_command *command2 = malloc(sizeof(t_command));
+	command2->id = 1;
+	command2->fd_in = -1;
+	command2->fd_out = -1;
+	command2->stdout_old = STDOUT_FILENO; //dup(STDOUT_FILENO);
+	command2->stdin_old = STDIN_FILENO; //dup(STDIN_FILENO);
+	command2->redirects = NULL;
+
+	// CMD 3:
+	char *cmd3 = ft_strdup("grep");
+	char **av3 = malloc(sizeof(char *) * 3);
+	av3[0] = ft_strdup("grep");
+	av3[1] = ft_strdup("b");
+	av3[2] = NULL;
+	t_command *command3 = malloc(sizeof(t_command));
+	command3->id = 2;
+	command3->fd_in = -1;
+	command3->fd_out = -1;
+	command3->stdout_old = STDOUT_FILENO; // dup(STDOUT_FILENO);
+	command3->stdin_old = STDIN_FILENO;	  // dup(STDIN_FILENO);
+	command3->redirects = malloc(sizeof(t_redirect));
+	command3->redirects->direction = r_input;
+	command3->redirects->redirector = STDIN_FILENO;
+	command3->redirects->flags = O_CREAT | O_RDONLY;
+	command3->redirects->redirectee.word = ft_strdup("infile");
+	command3->redirects->next = malloc(sizeof(t_redirect));
+
+	command3->redirects->direction = r_output;
+	command3->redirects->redirector = STDIN_FILENO;
+	command3->redirects->flags = O_CREAT | O_WRONLY;
+	command3->redirects->redirectee.word = ft_strdup("outfile");
+	command3->redirects->next = NULL;
+
+	command1->next = command2;
+	command2->next = command3;
+	command3->next = NULL;
+
+	zundra.pipes[0][0] = STDIN_FILENO;
+	zundra.pipes[0][1] = STDOUT_FILENO;
+	zundra.pipes[3][0] = STDIN_FILENO;
+	zundra.pipes[3][1] = STDOUT_FILENO;
+	for (int i = 0 ; i< 4; i++)
+		if (i != 0 && i != 3)
+			pipe(zundra.pipes[i]);
+
+	cmd_executor(command1, cmd1, av1);
+	cmd_executor(command2, cmd2, av2);
+	cmd_executor(command3, cmd3, av3);
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (i != 0 && i != 3)
+		{
+			close(zundra.pipes[i][0]);
+			close(zundra.pipes[i][1]);
+		}
+	}
+	wait(0);
+	wait(0);
+	wait(0);
 
 	return 0;
 }

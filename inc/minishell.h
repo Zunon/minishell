@@ -49,7 +49,9 @@ enum r_direction
 	r_input,
 	r_output,
 	r_output_append,
-	r_here_doc
+	r_here_doc,
+	r_pipe_in,
+	r_pipe_out
 };
 
 /**
@@ -58,7 +60,6 @@ enum r_direction
  */
 typedef struct s_redirect
 {
-	int id;
 	struct s_redirect *next;			/* Next element, or NULL. */
 	int redirector;					/* Descriptor to be redirected. */
 	int flags;						/* Flag value for `open'. */
@@ -68,6 +69,7 @@ typedef struct s_redirect
 }	t_redirect;
 
 typedef struct s_command{
+	int id;
 	WORD_LIST *words;	 /* The program name, the arguments */
 	t_redirect *redirects; /* Redirections to perform. */
 	int exit_code;		 /* Exit status of command */
@@ -83,7 +85,7 @@ typedef struct s_shell
 {
 	t_command *cmds;
 	int status_code;
-	int fd;
+	int pipes[4][2];
 	t_hash_table *env_mngr;
 	char **envp;
 } t_shell;
@@ -94,8 +96,6 @@ t_shell zundra;
 int	ft_echo(char **cmd);
 int ft_cd(char **cmd);
 int ft_pwd();
-int ft_export();
-int ft_unset();
 
 //builtins2.c
 int exec_builtin(char **cmd);
@@ -124,5 +124,5 @@ int test_cmd3(char *cmd, char **argv, char **envp);
 int piper(char *cmd, char **argv, char **envp);
 int c1();
 int c2();
-
+int c3();
 #endif
