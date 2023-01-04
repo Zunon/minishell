@@ -12,6 +12,8 @@
 
 #include "../inc/minishell.h"
 
+t_shell zundra;
+
 /**
  * @brief Function to handle various signals in the program
  *

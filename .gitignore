@@ -1,5 +1,11 @@
 # Prerequisites
+*.pdf
 *.d
+.idea
+app
+d
+e
+minishell
 
 # Object files
 *.o
@@ -18,7 +24,6 @@
 
 # Libraries
 *.lib
-*.a
 *.la
 *.lo
 
@@ -53,5 +58,4 @@ Mkfile.old
 dkms.conf
 
 #Custom Folders
-minishell
 .DS_Store

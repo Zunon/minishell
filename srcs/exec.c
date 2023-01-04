@@ -92,22 +92,12 @@ int perform_redirections(t_command *cmd)
 		if (iterator->direction == r_input)
 		{
 			cmd->fd_in = open(iterator->redirectee.word, iterator->flags, 0777);
-			if (cmd->fd_in == -1)
-			{
-				perror("File does not exist!");
-				return -1;
-			}
 			dup2(cmd->fd_in, STDIN_FILENO);
 			close(cmd->fd_in);
 		}
 		else if (iterator->direction == r_output || r_output_append)
 		{
 			cmd->fd_out = open(iterator->redirectee.word, iterator->flags, 0777);
-			if (cmd->fd_out == -1)
-			{
-				perror("File does not exist!");
-				return -1;
-			}
 			dup2(cmd->fd_out, STDOUT_FILENO);
 			close(cmd->fd_out);
 		}
