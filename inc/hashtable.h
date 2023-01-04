@@ -15,7 +15,7 @@
 
 #include <unistd.h>
 #include <stdlib.h>
-#include "libft.h"
+#include "../lib/libft/libft.h"
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -35,7 +35,7 @@ typedef struct s_pair{
     char *value;
 }t_pair;
 
-typedef struct s_hash_table{
+typedef struct s_hash_table {
     int size;
     int capacity;
     t_pair **table;

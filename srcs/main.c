@@ -12,6 +12,8 @@
 
 #include "../inc/minishell.h"
 
+t_shell zundra;
+
 /**
  * @brief Function to handle various signals in the program
  *
@@ -27,8 +29,6 @@ void sig_handler(int sig)
 	}
 }
 
-
-
 int main(int argc, char **argv, char **envp)
 {
 	char *s;
@@ -36,6 +36,7 @@ int main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	(void)envp;
+
 	signal(SIGINT, &sig_handler);
 	signal(SIGQUIT, &sig_handler);
 	zundra.envp = envp;
@@ -44,7 +45,7 @@ int main(int argc, char **argv, char **envp)
 		s = readline("minishell ^-^ : ");
 		add_history(s);
 		argv = ft_split(s, ' ');
-		c3();
+		t3();
 		free(s);
 	}
 	return (0);

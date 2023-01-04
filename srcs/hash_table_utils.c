@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../hashtable.h"
+#include "../inc/hashtable.h"
 
 /**
  * @brief 					Function to free allocated memory of a given key-value pair
