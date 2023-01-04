@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 16:18:19 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/04 14:37:19 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/04 15:23:24 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,11 +143,11 @@ int t3(/* cat Makefile > b| grep b | <infile grep b > outfile*/)
 	command3->redirects->redirectee.word = ft_strdup("infile");
 	command3->redirects->next = malloc(sizeof(t_redirect));
 
-	command3->redirects->direction = r_output;
-	command3->redirects->redirector = STDIN_FILENO;
-	command3->redirects->flags = O_CREAT | O_WRONLY;
-	command3->redirects->redirectee.word = ft_strdup("outfile");
-	command3->redirects->next = NULL;
+	command3->redirects->next->direction = r_output;
+	command3->redirects->next->redirector = STDIN_FILENO;
+	command3->redirects->next->flags = O_CREAT | O_WRONLY;
+	command3->redirects->next->redirectee.word = ft_strdup("outfile");
+	command3->redirects->next->next = NULL;
 
 	command1->next = command2;
 	command2->next = command3;
@@ -165,13 +165,15 @@ int t3(/* cat Makefile > b| grep b | <infile grep b > outfile*/)
 	cmd_executor(command2, cmd2, av2);
 	cmd_executor(command3, cmd3, av3);
 
-	for (int i = 0; i < zundra.num_of_cmds; i++)
+	for (int i = 1; i < zundra.num_of_cmds; i++)
 	{
 		close(zundra.pipes[i][0]);
 		close(zundra.pipes[i][1]);
 	}
 	for (int i = 0; i< zundra.num_of_cmds; i++)
 		wait(0);
+		// wait(0);
+		// wait(0);
 
 	return 0;
 }

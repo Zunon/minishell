@@ -109,7 +109,7 @@ int redirect_output(t_command *cmd, t_redirect *current)
 	}
 	if (dup2(cmd->fd_out, STDOUT_FILENO) == -1)
 	{
-		perror("Error while duping pipe to STDIN: ");
+		perror("Error while duping pipe to STDOUT: ");
 		return (-1);
 	}
 	if (close(cmd->fd_out) == -1)
@@ -140,7 +140,7 @@ int perform_IO_redirections(t_command *cmd)
 	{
 		if (iterator->direction == r_input)
 			redirect_input(cmd, iterator);
-		else if (iterator->direction == r_output || r_output_append)
+		else if (iterator->direction == r_output || iterator->direction  == r_output_append)
 			redirect_output(cmd, iterator);
 		else
 		{
@@ -166,7 +166,7 @@ int piper(t_command *cmd)
 	int error_code;
 
 	i = 1;
-	if (dup2(zundra.pipes[cmd->id][0], STDIN_FILENO))
+	if (dup2(zundra.pipes[cmd->id][0], STDIN_FILENO) == -1)
 	{
 		perror("Error while duping pipe to STDIN: ");
 		return (-1);
