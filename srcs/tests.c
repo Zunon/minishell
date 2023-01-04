@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 16:18:19 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/04 15:23:24 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/04 22:50:42 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,8 +172,28 @@ int t3(/* cat Makefile > b| grep b | <infile grep b > outfile*/)
 	}
 	for (int i = 0; i< zundra.num_of_cmds; i++)
 		wait(0);
-		// wait(0);
-		// wait(0);
 
 	return 0;
+}
+
+int t4()
+{
+	char *cmd1 = ft_strdup("cat");
+	char **av1 = malloc(sizeof(char *) * 3);
+	av1[0] = ft_strdup("cat");
+	av1[1] = ft_strdup("Makefile");
+	av1[2] = NULL;
+	t_command *command1 = malloc(sizeof(t_command));
+	command1->fd_in = -1;
+	command1->fd_out = -1;
+	command1->stdout_old = STDOUT_FILENO;
+	command1->stdin_old = STDIN_FILENO;
+	command1->id = 0;
+	command1->redirects = NULL;
+	command1->next = NULL;
+	// cmd_executor(command1, cmd1, av1);
+	zundra.num_of_cmds = 1;
+	executor(command1);
+	// wait(0);
+	return (0);
 }

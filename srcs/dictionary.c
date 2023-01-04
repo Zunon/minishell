@@ -1,55 +1,55 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hash_table.c                                       :+:      :+:    :+:   */
+/*   dict.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 12:18:51 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/02 11:17:09 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/04 18:48:07 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/hashtable.h"
+#include "../inc/dictionary.h"
 
 /**
- * @brief					Create a hash table and allocate necessary memory
+ * @brief					Create a Dictionary and allocate necessary memory
  *
- * @param s					Capacity of hash table
- * @return t_hash_table*	Newly created hash tabel of size s
+ * @param s					Capacity of Dictionary
+ * @return t_dict*			Newly created Dictionary of size s
  */
-t_hash_table *create_ht(int s)
+t_dict *create_dict(int s)
 {
-    t_hash_table *hash_table;
+    t_dict *dict;
     int i;
 
     i = 0;
     if (s <= 0)
         return NULL;
-    hash_table = malloc(sizeof(t_hash_table));
-    if (!hash_table)
+    dict = malloc(sizeof(t_dict));
+    if (!dict)
         return NULL;
-    hash_table->table = malloc (sizeof(t_pair*) * s);
-    if (!hash_table->table)
+    dict->table = malloc (sizeof(t_pair*) * s);
+    if (!dict->table)
         return NULL;
     while (i < s)
     {
-        hash_table->table[i] = NULL;
+        dict->table[i] = NULL;
         i++;
     }
-    hash_table->capacity = s;
-    hash_table->size = 0;
-    return hash_table;
+    dict->capacity = s;
+    dict->size = 0;
+    return dict;
 }
 
 /**
- * @brief 					Retrieve a key-value pair from the hash table with specific key
+ * @brief 					Retrieve a key-value pair from the Dictionary with specific key
  *
- * @param t					Hash table to search in
+ * @param t					Dictionary to search in
  * @param key				Key to look for
  * @return t_pair*			Key value pair that matches the given key on sucess, NULL on failed search
  */
-t_pair *retrieve_from_ht(t_hash_table *t, char *key)
+t_pair *retrieve_from_dict(t_dict *t, char *key)
 {
     int index;
 
@@ -66,18 +66,18 @@ t_pair *retrieve_from_ht(t_hash_table *t, char *key)
 }
 
 /**
- * @brief					Insert a key-value pair into the hash table
+ * @brief					Insert a key-value pair into the Dictionary
  *
- * @param t					Hash table to insert to
+ * @param t					Dictionary to insert to
  * @param key				Key of new entry
  * @param value				Value of new entry
  */
-void insert_into_ht(t_hash_table **t, char* key, char* value)
+void insert_into_dict(t_dict **t, char* key, char* value)
 {
     int index;
 	t_pair *exists;
 
-	exists = retrieve_from_ht(*t, key) ;
+	exists = retrieve_from_dict(*t, key) ;
 	if (exists)
 	{
 		free(exists->value);
@@ -85,7 +85,7 @@ void insert_into_ht(t_hash_table **t, char* key, char* value)
 		return ;
 	}
     if ((*t)->size == (*t)->capacity)
-        *t = resize_ht(*t, 2 *(*t)->capacity + 1);
+        *t = resize_dict(*t, 2 *(*t)->capacity + 1);
     index = (*t)->size % (*t)->capacity;
     while ((*t)->table[index])
         index = (index + 1) % (*t)->capacity;
@@ -98,12 +98,12 @@ void insert_into_ht(t_hash_table **t, char* key, char* value)
 }
 
 /**
- * @brief					Remove a specific key-value pair from the hash table
+ * @brief					Remove a specific key-value pair from the Dictionary
  *
- * @param t					Hash table to search in
- * @param key				Key of hash table entry to delete
+ * @param t					Dictionary to search in
+ * @param key				Key of Dictionary entry to delete
  */
-void remove_from_ht(t_hash_table *t, char* key)
+void remove_from_dict(t_dict *t, char* key)
 {
     int index;
 
@@ -120,4 +120,34 @@ void remove_from_ht(t_hash_table *t, char* key)
 		if (index == 0)
 			return ;
 	}
+}
+
+/**
+ * @brief					Function to resize a Dictionary on reaching full capacity
+ * 							Not to be called by user - will be indirectly called whenever needed
+ * 							automatically.
+ *
+ * @param t
+ * @param newCapacity		New capacity of Dictionary
+ * @return t_dict*			New Dictionary after resizing
+ */
+t_dict *resize_dict(t_dict *t, int newCapacity)
+{
+	int i;
+	t_dict *new_table;
+
+	i = 0;
+	if (newCapacity < 0 || newCapacity <= t->capacity)
+		return (NULL);
+	t->capacity = newCapacity;
+	new_table = create_dict(newCapacity);
+	if (!new_table)
+		return (NULL);
+	while (i < t->size)
+	{
+		insert_into_dict(&new_table, t->table[i]->key, t->table[i]->value);
+		i++;
+	}
+	destroy_dict(t);
+	return (new_table);
 }

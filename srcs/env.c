@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 11:51:12 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/04 14:48:50 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/04 21:51:17 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  */
 int ft_env()
 {
-	print_ht(zundra.env_mngr);
+	print_dict(zundra.env_mngr);
 	return (0);
 }
 
@@ -30,9 +30,21 @@ int ft_env()
  * @param value	Variable value
  * @return int	Status code of insertion
  */
-int ft_export(char *key, char *value)
+int ft_export(char **argv)
 {
-	insert_into_ht(&zundra.env_mngr, key, value);
+	t_dict *dict;
+
+	if (argv[1] && argv[2])
+	{
+		insert_into_dict(&zundra.env_mngr, argv[0], argv[1]);
+		zundra.envp = dict_to_string_arr(zundra.env_mngr);
+	}
+	else
+	{
+		dict = sort_dictionary(zundra.env_mngr, ft_strncmp);
+		print_dict(dict);
+		destroy_dict(dict);
+	}
 	return 0;
 }
 
@@ -42,8 +54,16 @@ int ft_export(char *key, char *value)
  * @param key	Name of variable to delete
  * @return int	Status code of deletion (remove if not needed)
  */
-int ft_unset(char *key)
+int ft_unset(char **argv)
 {
-	remove_from_ht(zundra.env_mngr, key);
+	int i;
+
+	i = 0;
+	if (argv[1])
+	{
+		remove_from_dict(zundra.env_mngr, argv[1]);
+		free(zundra.env_mngr);
+		zundra.envp = dict_to_string_arr(zundra.env_mngr);
+	}
 	return 0;
 }

@@ -65,132 +65,28 @@ int search_relative_path(char *cmd, char **argv)
 }
 
 /**
- * @brief			Redirect input to a specific file for a command
+ * @brief			Prepare the arguments of the current command as a char**
+ * 					for easy execution by execve
  *
- * @param cmd		Currently executing command
- * @param current	Current redirector in the list of redirections of the command cmd
- * @return int		Error code of operation (0 on SUCCESS, -1 on ERROR)
+ * @param word_lst	linked list of words
+ * @return char**	argv for the currently executing command
  */
-int redirect_input(t_command *cmd, t_redirect *current)
+char **prepare_cmd_args(t_word_list *word_lst)
 {
-	cmd->fd_in = open(current->redirectee.word, current->flags, 0777);
-	if (cmd->fd_in == -1)
-	{
-		perror("File does not exist!");
-		return (-1);
-	}
-	if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
-	{
-		perror("Error while duping pipe to STDIN: ");
-		return (-1);
-	}
-	if (close(cmd->fd_in) == -1)
-	{
-		perror("Error while closing file: ");
-		return (-1);
-	}
-	return (0);
-}
-
-/**
- * @brief			Redirect output to a specific file for a command
- *
- * @param cmd		Currently executing command
- * @param current	Current redirector in the list of redirections of the command cmd
- * @return int		Error code of operation (0 on SUCCESS, -1 on ERROR)
- */
-int redirect_output(t_command *cmd, t_redirect *current)
-{
-	cmd->fd_out = open(current->redirectee.word, current->flags, 0777);
-	if (cmd->fd_out == -1)
-	{
-		perror("File does not exist!");
-		return -1;
-	}
-	if (dup2(cmd->fd_out, STDOUT_FILENO) == -1)
-	{
-		perror("Error while duping pipe to STDOUT: ");
-		return (-1);
-	}
-	if (close(cmd->fd_out) == -1)
-	{
-		perror("Error while closing file: ");
-		return (-1);
-	}
-	return (0);
-}
-
-/**
- * @brief			Function to open necessary files and perform all redirections from left->right.
- * 					If there are pipes, then the necessary piping is handled as well.
- * 					Handles input, output, output append, and heredoc
- *
- * @param cmd		Currently executing command
- * @return int		Status code (discard if not needed)
- */
-int perform_IO_redirections(t_command *cmd)
-{
-	int fd;
-	t_redirect *iterator;
-
-	iterator = cmd->redirects;
-	if (piper(cmd) == -1)
-		return (-1);
-	while (iterator) /* Iterate through redireciton list */
-	{
-		if (iterator->direction == r_input)
-			redirect_input(cmd, iterator);
-		else if (iterator->direction == r_output || iterator->direction  == r_output_append)
-			redirect_output(cmd, iterator);
-		else
-		{
-			// heredoc
-		}
-		iterator = iterator->next;
-	}
-	return (0);
-}
-
-/**
- * @brief			Function to pipe input and output to and from commands following and
- *					preceding the currently executing command. command[i] reads from pipe i and writes
-					to pipe[i+1]. To account for all varieties of commands, 2 artificial pipes are
-					created before the first command and after the last command mimicking STDIN & STDOUT
- *
- * @param cmd		Currently executing command
- * @return int		Status code of the closing pipes and dupes done
- */
-int piper(t_command *cmd)
-{
+	char **ret;
 	int i;
-	int error_code;
 
-	i = 1;
-	if (dup2(zundra.pipes[cmd->id][0], STDIN_FILENO) == -1)
+	i = 0;
+	ret = malloc(sizeof(char *) * zundra.num_of_cmds);
+	while (word_lst)
 	{
-		perror("Error while duping pipe to STDIN: ");
-		return (-1);
-	}
-	if (dup2(zundra.pipes[cmd->id + 1][1], STDOUT_FILENO) == -1)
-	{
-		perror("Error while duping pipe to STDOUT: ");
-		return (-1);
-	}
-	while (i < zundra.num_of_cmds)
-	{
-		if (close(zundra.pipes[i][0]) == -1)
-		{
-			perror("Error while closing pipe: ");
-			return (-1);
-		}
-		if (close(zundra.pipes[i][1]) == -1)
-		{
-			perror("Error while closing pipe: ");
-			return (-1);
-		}
+		ret[i] = word_lst->word->word;
+		ft_printf("%s\n", ret[i]);
+		word_lst = word_lst->next;
 		i++;
 	}
-	return (1);
+	ret[i] = NULL;
+	return ret;
 }
 
 /**
@@ -216,13 +112,10 @@ int cmd_executor(t_command *cmd, char *c, char **av)
 	{
 		if (perform_IO_redirections(cmd) == -1)
 			return -1;
-		if (search_absolute_path(c, av) == 0)
+		if (exec_builtin(av) != 2 && !search_absolute_path(c, av) && !search_relative_path(c, av))
 		{
-			if (!search_relative_path(c, av))
-			{
-				ft_printf("minishell: command not found\n");
-				return 0;
-			}
+			ft_printf("minishell: command not found\n");
+			return 0;
 		}
 	}
 	zundra.status_code = WEXITSTATUS(child_status);
