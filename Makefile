@@ -23,8 +23,8 @@ CFLAGS		=	-lreadline #-L /usr/local/Cellar/readline/8.1/lib -I /usr/local/Cellar
 
 all:	$(NAME)
 
-$(NAME):	${OBJS} ${LIB}
-		$(CC) -g -fsanitize=address $(CFLAGS) -I ../inc/minishell.h ${OBJS} ${LIB} -o minishell
+$(NAME):	$(OBJS) $(LIB)
+		$(CC) -g $(CFLAGS) -I ../inc/minishell.h $(OBJS) $(LIB) -o minishell
 
 $(LIB):
 		make -C ./lib/libft/
