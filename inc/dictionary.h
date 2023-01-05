@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 11:58:02 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/04 21:49:22 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/05 17:24:34 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,6 @@ char **dict_to_string_arr(t_dict *dict);
 //dictionary_cleanup.c
 void destroy_pair(t_pair *p);
 void destroy_dict(t_dict *t);
+t_dict *generate_env_manager(char **envp);
 
 #endif

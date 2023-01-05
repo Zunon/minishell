@@ -61,8 +61,8 @@ int exec_builtin(char **cmd)
 		ft_exit(cmd);
 	if (!cmd[1] && ft_strncmp(cmd[0], "env", 3) == 0)
 		return ft_env();
-	if (!cmd[1] && ft_strncmp(cmd[0], "export", 6) == 0)
-		return ft_export(cmd);
+	// if (!cmd[1] && ft_strncmp(cmd[0], "export", 6) == 0)
+	// 	return ft_export(cmd);
 	if (!cmd[1] && ft_strncmp(cmd[0], "unset", 5) == 0)
 		return ft_unset(cmd);
 	return (2);

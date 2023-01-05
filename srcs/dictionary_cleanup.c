@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 21:21:53 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/05 14:37:54 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/05 18:35:46 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,44 @@ void destroy_dict(t_dict *t)
 	t->table = NULL;
 	t->size = 0;
 	free(t);
+}
+
+static int find_pos(char *s, char c)
+{
+	int i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == c)
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+t_dict *generate_env_manager(char **envp)
+{
+	t_dict *env_manager;
+	int i;
+	char *key;
+	char *value;
+	int pos;
+
+	i = 0;
+	env_manager = create_dict(25);
+	while (envp[i])
+	{
+		pos = find_pos(envp[i], '=');
+		if (pos != -1)
+		{
+			key = ft_substr(envp[i], 0, pos);
+			value = ft_substr(envp[i], pos + 1, 10000000);
+		}
+		insert_into_dict(&env_manager, key, value);
+		free(key);
+		free(value);
+		i++;
+	}
+	return (env_manager);
 }

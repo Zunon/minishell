@@ -33,7 +33,9 @@ typedef struct s_word_desc
 	char *word;			/* Zero terminated string. */
 	int dollar_present; /* Non-zero means dollar sign present. */
 	int quoted;			/* Non-zero means single, double, or back quote
-				   or backslash is present. */
+				   			or backslash is present. */
+	int assignment;		/* Non-zero means that this word contains an
+				   			assignment. */
 } t_word_desc;
 
 /* A linked list of words. */
@@ -128,7 +130,7 @@ t_dict *resize_dict(t_dict *t, int newCapacity);
 
 // env.c
 int ft_env();
-int ft_export(char **argv);
+int ft_export(t_command *cmd);
 int ft_unset(char **argv);
 
 // main.c
