@@ -91,7 +91,7 @@ typedef struct s_shell
 	char **envp;
 } t_shell;
 
-extern t_shell zundra;
+t_shell zundra;
 
 //builtins1.c
 int	ft_echo(char **cmd);
@@ -99,7 +99,7 @@ int ft_cd(char **cmd);
 int ft_pwd();
 
 //builtins2.c
-void ft_exit();
+void ft_exit(char **);
 int status_code();
 int exec_builtin(char **cmd);
 
@@ -150,7 +150,5 @@ int perform_IO_redirections(t_command *cmd);
 void prepare_pipes();
 int piper(t_command *cmd);
 
-// tests.c
-int t1();
 
 #endif

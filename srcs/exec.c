@@ -77,9 +77,10 @@ char **prepare_cmd_args(t_word_list *word_lst)
 	int i;
 
 	i = 0;
-	ret = malloc(sizeof(char *) * (zundra.num_of_cmds + 1));
+	ret = malloc(sizeof(char *) * (3));
 	while (word_lst)
 	{
+		ft_printf("%d", i);
 		ret[i] = word_lst->curr_word_desc->word;
 		word_lst = word_lst->next;
 		i++;
@@ -119,4 +120,35 @@ int cmd_executor(t_command *cmd, char **argv)
 	}
 	zundra.status_code = WEXITSTATUS(child_status);
 	return WEXITSTATUS(child_status);
+}
+
+/**
+ * @brief			Phase 3 of the shell - execution of commands takes place here
+ *
+ * @param cmd		Linked list of commands to execute in the current pipeline
+ * @return int		Status code of last executed command
+ */
+int executor(t_command *cmd)
+{
+	t_command *iterator;
+	char **cmd_argv;
+	int i;
+
+	iterator = cmd;
+	prepare_pipes();
+	while (iterator)
+	{
+		zundra.cmds = iterator;
+		cmd_argv = prepare_cmd_args(iterator->words);
+		cmd_executor(iterator, cmd_argv);
+		iterator = iterator->next;
+	}
+	i = 0;
+	while (i < zundra.num_of_cmds)
+	{
+		wait(0);
+		i++;
+	}
+	free_commands(cmd);
+	return status_code();
 }

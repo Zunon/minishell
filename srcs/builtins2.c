@@ -16,8 +16,15 @@
  * @brief		Exit from minishell safely
  *
  */
-void ft_exit()
+void ft_exit(char **argv)
 {
+	int x;
+
+	if (argv[1])
+	{
+		x = ft_atoi(argv[1]);
+		exit(x & 0xff);
+	}
 	exit(0);
 }
 
@@ -51,7 +58,7 @@ int exec_builtin(char **cmd)
 	if (!cmd[1] && ft_strncmp(cmd[0], "pwd", 3) == 0)
 		return ft_pwd();
 	if (!cmd[1] && ft_strncmp(cmd[0], "exit", 4) == 0)
-		ft_exit();
+		ft_exit(cmd);
 	if (!cmd[1] && ft_strncmp(cmd[0], "env", 3) == 0)
 		return ft_env();
 	if (!cmd[1] && ft_strncmp(cmd[0], "export", 6) == 0)

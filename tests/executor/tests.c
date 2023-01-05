@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 16:18:19 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/05 01:19:46 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/05 16:20:29 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,7 +195,12 @@ int t4()
 	wd->next = malloc(sizeof(t_word_list));
 	wd->next->curr_word_desc = malloc(sizeof(t_word_desc));
 	wd->next->curr_word_desc->word = ft_strdup("Makefile");
+
 	wd->next->next = NULL;
+	// malloc(sizeof(t_word_list));
+	// wd->next->next->curr_word_desc = malloc(sizeof(t_word_desc));
+	// wd->next->next->curr_word_desc->word = ft_strdup("");
+	// wd->next->next->next = NULL;
 
 	command1->words = wd;
 	executor(command1);

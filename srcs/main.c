@@ -48,44 +48,14 @@ t_command *parser()
 	return NULL;
 }
 
-/**
- * @brief			Phase 3 of the shell - execution of commands takes place here
- *
- * @param cmd		Linked list of commands to execute in the current pipeline
- * @return int		Status code of last executed command
- */
-int executor(t_command *cmd)
-{
-	t_command *iterator;
-	char **cmd_argv;
-	int i;
-
-	prepare_pipes();
-	while (iterator)
-	{
-		iterator = cmd;
-		zundra.cmds = iterator;
-		cmd_argv = prepare_cmd_args(iterator->words);
-		cmd_executor(iterator, cmd_argv);
-		iterator = iterator->next;
-	}
-	i = 0;
-	while (i < zundra.num_of_cmds)
-	{
-		wait(0);
-		i++;
-	}
-	free_commands(cmd);
-	return status_code();
-}
-
 int main(int argc, char **argv, char **envp)
 {
+	int i;
 	char *s;
 	t_command *cmd;
+
 	(void)argc;
 	(void)argv;
-
 	signal(SIGINT, &sig_handler);
 	signal(SIGQUIT, &sig_handler);
 	zundra.envp = envp;
@@ -98,5 +68,6 @@ int main(int argc, char **argv, char **envp)
 		executor(cmd);
 		free(s);
 	}
+	ft_exit(argv);
 	return (0);
 }

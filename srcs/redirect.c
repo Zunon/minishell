@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 22:00:33 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/05 01:14:12 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/05 16:05:15 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,36 +64,6 @@ int redirect_output(t_command *cmd, t_redirect *current)
 	{
 		perror("Error while closing file: ");
 		return (-1);
-	}
-	return (0);
-}
-
-/**
- * @brief			Function to open necessary files and perform all redirections from left->right.
- * 					If there are pipes, then the necessary piping is handled as well.
- * 					Handles input, output, output append, and heredoc
- *
- * @param cmd		Currently executing command
- * @return int		Status code (discard if not needed)
- */
-int perform_IO_redirections(t_command *cmd)
-{
-	t_redirect *iterator;
-
-	iterator = cmd->redirects;
-	if (piper(cmd) == -1)
-		return (-1);
-	while (iterator) /* Iterate through redireciton list */
-	{
-		if (iterator->direction == r_input)
-			redirect_input(cmd, iterator);
-		else if (iterator->direction == r_output || iterator->direction == r_output_append)
-			redirect_output(cmd, iterator);
-		else
-		{
-			// heredoc
-		}
-		iterator = iterator->next;
 	}
 	return (0);
 }
@@ -162,4 +132,34 @@ int piper(t_command *cmd)
 		i++;
 	}
 	return (1);
+}
+
+/**
+ * @brief			Function to open necessary files and perform all redirections from left->right.
+ * 					If there are pipes, then the necessary piping is handled as well.
+ * 					Handles input, output, output append, and heredoc
+ *
+ * @param cmd		Currently executing command
+ * @return int		Status code (discard if not needed)
+ */
+int perform_IO_redirections(t_command *cmd)
+{
+	t_redirect *iterator;
+
+	iterator = cmd->redirects;
+	if (piper(cmd) == -1)
+		return (-1);
+	while (iterator) /* Iterate through redireciton list */
+	{
+		if (iterator->direction == r_input)
+			redirect_input(cmd, iterator);
+		else if (iterator->direction == r_output || iterator->direction == r_output_append)
+			redirect_output(cmd, iterator);
+		else
+		{
+			// heredoc
+		}
+		iterator = iterator->next;
+	}
+	return (0);
 }
