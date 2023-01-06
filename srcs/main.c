@@ -15,16 +15,31 @@
 t_shell zundra;
 
 /**
- * @brief Function to handle various signals in the program
+ * @brief				Function to handle various signals in the program
  *
- * @param sig - signal recieved by the program
+ * @param sig			Signal recieved by the program
  */
 void sig_handler(int sig)
 {
+	int i;
+
+	i = -1;
 	if (sig == SIGINT) //needs work
 	{
-		write(1, "\n", 1);
 		rl_on_new_line();
+		rl_redisplay();
+		write(2, "  \n", 3);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	if (sig == 3)
+	{
+		free_commands(zundra.cmds);
+		destroy_dict(zundra.env_mngr);
+		while (zundra.envp[++i])
+			free(zundra.envp[i]);
+		free(zundra.envp);
 		exit(0);
 	}
 }
@@ -58,15 +73,14 @@ int main(int argc, char **argv, char **envp)
 	(void)argv;
 	signal(SIGINT, &sig_handler);
 	signal(SIGQUIT, &sig_handler);
-	zundra.envp = envp;
 	zundra.env_mngr = generate_env_manager(envp);
 	while (2)
 	{
 		s = readline("minishell ^-^ : ");
 		add_history(s);
-		lexer(argv);
-		cmd = parser();
-		executor(cmd);
+		// lexer(argv);
+		// cmd = parser();
+		// executor(cmd);
 		free(s);
 	}
 	return (0);

@@ -138,6 +138,8 @@ int executor(t_command *cmd)
 	int i;
 
 	iterator = cmd;
+	if (!cmd)
+		return (0);
 	prepare_pipes();
 	while (iterator)
 	{

@@ -12,6 +12,12 @@
 
 #include "../inc/minishell.h"
 
+/**
+ * @brief				Update the environment variable manager dictionary after any
+ * 						exports and/or unsets
+ * 
+ * @param env_manager	Envrionment manager dictionary to update
+ */
 void update_env(t_dict *env_manager)
 {
 	int i;
@@ -28,6 +34,12 @@ void update_env(t_dict *env_manager)
 	zundra.envp = strs;
 }
 
+/**
+ * @brief				Print all envrioment variables in a sorted manner if there
+ * 						are no arguments to export
+ * 
+ * @return int			Status code of operation (discard if not needed)
+ */
 static int ft_export_no_args()
 {
 	t_dict *dict;
@@ -46,11 +58,11 @@ static int ft_export_no_args()
 }
 
 /**
- * @brief		Add new envrionment variable into the shell
+ * @brief				Add new envrionment variable into the shell
  *
- * @param key	Variable name
- * @param value	Variable value
- * @return int	Status code of insertion
+ * @param key			Variable name
+ * @param value			Variable value
+ * @return int			Status code of insertion
  */
 int ft_export(t_command *cmd)
 {
@@ -81,10 +93,10 @@ int ft_export(t_command *cmd)
 }
 
 /**
- * @brief		Remove an environment variable
+ * @brief				Remove an environment variable
  *
- * @param key	Name of variable to delete
- * @return int	Status code of deletion (remove if not needed)
+ * @param key			Name of variable to delete
+ * @return int			Status code of deletion (remove if not needed)
  */
 int ft_unset(char **argv)
 {

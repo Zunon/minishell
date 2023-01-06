@@ -135,5 +135,5 @@ char **dict_to_string_arr(t_dict *dict)
 		i++;
 	}
 	strs[j] = NULL;
-
+	return strs;
 }

@@ -36,15 +36,20 @@ CFLAGS		=	# -Wall -Wextra -Werror  #-L /usr/local/Cellar/readline/8.1/lib -I /us
 all:	$(NAME)
 
 $(NAME):	$(OBJS) $(LIB)
-		$(CC) -g -fsanitize=address $(CFLAGS) -I ../inc/minishell.h -lreadline $(OBJS) $(LIB) -lreadline -o minishell
+		$(CC) -g $(CFLAGS) -I ../inc/minishell.h -lreadline $(OBJS) $(LIB) -lreadline -o minishell
 
 $(LIB):
 		make -C ./lib/libft/
 
+fd_leaks:
+		make re && valgrind --track-fds=yes ./minishell
+leaks:
+		make && valgrind --show-leak-kinds=all --leak-check=full --show-reachable=yes --error-limit=no --suppressions=inc/readline.supp --log-file=valg_errors.log ./minishell
+		# make && valgrind --show-leak-kinds=all --leak-check=full --show-reachable=yes --error-limit=no --gen-suppressions=all --log-file=minimalraw.log ./minishell
 lex_tester:	$(LEX_TEST_OBJS) $(LIB)
-		$(CC) -g -fsanitize=address $(CFLAGS) -I ../inc/minishell.h -lreadline $(LEX_TEST_OBJS) $(LIB) -lreadline -o minishell
+		$(CC) -g -no-pie -fsanitize=address $(CFLAGS) -I ../inc/minishell.h -lreadline $(LEX_TEST_OBJS) $(LIB) -lreadline -o minishell
 parser_tester:	$(PARSE_TEST_OBJS) $(LIB)
-		$(CC) -g -fsanitize=address $(CFLAGS) -I ../inc/minishell.h -lreadline $(PARSE_TEST_OBJS) $(LIB) -lreadline -o minishell
+		$(CC) -g -no-pie -fsanitize=address $(CFLAGS) -I ../inc/minishell.h -lreadline $(PARSE_TEST_OBJS) $(LIB) -lreadline -o minishell
 exec_tester:	$(EXEC_TEST_OBJS) $(LIB)
 		$(CC) -g -no-pie -fsanitize=address $(CFLAGS) -I ../inc/minishell.h -lreadline $(EXEC_TEST_OBJS) $(LIB) -lreadline -o minishell
 clean:

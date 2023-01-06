@@ -12,7 +12,12 @@
 
 #include "../inc/minishell.h"
 
-
+/**
+ * @brief				Update the shell level of minishell on execution at startup
+ * 						Note: If SHLVL is unset by calling process, SHLVL is exported
+ * 						with default value 1
+ * @param env_manager	Environment variable manager dictionary
+ */
 static void update_shlvl(t_dict *env_manager)
 {
 	t_pair *shlvl;
@@ -29,6 +34,14 @@ static void update_shlvl(t_dict *env_manager)
 	free(temp);
 }
 
+/**
+ * @brief				Helper function to find the index of a specific character in a 
+ * 						string if it exists
+ * 
+ * @param s				String to search through
+ * @param c				Character to look for
+ * @return int			Index of occurance OR -1 if not found
+ */
 static int find_pos(char *s, char c)
 {
 	int i;
@@ -43,6 +56,14 @@ static int find_pos(char *s, char c)
 	return (-1);
 }
 
+/**
+ * @brief				Function to generate an envrionment variable manager from
+ * 						the envrionment variables passed into minishell by the
+ * 						calling process.
+ * 
+ * @param envp			Pointer to array of characters with all variables
+ * @return t_dict*		Pointer to generated dictionary of environment variables
+ */
 t_dict *generate_env_manager(char **envp)
 {
 	t_dict *env_manager;
@@ -67,13 +88,14 @@ t_dict *generate_env_manager(char **envp)
 		i++;
 	}
 	update_shlvl(env_manager);	
+	zundra.envp = dict_to_string_arr(env_manager);
 	return (env_manager);
 }
 
 /**
- * @brief		Display all environment variables of the current shell
+ * @brief				Display all environment variables of the current shell
  *
- * @return int	status code of oepration (discard if not needed)
+ * @return int			status code of oepration (discard if not needed)
  */
 int ft_env()
 {
