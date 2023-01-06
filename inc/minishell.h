@@ -81,6 +81,7 @@ typedef struct s_command{
 	int stdout_old;
 	int stdin_old;
 	struct s_command *next;
+	char **argv;
 }	t_command;
 
 typedef struct s_shell
@@ -93,7 +94,7 @@ typedef struct s_shell
 	char **envp;
 } t_shell;
 
-t_shell zundra;
+extern t_shell zundra;
 
 //builtins1.c
 int	ft_echo(char **cmd);
@@ -103,32 +104,15 @@ int ft_pwd();
 //builtins2.c
 void ft_exit(char **);
 int status_code();
-int exec_builtin(char **cmd);
+int exec_builtin(t_command *cmd, char **argv);
 
 //cleanup.c
 void free_redirects(t_redirect *redir);
 void free_word_list(t_word_list *word_list);
 void free_commands(t_command *cmd);
 
-//dictionary_cleanup.c
-void destroy_pair(t_pair *p);
-void destroy_dict(t_dict *t);
-
-//dictionary_utils.c
-void print_pair(t_pair *p);
-void print_dict(t_dict *t);
-t_dict *duplicate_dictionary(t_dict *dict);
-t_dict *sort_dictionary(t_dict *dict, int (*compare)(char *, char *, size_t));
-char **dict_to_string_arr(t_dict *dict);
-
-//dictionary.c
-t_dict *create_dict(int s);
-t_pair *retrieve_from_dict(t_dict *t, char *key);
-void insert_into_dict(t_dict **t, char *key, char *value);
-void remove_from_dict(t_dict *t, char *key);
-t_dict *resize_dict(t_dict *t, int newCapacity);
-
 // env.c
+t_dict *generate_env_manager(char **envp);
 int ft_env();
 int ft_export(t_command *cmd);
 int ft_unset(char **argv);

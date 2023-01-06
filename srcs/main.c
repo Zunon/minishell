@@ -69,6 +69,5 @@ int main(int argc, char **argv, char **envp)
 		executor(cmd);
 		free(s);
 	}
-	ft_exit(argv);
 	return (0);
 }

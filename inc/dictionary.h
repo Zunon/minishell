@@ -52,12 +52,11 @@ t_dict *resize_dict(t_dict *t, int newCapacity);
 void print_pair(t_pair *p);
 void print_dict(t_dict *t);
 t_dict *duplicate_dictionary(t_dict *dict);
-t_dict *sort_dictionary(t_dict *dict, int (*compare)(char *, char *, size_t));
+t_dict *sort_dictionary(t_dict *dict, int (*compare)(const char *, const char *, size_t));
 char **dict_to_string_arr(t_dict *dict);
 
 //dictionary_cleanup.c
 void destroy_pair(t_pair *p);
 void destroy_dict(t_dict *t);
-t_dict *generate_env_manager(char **envp);
 
 #endif

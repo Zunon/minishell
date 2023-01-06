@@ -63,7 +63,9 @@ void free_word_list(t_word_list *word_list)
 void free_commands(t_command *cmd)
 {
 	t_command *temp;
+	int i;
 
+	i = 0;
 	if (!cmd)
 		return;
 	while (cmd)
@@ -72,6 +74,12 @@ void free_commands(t_command *cmd)
 		cmd = cmd->next;
 		free_redirects(temp->redirects);
 		free_word_list(temp->words);
+		while (cmd->argv[i])
+		{
+			free(cmd->argv[i]);
+			i++;
+		}
+		free(cmd->argv);
 		free(temp);
 	}
 }

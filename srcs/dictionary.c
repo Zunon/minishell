@@ -77,6 +77,7 @@ void insert_into_dict(t_dict **t, char* key, char* value)
     int index;
 	t_pair *exists;
 
+	index = 0;
 	exists = retrieve_from_dict(*t, key) ;
 	if (exists)
 	{
@@ -86,7 +87,6 @@ void insert_into_dict(t_dict **t, char* key, char* value)
 	}
     if ((*t)->size == (*t)->capacity)
         *t = resize_dict(*t, 2 *(*t)->capacity + 1);
-    index = (*t)->size % (*t)->capacity;
     while ((*t)->table[index])
         index = (index + 1) % (*t)->capacity;
     (*t)->table[index] = malloc(sizeof(t_pair));

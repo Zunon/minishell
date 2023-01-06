@@ -78,7 +78,7 @@ t_dict *duplicate_dictionary(t_dict *dict)
  * @param compare			Function used to compare keys of a dictionary
  * @return t_dict*			Pointer to sorted duplicated dictionary
  */
-t_dict *sort_dictionary(t_dict *dict, int (*compare)(char *, char *, size_t))
+t_dict *sort_dictionary(t_dict *dict, int (*compare)(const char *, const char *, size_t))
 {
 	int i;
 	int j;
@@ -113,19 +113,27 @@ t_dict *sort_dictionary(t_dict *dict, int (*compare)(char *, char *, size_t))
  */
 char **dict_to_string_arr(t_dict *dict)
 {
-	char **ret;
+	char *temp;
+	char **strs;
 	int i;
+	int j;
 
+	j = 0;
 	i = 0;
-	ret = malloc(sizeof (dict->size));
-	while (i < dict->size)
+	if (!dict || !dict->table)
+		return (NULL);
+	strs = malloc(sizeof(char*) * (dict->size + 1));
+	while (i < dict->capacity)
 	{
 		if (dict->table[i])
 		{
-			ret[i] = ft_strjoin(dict->table[i]->key, "=");
-			ret[i] = ft_strjoin(ret[i], dict->table[i]->value);
-		}
+			temp = ft_strjoin(dict->table[i]->key, "=");
+			strs[j] = ft_strjoin(temp, dict->table[i]->value);
+			free(temp);
+			j++;
+		}		
+		i++;
 	}
-	ret[i] = NULL;
-	return (ret);
+	strs[j] = NULL;
+
 }

@@ -76,6 +76,8 @@ char **prepare_cmd_args(t_word_list *word_lst)
 	char **ret;
 	int i;
 
+	if (!word_lst)
+		return (NULL);
 	i = 0;
 	ret = malloc(sizeof(char *) * (3));
 	while (word_lst)
@@ -102,6 +104,8 @@ int cmd_executor(t_command *cmd, char **argv)
 	pid_t pid;
 	int child_status;
 
+	if (!cmd->next && exec_builtin(cmd, argv) != 2)
+		return 0;
 	pid = fork();
 	if (pid == -1)
 	{
@@ -112,7 +116,7 @@ int cmd_executor(t_command *cmd, char **argv)
 	{
 		if (perform_IO_redirections(cmd) == -1)
 			return -1;
-		if (exec_builtin(argv) == 2 && !search_absolute_path(argv[0], argv) && !search_relative_path(argv[0], argv))
+		if (exec_builtin(cmd, argv) == 2 && !search_absolute_path(argv[0], argv) && !search_relative_path(argv[0], argv))
 		{
 			ft_printf("minishell: command not found\n");
 			return 0;
@@ -131,7 +135,6 @@ int cmd_executor(t_command *cmd, char **argv)
 int executor(t_command *cmd)
 {
 	t_command *iterator;
-	char **cmd_argv;
 	int i;
 
 	iterator = cmd;
@@ -139,8 +142,8 @@ int executor(t_command *cmd)
 	while (iterator)
 	{
 		zundra.cmds = iterator;
-		cmd_argv = prepare_cmd_args(iterator->words);
-		cmd_executor(iterator, cmd_argv);
+		iterator->argv = prepare_cmd_args(iterator->words);
+		cmd_executor(iterator, iterator->argv);
 		iterator = iterator->next;
 	}
 	i = 0;
