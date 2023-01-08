@@ -155,17 +155,3 @@ int t2(/*cat /dev/random | head -n 10 > rand */)
 	command2->next = NULL;
 	executor(command1);
 }
-int main(int argc, char **argv, char **envp)
-{
-	// intitiate_testing_env(envp);
-	// test_env_noargs();
-	// test_export_no_arg();
-	// test_export_with_args();
-	// test_unset_no_args();
-	// test_unset_existing_var();
-	// test_unset_missing_var();
-    t1();
-    write(1, "\n", 1);
-    t2();
-	return 0;
-}
