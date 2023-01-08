@@ -72,6 +72,27 @@ static int close_parent_pipes()
 }
 
 /**
+ * @brief			Get the number of words in the given word list.
+ * 					Used to help deicde how many bytes of memory to allocate for
+ * 					the argument list of a command
+ * 
+ * @param word_lst 	t_word_lst variable to get the size of
+ * @return int		Number of strings present (Excluding NULL element)
+ */
+static int get_word_list_length(t_word_list *word_lst)
+{
+	int i;
+
+	i = 0;
+	while (word_lst)
+	{
+		word_lst = word_lst->next;
+		i++;
+	}
+	return (i);
+}
+
+/**
  * @brief			Prepare the arguments of the current command as a char**
  * 					for easy execution by execve
  *
@@ -86,7 +107,7 @@ static char **prepare_cmd_args(t_word_list *word_lst)
 	if (!word_lst)
 		return (NULL);
 	i = 0;
-	ret = malloc(sizeof(char *) * (4));
+	ret = malloc(sizeof(char *) * (1 + get_word_list_length(word_lst)));
 	while (word_lst)
 	{
 		ret[i] = word_lst->curr_word_desc->word;

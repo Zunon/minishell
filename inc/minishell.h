@@ -75,7 +75,6 @@ typedef struct s_command{
 	t_word_list *words;   			/* The program name, the arguments */
 	t_redirect *redirects; 			/* Redirections to perform. */
 	int exit_code;		 			/* Exit status of command */
-	int num_redirections;
 	int fd_in;
 	int fd_out;
 	struct s_command *next;

@@ -41,11 +41,11 @@ static int search_absolute_path(char **argv)
 			perror("Error during execution of program!");
 			return (EXIT_FAILURE);
 		}
-		// free(exec_path);
-		// free(paths[i]);
+		free(exec_path);
+		free(paths[i]);
 		i++;
 	}
-	// free(paths);
+	free(paths);
 	return (EXIT_SUCCESS);
 }
 /**
@@ -98,7 +98,6 @@ int exec_simple_cmd(t_command *cmd, char **argv)
 			exit(127);
 		}
 	}
-	else
-		zundra.last_child_pid = pid;
+	zundra.last_child_pid = pid;
 	return (EXIT_SUCCESS);
 }

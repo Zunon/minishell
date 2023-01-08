@@ -136,7 +136,7 @@ int perform_IO_redirections(t_command *cmd)
 	iterator = cmd->redirects;
 	if (piper(cmd) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	while (iterator && status != EXIT_FAILURE) /* Iterate through redireciton list */
+	while (iterator && status != EXIT_FAILURE) /* Iterate through redirection list */
 	{
 		if (iterator->direction == r_input)
 			status = redirect_input(cmd, iterator);
