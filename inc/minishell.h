@@ -133,8 +133,12 @@ int cmd_executor(t_command *cmd, char **argv);
 int redirect_input(t_command *cmd, t_redirect *current);
 int redirect_output(t_command *cmd, t_redirect *current);
 int perform_IO_redirections(t_command *cmd);
-void prepare_pipes();
+int prepare_pipes();
+int close_parent_pipes();
+int close_child_pipes();
 int piper(t_command *cmd);
+
+int t4();
 
 
 #endif

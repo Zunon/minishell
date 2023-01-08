@@ -79,10 +79,9 @@ char **prepare_cmd_args(t_word_list *word_lst)
 	if (!word_lst)
 		return (NULL);
 	i = 0;
-	ret = malloc(sizeof(char *) * (3));
+	ret = malloc(sizeof(char *) * (4));
 	while (word_lst)
 	{
-		ft_printf("%d", i);
 		ret[i] = word_lst->curr_word_desc->word;
 		word_lst = word_lst->next;
 		i++;
@@ -148,12 +147,9 @@ int executor(t_command *cmd)
 		cmd_executor(iterator, iterator->argv);
 		iterator = iterator->next;
 	}
-	i = 0;
-	while (i < zundra.num_of_cmds)
-	{
+	close_parent_pipes();
+	i = -1;
+	while (++i < zundra.num_of_cmds)
 		wait(0);
-		i++;
-	}
-	free_commands(cmd);
 	return status_code();
 }

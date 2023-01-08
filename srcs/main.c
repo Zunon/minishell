@@ -35,7 +35,7 @@ void sig_handler(int sig)
 	}
 	if (sig == 3)
 	{
-		free_commands(zundra.cmds);
+		// free_commands(zundra.cmds);
 		destroy_dict(zundra.env_mngr);
 		while (zundra.envp[++i])
 			free(zundra.envp[i]);
@@ -62,6 +62,7 @@ t_command *parser()
 {
 	return NULL;
 }
+
 
 int main(int argc, char **argv, char **envp)
 {

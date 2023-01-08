@@ -51,7 +51,7 @@ lex_tester:	$(LEX_TEST_OBJS) $(LIB)
 parser_tester:	$(PARSE_TEST_OBJS) $(LIB)
 		$(CC) -g -no-pie -fsanitize=address $(CFLAGS) -I ../inc/minishell.h -lreadline $(PARSE_TEST_OBJS) $(LIB) -lreadline -o minishell
 exec_tester:	$(EXEC_TEST_OBJS) $(LIB)
-		$(CC) -g -no-pie -fsanitize=address $(CFLAGS) -I ../inc/minishell.h -lreadline $(EXEC_TEST_OBJS) $(LIB) -lreadline -o minishell
+		$(CC) -g -no-pie $(CFLAGS) -I ../inc/minishell.h -lreadline $(EXEC_TEST_OBJS) $(LIB) -lreadline -o minishell
 clean:
 		${RM} $(OBJS) $(PARSE_TEST_OBJS) $(EXEC_TEST_OBJS)
 fclean:	clean

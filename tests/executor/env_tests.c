@@ -67,15 +67,3 @@ int test_unset_missing_var()
 {
 	return 0;
 }
-
-int main(int argc, char **argv, char **envp)
-{
-	intitiate_testing_env(envp);
-	test_env_noargs();
-	test_export_no_arg();
-	test_export_with_args();
-	test_unset_no_args();
-	test_unset_existing_var();
-	test_unset_missing_var();
-	return 0;
-}

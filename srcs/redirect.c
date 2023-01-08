@@ -24,17 +24,17 @@ int redirect_input(t_command *cmd, t_redirect *current)
 	cmd->fd_in = open(current->redirectee.word, current->flags, 0777);
 	if (cmd->fd_in == -1)
 	{
-		perror("File does not exist!");
+		perror("CHILD - File does not exist!");
 		return (-1);
 	}
 	if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
 	{
-		perror("Error while duping pipe to STDIN: ");
+		perror("CHILD - Error while duping pipe to STDIN: ");
 		return (-1);
 	}
 	if (close(cmd->fd_in) == -1)
 	{
-		perror("Error while closing file: ");
+		perror("CHILD - Error while closing input file: ");
 		return (-1);
 	}
 	return (0);
@@ -52,17 +52,17 @@ int redirect_output(t_command *cmd, t_redirect *current)
 	cmd->fd_out = open(current->redirectee.word, current->flags, 0777);
 	if (cmd->fd_out == -1)
 	{
-		perror("File does not exist!");
+		perror("CHILD - File does not exist!");
 		return -1;
 	}
 	if (dup2(cmd->fd_out, STDOUT_FILENO) == -1)
 	{
-		perror("Error while duping pipe to STDOUT: ");
+		perror("CHILD - Error while duping pipe to STDOUT: ");
 		return (-1);
 	}
 	if (close(cmd->fd_out) == -1)
 	{
-		perror("Error while closing file: ");
+		perror("CHILD - Error while closing output file: ");
 		return (-1);
 	}
 	return (0);
@@ -74,7 +74,7 @@ int redirect_output(t_command *cmd, t_redirect *current)
  * 					First and last pipe are dummy pipes with STDIN and STDOUT
  *
  */
-void prepare_pipes()
+int prepare_pipes()
 {
 	int i;
 
@@ -84,13 +84,70 @@ void prepare_pipes()
 	{
 		zundra.pipes[i] = malloc(sizeof(int) * 2);
 		if (i != 0 && i != zundra.num_of_cmds)
-			pipe(zundra.pipes[i]);
+			if (pipe(zundra.pipes[i]) == -1)
+			{
+				perror("PARENT - Failed to create pipe: ");
+				return (-1);
+			}
 		i++;
 	}
 	zundra.pipes[0][0] = STDIN_FILENO;
 	zundra.pipes[0][1] = STDOUT_FILENO;
 	zundra.pipes[zundra.num_of_cmds][0] = STDIN_FILENO;
 	zundra.pipes[zundra.num_of_cmds][1] = STDOUT_FILENO;
+}
+
+/**
+ * @brief			Close all pipes safely from the parent process
+ * 
+ */
+int close_parent_pipes()
+{
+	int i;
+
+	i = 1;
+	while (i < zundra.num_of_cmds)
+	{
+		if (close(zundra.pipes[i][0]) == -1)
+		{
+			perror("Error while closing pipe read end: ");
+			return (-1);
+		}
+		if (close(zundra.pipes[i][1]) == -1)
+		{
+			perror("Error while closing pipe write end: ");
+			return (-1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+/**
+ * @brief			Close all pipes safely from the child process
+ * 
+ * @return int 
+ */
+int close_child_pipes()
+{
+	int i;
+
+	i = 1;
+	while (i < zundra.num_of_cmds)
+	{
+		if (close(zundra.pipes[i][0]) == -1)
+		{
+			perror("CHILD - Error while closing pipe read end: ");
+			return (-1);
+		}
+		if (close(zundra.pipes[i][1]) == -1)
+		{
+			perror("CHILD - Error while closing pipe write end: ");
+			return (-1);
+		}
+		i++;
+	}
+	return (0);
 }
 
 /**
@@ -109,29 +166,15 @@ int piper(t_command *cmd)
 	i = 1;
 	if (dup2(zundra.pipes[cmd->id][0], STDIN_FILENO) == -1)
 	{
-		perror("Error while duping pipe to STDIN: ");
+		perror("CHILD - Error while duping pipe to STDIN: ");
 		return (-1);
 	}
 	if (dup2(zundra.pipes[cmd->id + 1][1], STDOUT_FILENO) == -1)
 	{
-		perror("Error while duping pipe to STDOUT: ");
+		perror("CHILD - Error while duping pipe to STDOUT: ");
 		return (-1);
 	}
-	while (i < zundra.num_of_cmds)
-	{
-		if (close(zundra.pipes[i][0]) == -1)
-		{
-			perror("Error while closing pipe: ");
-			return (-1);
-		}
-		if (close(zundra.pipes[i][1]) == -1)
-		{
-			perror("Error while closing pipe: ");
-			return (-1);
-		}
-		i++;
-	}
-	return (1);
+	return (close_child_pipes());
 }
 
 /**

@@ -79,7 +79,9 @@ void free_commands(t_command *cmd)
 			free(cmd->argv[i]);
 			i++;
 		}
-		free(cmd->argv);
-		free(temp);
+		if (cmd->argv)
+			free(cmd->argv);
+		if (temp)
+			free(temp);
 	}
 }
