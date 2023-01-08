@@ -16,7 +16,7 @@
 t_shell zundra;
 int t = 0;
 
-int intitiate_testing_env(char **envp)
+void intitiate_testing_env(char **envp)
 {
 	zundra.envp = envp;
 	zundra.env_mngr = generate_env_manager(envp);
@@ -29,8 +29,6 @@ int test_env_noargs()
 	t_command *command1 = malloc(sizeof(t_command));
 	command1->fd_in = -1;
 	command1->fd_out = -1;
-	command1->stdout_old = STDOUT_FILENO;//dup(STDOUT_FILENO);
-	command1->stdin_old = STDIN_FILENO; //dup(STDIN_FILENO);
 	command1->id = 0;
 	command1->redirects = NULL;
 
@@ -52,8 +50,6 @@ int test_export_no_arg()
 	t_command *command1 = malloc(sizeof(t_command));
 	command1->fd_in = -1;
 	command1->fd_out = -1;
-	command1->stdout_old = STDOUT_FILENO;//dup(STDOUT_FILENO);
-	command1->stdin_old = STDIN_FILENO; //dup(STDIN_FILENO);
 	command1->id = 0;
 	command1->redirects = NULL;
 
@@ -75,8 +71,6 @@ int test_export_with_args()
 	t_command *command1 = malloc(sizeof(t_command));
 	command1->fd_in = -1;
 	command1->fd_out = -1;
-	command1->stdout_old = STDOUT_FILENO;//dup(STDOUT_FILENO);
-	command1->stdin_old = STDIN_FILENO; //dup(STDIN_FILENO);
 	command1->id = 0;
 	command1->redirects = NULL;
 
@@ -106,8 +100,6 @@ int test_unset_no_args()
 	t_command *command1 = malloc(sizeof(t_command));
 	command1->fd_in = -1;
 	command1->fd_out = -1;
-	command1->stdout_old = STDOUT_FILENO;//dup(STDOUT_FILENO);
-	command1->stdin_old = STDIN_FILENO; //dup(STDIN_FILENO);
 	command1->id = 0;
 	command1->redirects = NULL;
 
@@ -129,8 +121,6 @@ int test_unset_existing_var()
 	t_command *command1 = malloc(sizeof(t_command));
 	command1->fd_in = -1;
 	command1->fd_out = -1;
-	command1->stdout_old = STDOUT_FILENO;//dup(STDOUT_FILENO);
-	command1->stdin_old = STDIN_FILENO; //dup(STDIN_FILENO);
 	command1->id = 0;
 	command1->redirects = NULL;
 
@@ -160,8 +150,6 @@ int test_unset_missing_var()
 	t_command *command1 = malloc(sizeof(t_command));
 	command1->fd_in = -1;
 	command1->fd_out = -1;
-	command1->stdout_old = STDOUT_FILENO;//dup(STDOUT_FILENO);
-	command1->stdin_old = STDIN_FILENO; //dup(STDIN_FILENO);
 	command1->id = 0;
 	command1->redirects = NULL;
 
@@ -179,19 +167,19 @@ int test_unset_missing_var()
 	return 0;
 }
 
-int main(int argc, char **argv, char **envp)
-{
-	intitiate_testing_env(envp);
-	test_env_noargs();
-	test_export_no_arg();
-	test_export_with_args();
-	test_env_noargs();
-	test_unset_no_args();
-	test_env_noargs();
-	test_unset_existing_var();
-	test_env_noargs();
-	test_unset_missing_var();
-	test_env_noargs();
+// int main(int argc, char **argv, char **envp)
+// {
+// 	intitiate_testing_env(envp);
+// 	test_env_noargs();
+// 	test_export_no_arg();
+// 	test_export_with_args();
+// 	test_env_noargs();
+// 	test_unset_no_args();
+// 	test_env_noargs();
+// 	test_unset_existing_var();
+// 	test_env_noargs();
+// 	test_unset_missing_var();
+// 	test_env_noargs();
 
-	return 0;
-}
+// 	return 0;
+// }

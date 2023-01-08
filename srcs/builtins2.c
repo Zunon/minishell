@@ -29,13 +29,14 @@ void ft_exit(char **argv)
 }
 
 /**
- * @brief		Return status code of last executed command
- *
- * @return int	status code
+ * @brief 		Return status code of last executed command
+ * 
+ * @return int 	Status code of operation
  */
 int status_code()
 {
-	return (zundra.status_code);
+	ft_printf("%d", zundra.status_code);
+	return (EXIT_SUCCESS);
 }
 
 /**
@@ -48,22 +49,22 @@ int status_code()
 int exec_builtin(t_command *cmd, char **argv)
 {
 	if (!argv || !argv[0])
-		return 0;
+		return (EXIT_SUCCESS);
 	if (ft_strncmp(argv[0], "cd", 2) == 0)
-		return ft_cd(argv);
+		return (ft_cd(argv));
 	if (ft_strncmp(argv[0], "echo", 4) == 0 && argv[1] && ft_strncmp(argv[1], "$?", 2) == 0)
-		return status_code();
+		return (status_code());
 	if (ft_strncmp(argv[0], "echo", 4) == 0)
-		return ft_echo(argv);
+		return (ft_echo(argv));
 	if (ft_strncmp(argv[0], "pwd", 3) == 0)
-		return ft_pwd();
+		return (ft_pwd());
 	if (ft_strncmp(argv[0], "exit", 4) == 0)
 		ft_exit(argv);
 	if (ft_strncmp(argv[0], "env", 3) == 0)
-		return ft_env();
+		return (ft_env());
 	if (ft_strncmp(argv[0], "unset", 5) == 0)
-		return ft_unset(argv);
+		return (ft_unset(argv));
 	if (ft_strncmp(argv[0], "export", 6) == 0)
-		return ft_export(cmd);
-	return (2);
+		return (ft_export(cmd));
+	return (EXIT_FAILURE);
 }

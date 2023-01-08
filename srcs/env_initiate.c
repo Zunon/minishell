@@ -53,7 +53,7 @@ static int find_pos(char *s, char c)
 			return (i);
 		i++;
 	}
-	return (-1);
+	return (EXIT_FAILURE);
 }
 
 /**
@@ -77,7 +77,7 @@ t_dict *generate_env_manager(char **envp)
 	while (envp[i])
 	{
 		pos = find_pos(envp[i], '=');
-		if (pos != -1)
+		if (pos != EXIT_FAILURE)
 		{
 			key = ft_substr(envp[i], 0, pos);
 			value = ft_substr(envp[i], pos + 1, -1);
@@ -90,15 +90,4 @@ t_dict *generate_env_manager(char **envp)
 	update_shlvl(env_manager);	
 	zundra.envp = dict_to_string_arr(env_manager);
 	return (env_manager);
-}
-
-/**
- * @brief				Display all environment variables of the current shell
- *
- * @return int			status code of oepration (discard if not needed)
- */
-int ft_env()
-{
-	print_dict(zundra.env_mngr);
-	return (0);
 }

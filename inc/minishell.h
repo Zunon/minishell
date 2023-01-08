@@ -23,6 +23,7 @@
 #include <signal.h>
 #include <pthread.h>
 #include <dirent.h>
+#include <sys/types.h>
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <errno.h>
@@ -30,12 +31,12 @@
 // /* A structure which represents a word. */
 typedef struct s_word_desc
 {
-	char *word;			/* Zero terminated string. */
-	int dollar_present; /* Non-zero means dollar sign present. */
-	int quoted;			/* Non-zero means single, double, or back quote
-				   			or backslash is present. */
-	int assignment;		/* Non-zero means that this word contains an
-				   			assignment. */
+	char *word;						/* Zero terminated string. */
+	int dollar_present; 			/* Non-zero means dollar sign present. */
+	int quoted;						/* Non-zero means single, double, or back quote
+				   						or backslash is present. */
+	int assignment;					/* Non-zero means that this word contains an
+				   						assignment. */
 } t_word_desc;
 
 /* A linked list of words. */
@@ -63,7 +64,6 @@ enum r_direction
 typedef struct s_redirect
 {
 	struct s_redirect *next;		/* Next element, or NULL. */
-	int redirector;					/* Descriptor to be redirected. */
 	int flags;						/* Flag value for `open'. */
 	enum r_direction direction;		/* What to do with the information. */
 	t_word_desc redirectee;			/* File descriptor or filename */
@@ -72,14 +72,12 @@ typedef struct s_redirect
 
 typedef struct s_command{
 	int id;
-	t_word_list *words;   /* The program name, the arguments */
-	t_redirect *redirects; /* Redirections to perform. */
-	int exit_code;		 /* Exit status of command */
+	t_word_list *words;   			/* The program name, the arguments */
+	t_redirect *redirects; 			/* Redirections to perform. */
+	int exit_code;		 			/* Exit status of command */
 	int num_redirections;
 	int fd_in;
 	int fd_out;
-	int stdout_old;
-	int stdin_old;
 	struct s_command *next;
 	char **argv;
 }	t_command;
@@ -87,58 +85,32 @@ typedef struct s_command{
 typedef struct s_shell
 {
 	t_command *cmds;
-	int status_code;
 	int num_of_cmds;
+	int status_code;
 	int **pipes;
 	t_dict *env_mngr;
 	char **envp;
+	pid_t last_child_pid;
+	int stdout_old;
 } t_shell;
 
 extern t_shell zundra;
 
-//builtins1.c
 int	ft_echo(char **cmd);
 int ft_cd(char **cmd);
 int ft_pwd();
-
-//builtins2.c
 void ft_exit(char **);
 int status_code();
 int exec_builtin(t_command *cmd, char **argv);
-
-//cleanup.c
-void free_redirects(t_redirect *redir);
-void free_word_list(t_word_list *word_list);
 void free_commands(t_command *cmd);
-
-// env.c
 t_dict *generate_env_manager(char **envp);
 int ft_env();
 int ft_export(t_command *cmd);
 int ft_unset(char **argv);
-
-// main.c
-void sig_handler(int sig);
 void lexer(char **argv);
 t_command *parser();
+int exec_simple_cmd(t_command *cmd, char **argv);
 int executor(t_command *cmd);
-
-// exec.c
-int search_absolute_path(char *cmd, char **argv);
-int search_relative_path(char *cmd, char **argv);
-char **prepare_cmd_args(t_word_list *word_lst);
-int cmd_executor(t_command *cmd, char **argv);
-
-//redirect.c
-int redirect_input(t_command *cmd, t_redirect *current);
-int redirect_output(t_command *cmd, t_redirect *current);
 int perform_IO_redirections(t_command *cmd);
-int prepare_pipes();
-int close_parent_pipes();
-int close_child_pipes();
-int piper(t_command *cmd);
-
-int t4();
-
 
 #endif

@@ -18,7 +18,7 @@
  *
  * @param redir		Linked list of redirections for the command
  */
-void free_redirects(t_redirect *redir)
+static void free_redirects(t_redirect *redir)
 {
 	t_redirect *temp;
 
@@ -39,7 +39,7 @@ void free_redirects(t_redirect *redir)
  *
  * @param word_list	List to clear
  */
-void free_word_list(t_word_list *word_list)
+static void free_word_list(t_word_list *word_list)
 {
 	t_word_list *temp;
 

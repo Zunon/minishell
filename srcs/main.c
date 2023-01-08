@@ -50,7 +50,7 @@ void sig_handler(int sig)
  */
 void lexer(char **argv)
 {
-
+	(void)argv;
 }
 
 /**
@@ -66,7 +66,6 @@ t_command *parser()
 
 int main(int argc, char **argv, char **envp)
 {
-	int i;
 	char *s;
 	t_command *cmd;
 
@@ -79,9 +78,9 @@ int main(int argc, char **argv, char **envp)
 	{
 		s = readline("minishell ^-^ : ");
 		add_history(s);
-		// lexer(argv);
-		// cmd = parser();
-		// executor(cmd);
+		lexer(argv);
+		cmd = parser();
+		executor(cmd);
 		free(s);
 	}
 	return (0);

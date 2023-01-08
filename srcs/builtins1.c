@@ -25,7 +25,7 @@ int	ft_echo(char **cmd)
 
 	nl = 1;
 	i = 0;
-	if (cmd[1] && ft_strncmp(cmd[1], "-n\0", 3) == 0)
+	if (cmd[1] && ft_strncmp(cmd[1], "-n", 2) == 0)
 	{
 		nl = 0;
 		i++;
@@ -38,7 +38,7 @@ int	ft_echo(char **cmd)
 	}
 	if (nl == 1)
 		write(1, "\n", 1);
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 /**
@@ -67,5 +67,5 @@ int ft_pwd()
 	write(1, path, ft_strlen(path));
 	write(1, "\n", 1);
 	free(path);
-	return 0;
+	return (EXIT_SUCCESS);
 }

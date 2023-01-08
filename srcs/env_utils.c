@@ -12,16 +12,28 @@
 
 #include "../inc/minishell.h"
 
+
+/**
+ * @brief				Display all environment variables of the current shell
+ *
+ * @return int			status code of oepration (discard if not needed)
+ */
+int ft_env()
+{
+	print_dict(zundra.env_mngr);
+	return (EXIT_SUCCESS);
+}
+
+
 /**
  * @brief				Update the environment variable manager dictionary after any
  * 						exports and/or unsets
  * 
  * @param env_manager	Envrionment manager dictionary to update
  */
-void update_env(t_dict *env_manager)
+static void update_env(t_dict *env_manager)
 {
 	int i;
-	char *temp;
 	char **strs;
 
 	i = -1;
@@ -54,7 +66,7 @@ static int ft_export_no_args()
 		i++;
 	}
 	destroy_dict(dict);
-	return 0;
+	return (EXIT_SUCCESS);
 }
 
 /**
@@ -89,7 +101,7 @@ int ft_export(t_command *cmd)
 			i++;
 		}
 	}
-	return 0;
+	return (EXIT_SUCCESS);
 }
 
 /**
@@ -104,12 +116,12 @@ int ft_unset(char **argv)
 
 	i = 1;
 	if (!argv[1])
-		return 0;
+		return (EXIT_SUCCESS);
 	while (argv[i])
 	{
 		remove_from_dict(zundra.env_mngr, argv[1]);
 		i++;
 	} 
 	update_env(zundra.env_mngr);
-	return 0;
+	return (EXIT_SUCCESS);
 }

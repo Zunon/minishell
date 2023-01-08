@@ -18,23 +18,20 @@ int t1(/* cat Makefile > b| grep b | <infile grep a > outfile*/)
 	t_command *command1 = malloc(sizeof(t_command));
 	command1->fd_in = -1;
 	command1->fd_out = -1;
-	command1->stdout_old = STDOUT_FILENO;//dup(STDOUT_FILENO);
-	command1->stdin_old = STDIN_FILENO; //dup(STDIN_FILENO);
 	command1->id = 0;
 	command1->redirects = malloc(sizeof(t_redirect));
 	command1->redirects->direction = r_output;
-	command1->redirects->redirector = STDIN_FILENO;
 	command1->redirects->flags = O_CREAT | O_WRONLY;
 	command1->redirects->redirectee.word = ft_strdup("b");
 	command1->redirects->next = NULL;
 
 	t_word_list *wd1 = malloc(sizeof(t_word_list));
 	wd1->curr_word_desc = malloc(sizeof(t_word_desc));
-	wd1->curr_word_desc->word = ft_strdup("cat");
+	wd1->curr_word_desc->word = ft_strdup("sleep");
 
 	wd1->next = malloc(sizeof(t_word_list));
 	wd1->next->curr_word_desc = malloc(sizeof(t_word_desc));
-	wd1->next->curr_word_desc->word = ft_strdup("Makefile");
+	wd1->next->curr_word_desc->word = ft_strdup("3");
 
 	wd1->next->next = NULL;
 	command1->words = wd1;
@@ -45,8 +42,6 @@ int t1(/* cat Makefile > b| grep b | <infile grep a > outfile*/)
 	command2->id = 1;
 	command2->fd_in = -1;
 	command2->fd_out = -1;
-	command2->stdout_old = STDOUT_FILENO;
-	command2->stdin_old = STDIN_FILENO;
 	command2->redirects = NULL;
 
 	t_word_list *wd2 = malloc(sizeof(t_word_list));
@@ -65,17 +60,13 @@ int t1(/* cat Makefile > b| grep b | <infile grep a > outfile*/)
 	command3->id = 2;
 	command3->fd_in = -1;
 	command3->fd_out = -1;
-	command3->stdout_old = STDOUT_FILENO;
-	command3->stdin_old = STDIN_FILENO;
 	command3->redirects = malloc(sizeof(t_redirect));
 	command3->redirects->direction = r_input;
-	command3->redirects->redirector = STDIN_FILENO;
 	command3->redirects->flags = O_CREAT | O_RDONLY;
 	command3->redirects->redirectee.word = ft_strdup("infile");
 	command3->redirects->next = malloc(sizeof(t_redirect));
 
 	command3->redirects->next->direction = r_output;
-	command3->redirects->next->redirector = STDIN_FILENO;
 	command3->redirects->next->flags = O_CREAT | O_WRONLY | O_TRUNC;
 	command3->redirects->next->redirectee.word = ft_strdup("outfile");
 	command3->redirects->next->next = NULL;
@@ -106,8 +97,6 @@ int t2(/*cat /dev/random | head -n 10 > rand */)
 	t_command *command1 = malloc(sizeof(t_command));
 	command1->fd_in = -1;
 	command1->fd_out = -1;
-	command1->stdout_old = STDOUT_FILENO;//dup(STDOUT_FILENO);
-	command1->stdin_old = STDIN_FILENO; //dup(STDIN_FILENO);
 	command1->id = 0;
 	command1->redirects = NULL;
 
@@ -127,12 +116,9 @@ int t2(/*cat /dev/random | head -n 10 > rand */)
 	command2->id = 1;
 	command2->fd_in = -1;
 	command2->fd_out = -1;
-	command2->stdout_old = STDOUT_FILENO;
-	command2->stdin_old = STDIN_FILENO;
 	command2->redirects = malloc(sizeof(t_redirect));
 
 	command2->redirects->direction = r_output;
-	command2->redirects->redirector = STDIN_FILENO;
 	command2->redirects->flags = O_CREAT | O_WRONLY | O_TRUNC;
 	command2->redirects->redirectee.word = ft_strdup("rand");
 	command2->redirects->next = NULL;
@@ -154,4 +140,10 @@ int t2(/*cat /dev/random | head -n 10 > rand */)
 	command1->next = command2;
 	command2->next = NULL;
 	executor(command1);
+}
+int main(int argc, char **argv, char **envp)
+{
+	zundra.env_mngr = generate_env_manager(envp);
+	t1();
+	return 0;
 }
