@@ -113,5 +113,6 @@ int executor(t_command *cmd);
 int perform_IO_redirections(t_command *cmd);
 
 #define ERROR_DURING_EXECUTION -99
+#define ERROR_COMMAND_NOT_FOUND 127
 
 #endif
