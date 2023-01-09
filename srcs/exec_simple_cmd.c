@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
+/*   exec_simple_cmd.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 20:35:27 by rriyas            #+#    #+#             */
-/*   Updated: 2022/10/22 20:36:59 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/09 20:02:29 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,23 +30,27 @@ static int search_absolute_path(char **argv)
 	path = retrieve_from_dict(zundra.env_mngr, "PATH");
 	if (!path || !path->value)
 		return (EXIT_FAILURE);
-	
 	paths = ft_split(path->value, ':');
 	i = 0;
 	while (paths[i])
 	{
 		exec_path = ft_strjoin(ft_strjoin(paths[i], "/"), argv[0]);
-		if (access(exec_path, X_OK) != -1 && execve(exec_path, argv, zundra.envp) == -1)
+		if (access(exec_path, F_OK) != -1 && execve(exec_path, argv, zundra.envp) == -1)
 		{
-			perror("Error during execution of program!");
-			return (EXIT_FAILURE);
+			if (access(exec_path, X_OK) == -1)
+			{
+				perror("Error during execution of program: ");
+				if (zundra.num_of_cmds > 1)
+					exit(126);
+			}
+			return (ERROR_DURING_EXECUTION);
 		}
 		free(exec_path);
 		free(paths[i]);
 		i++;
 	}
 	free(paths);
-	return (EXIT_SUCCESS);
+	return (EXIT_FAILURE);
 }
 /**
  * @brief 			Find and execute commands based on current directory (Eg. run executables)
@@ -60,10 +64,16 @@ static int search_relative_path(char **argv)
 {
 	if (ft_strchr(argv[0], '/') != 0 && execve(argv[0], argv, zundra.envp) == -1)
 	{
-		perror("Error during execution of program!");
-		return (EXIT_FAILURE);
+		if (access(argv[0], X_OK) == -1)
+		{
+			perror("Error during execution: ");
+			if (zundra.num_of_cmds > 1)
+				exit(126);
+		}
+		perror("Error during execution: ");
+		return (ERROR_DURING_EXECUTION);
 	}
-	return (EXIT_SUCCESS);
+	return (EXIT_FAILURE);
 }
 
 /**
@@ -90,12 +100,13 @@ int exec_simple_cmd(t_command *cmd, char **argv)
 	{
 		if (perform_IO_redirections(cmd) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
-		if (exec_builtin(cmd, argv) == EXIT_FAILURE && !search_absolute_path(argv) && !search_relative_path(argv))
+		if (exec_builtin(cmd, argv) == EXIT_FAILURE &&
+				search_absolute_path(argv) == EXIT_FAILURE &&
+				search_relative_path(argv) == EXIT_FAILURE)
 		{
-			write(zundra.stdout_old, "minishell: command not found\n", 30);
-			zundra.status_code = 127;
-			close(zundra.stdout_old);
-			exit(127);
+			write(zundra.stdout_old, "Command not found\n", 19);
+			if (zundra.num_of_cmds > 1)
+				exit(127);
 		}
 	}
 	zundra.last_child_pid = pid;

@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 18:11:11 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/08 18:11:11 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/09 19:06:44 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int prepare_pipes()
 
 /**
  * @brief			Close all pipes safely from the parent process
- * 
+ *
  */
 static int close_parent_pipes()
 {
@@ -56,13 +56,13 @@ static int close_parent_pipes()
 		// printf("%d", i);
 		if (close(zundra.pipes[i][0]) == -1)
 		{
-		ft_printf("closing %d\n", zundra.pipes[i][0]);
+			ft_printf("closing %d\n", zundra.pipes[i][0]);
 			perror("PARENT - Error while closing pipe read end: ");
 			return (EXIT_FAILURE);
 		}
 		if (close(zundra.pipes[i][1]) == -1)
 		{
-		ft_printf("closing %d\n", zundra.pipes[i][1]);
+			ft_printf("closing %d\n", zundra.pipes[i][1]);
 			perror("PARENT - Error while closing pipe write end: ");
 			return (EXIT_FAILURE);
 		}
@@ -75,7 +75,7 @@ static int close_parent_pipes()
  * @brief			Get the number of words in the given word list.
  * 					Used to help deicde how many bytes of memory to allocate for
  * 					the argument list of a command
- * 
+ *
  * @param word_lst 	t_word_lst variable to get the size of
  * @return int		Number of strings present (Excluding NULL element)
  */

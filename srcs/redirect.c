@@ -70,8 +70,8 @@ static int redirect_output(t_command *cmd, t_redirect *current)
 
 /**
  * @brief			Close all pipes safely from the child process
- * 
- * @return int 
+ *
+ * @return int
  */
 static int close_child_pipes()
 {

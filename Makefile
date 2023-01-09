@@ -31,7 +31,7 @@ EXEC_TEST_SRCS	=	tests/executor/env_tests.c tests/executor/absolute_path_cmd_tes
 				srcs/dictionary_utils.c srcs/dictionary_cleanup.c srcs/redirect.c srcs/cleanup.c
 EXEC_TEST_OBJS	=	${EXEC_TEST_SRCS:.c=.o}
 HEADER		=	./lib/libft/libft.h
-CFLAGS		=	# -Wall -Wextra -Werror
+CFLAGS		=	-L /usr/local/Cellar/readline/8.1/lib -I /usr/local/Cellar/readline/8.1/include # -Wall -Wextra -Werror
 
 all:	$(NAME)
 
@@ -51,7 +51,7 @@ lex_tester:	$(LEX_TEST_OBJS) $(LIB)
 parser_tester:	$(PARSE_TEST_OBJS) $(LIB)
 		$(CC) -g -no-pie -fsanitize=address $(CFLAGS) -I ../inc/minishell.h -lreadline $(PARSE_TEST_OBJS) $(LIB) -lreadline -o minishell
 exec_tester:	$(EXEC_TEST_OBJS) $(LIB)
-		$(CC) -g -no-pie $(CFLAGS) -I ../inc/minishell.h -lreadline $(EXEC_TEST_OBJS) $(LIB) -lreadline -o minishell
+		$(CC) -g $(CFLAGS) -I ../inc/minishell.h -lreadline $(EXEC_TEST_OBJS) $(LIB) -lreadline -o minishell
 clean:
 		${RM} $(OBJS) $(PARSE_TEST_OBJS) $(EXEC_TEST_OBJS)
 fclean:	clean

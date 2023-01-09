@@ -50,7 +50,14 @@ int	ft_echo(char **cmd)
 int ft_cd(char **cmd)
 {
 	/* Error Handling */
-	return (chdir(cmd[1]));
+	if (chdir(cmd[1]) == -1)
+	{
+		perror(cmd[1]);
+		if (zundra.num_of_cmds > 1)
+			exit(1);
+		return (ERROR_DURING_EXECUTION);
+	}
+	return (EXIT_SUCCESS);
 }
 
 /**
@@ -62,10 +69,15 @@ int ft_pwd()
 {
 	char *path;
 
-	path = malloc(1024 * sizeof(char));
-	getcwd(path, 1024);
+	path = getcwd(path, 1025);
+	if (!path)
+	{
+		perror("Error while getting current working directory: ");
+		return (ERROR_DURING_EXECUTION);
+	}
 	write(1, path, ft_strlen(path));
 	write(1, "\n", 1);
-	free(path);
+	if (path)
+		free(path);
 	return (EXIT_SUCCESS);
 }

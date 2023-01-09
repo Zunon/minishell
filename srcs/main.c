@@ -32,10 +32,10 @@ void sig_handler(int sig)
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
+		zundra.status_code = 130;
 	}
-	if (sig == 3)
+	if (sig == 4)
 	{
-		// free_commands(zundra.cmds);
 		destroy_dict(zundra.env_mngr);
 		while (zundra.envp[++i])
 			free(zundra.envp[i]);
@@ -72,7 +72,7 @@ int main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	signal(SIGINT, &sig_handler);
-	signal(SIGQUIT, &sig_handler);
+	signal(SIGQUIT, SIG_IGN);
 	zundra.env_mngr = generate_env_manager(envp);
 	while (2)
 	{

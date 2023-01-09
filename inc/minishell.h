@@ -112,4 +112,6 @@ int exec_simple_cmd(t_command *cmd, char **argv);
 int executor(t_command *cmd);
 int perform_IO_redirections(t_command *cmd);
 
+#define ERROR_DURING_EXECUTION -99
+
 #endif

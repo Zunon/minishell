@@ -30,7 +30,7 @@ void ft_exit(char **argv)
 
 /**
  * @brief 		Return status code of last executed command
- * 
+ *
  * @return int 	Status code of operation
  */
 int status_code()
