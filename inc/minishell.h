@@ -99,10 +99,10 @@ extern t_shell zundra;
 
 int	ft_echo(char **cmd);
 int ft_cd(char **cmd);
-int ft_pwd();
+int ft_pwd(char **cmd);
 void ft_exit(char **);
 int status_code();
-int exec_builtin(t_command *cmd, char **argv);
+int exec_builtin(t_command *cmd);
 void free_commands(t_command *cmd);
 t_dict *generate_env_manager(char **envp);
 int ft_env();
@@ -113,6 +113,7 @@ t_command *parser();
 int exec_simple_cmd(t_command *cmd);
 int executor(t_command *cmd);
 int perform_IO_redirections(t_command *cmd);
+void expansion_handler(t_word_list *words)
 
 #define ERROR_DURING_EXECUTION -99
 #define NO_EXECUTION_PERMISSION 126

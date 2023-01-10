@@ -49,7 +49,10 @@ int	ft_echo(char **cmd)
  */
 int ft_cd(char **cmd)
 {
+	t_pair *pair;
 	/* Error Handling */
+	if (!cmd[1])
+		return (EXIT_SUCCESS);
 	if (chdir(cmd[1]) == -1)
 	{
 		perror(cmd[1]);
@@ -65,10 +68,12 @@ int ft_cd(char **cmd)
  *
  * @return int	status code of execution
  */
-int ft_pwd()
+int ft_pwd(char **cmd)
 {
 	char *path;
 
+	if (cmd[1])
+		return (EXIT_SUCCESS);
 	path = getcwd(path, 1025);
 	if (!path)
 	{

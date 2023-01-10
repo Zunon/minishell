@@ -28,7 +28,7 @@ void sig_handler(int sig)
 	{
 		rl_on_new_line();
 		rl_redisplay();
-		write(2, "  \n", 3);
+		write(2, "  \n", 4);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
@@ -67,6 +67,7 @@ t_command *parser()
 int main(int argc, char **argv, char **envp)
 {
 	char *s;
+	char **sup;
 	t_command *cmd;
 
 	(void)argc;
@@ -74,14 +75,16 @@ int main(int argc, char **argv, char **envp)
 	signal(SIGINT, &sig_handler);
 	signal(SIGQUIT, SIG_IGN);
 	zundra.env_mngr = generate_env_manager(envp);
-	while (2)
-	{
-		s = readline("minishell ^-^ : ");
-		add_history(s);
-		lexer(s);
-		cmd = parser();
-		executor(cmd);
-		free(s);
-	}
+	// while (2)
+	// {
+	// 	s = readline("minishell ^-^ : ");
+	// 	add_history(s);
+	// 	lexer(s);
+	// 	cmd = parser();
+	// 	executor(cmd);
+	// 	// ft_exit(argv);
+	// 	free(s);
+	// }
+	ft_exit(sup);
 	return (0);
 }

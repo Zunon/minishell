@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 20:35:27 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/10 16:23:22 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/10 19:17:58 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ static int search_relative_path(char **argv)
 			perror("Error during execution: ");
 			if (zundra.num_of_cmds > 1)
 				exit(NO_EXECUTION_PERMISSION);
+			zundra.status_code = NO_EXECUTION_PERMISSION;
+			return (ERROR_COMMAND_NOT_FOUND);
 		}
 		perror("Error during execution: ");
 		return (ERROR_DURING_EXECUTION);
@@ -88,7 +90,7 @@ int exec_simple_cmd(t_command *cmd)
 {
 	pid_t pid;
 
-	if (!cmd->next && exec_builtin(cmd, cmd->argv) == EXIT_SUCCESS)
+	if (!cmd->next && exec_builtin(cmd) == EXIT_SUCCESS)
 		return (EXIT_SUCCESS);
 	pid = fork();
 	if (pid == -1)
@@ -100,13 +102,12 @@ int exec_simple_cmd(t_command *cmd)
 	{
 		if (perform_IO_redirections(cmd) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
-		if (exec_builtin(cmd, cmd->argv) == EXIT_FAILURE &&
+		if (exec_builtin(cmd) == EXIT_FAILURE &&
 				search_absolute_path(cmd->argv) == EXIT_FAILURE &&
 				search_relative_path(cmd->argv) == EXIT_FAILURE)
 		{
 			write(STDERR_FILENO, "Command not found\n", 19);
-			if (zundra.num_of_cmds > 1)
-				exit(ERROR_COMMAND_NOT_FOUND);
+			exit(ERROR_COMMAND_NOT_FOUND);
 		}
 	}
 	zundra.last_child_pid = pid;

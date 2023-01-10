@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 16:33:01 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/10 16:25:40 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/10 18:46:51 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,67 +23,62 @@ int t1(/* cat Makefile > b| grep b | <infile grep a > outfile*/)
 
 	t_word_list *wd1 = malloc(sizeof(t_word_list));
 	wd1->curr_word_desc = malloc(sizeof(t_word_desc));
-	wd1->curr_word_desc->word = ft_strdup("cat");
+	wd1->curr_word_desc->word = ft_strdup("radi");
 
-	wd1->next =  malloc(sizeof(t_word_list));
-	wd1->next->curr_word_desc = malloc(sizeof(t_word_desc));
-	wd1->next->curr_word_desc->word = ft_strdup("Makefile");
-	wd1->next->next = NULL;
+	wd1->next =  NULL;
 	command1->words = wd1;
 
 
 	// CMD 2:
-	t_command *command2 = malloc(sizeof(t_command));
-	command2->id = 1;
-	command2->fd_in = -1;
-	command2->fd_out = -1;
-	command2->redirects = NULL;
+	// t_command *command2 = malloc(sizeof(t_command));
+	// command2->id = 1;
+	// command2->fd_in = -1;
+	// command2->fd_out = -1;
+	// command2->redirects = NULL;
 
-	t_word_list *wd2 = malloc(sizeof(t_word_list));
-	wd2->curr_word_desc = malloc(sizeof(t_word_desc));
-	wd2->curr_word_desc->word = ft_strdup("grep");
+	// t_word_list *wd2 = malloc(sizeof(t_word_list));
+	// wd2->curr_word_desc = malloc(sizeof(t_word_desc));
+	// wd2->curr_word_desc->word = ft_strdup("grep");
 
-	wd2->next = malloc(sizeof(t_word_list));
-	wd2->next->curr_word_desc = malloc(sizeof(t_word_desc));
-	wd2->next->curr_word_desc->word = ft_strdup("1");
+	// wd2->next = malloc(sizeof(t_word_list));
+	// wd2->next->curr_word_desc = malloc(sizeof(t_word_desc));
+	// wd2->next->curr_word_desc->word = ft_strdup("1");
 
-	wd2->next->next = NULL;
-	command2->words = wd2;
+	// wd2->next->next = NULL;
+	// command2->words = wd2;
 
-	// CMD 3:
-	t_command *command3 = malloc(sizeof(t_command));
-	command3->id = 2;
-	command3->fd_in = -1;
-	command3->fd_out = -1;
-	command3->redirects = malloc(sizeof(t_redirect));
-	command3->redirects->direction = r_input;
-	command3->redirects->flags = O_CREAT | O_RDONLY;
-	command3->redirects->redirectee.word = ft_strdup("infile");
-	command3->redirects->next = malloc(sizeof(t_redirect));
+	// // CMD 3:
+	// t_command *command3 = malloc(sizeof(t_command));
+	// command3->id = 2;
+	// command3->fd_in = -1;
+	// command3->fd_out = -1;
+	// command3->redirects = malloc(sizeof(t_redirect));
+	// command3->redirects->direction = r_input;
+	// command3->redirects->flags = O_CREAT | O_RDONLY;
+	// command3->redirects->redirectee.word = ft_strdup("infile");
+	// command3->redirects->next = malloc(sizeof(t_redirect));
 
-	command3->redirects->next->direction = r_output;
-	command3->redirects->next->flags = O_CREAT | O_WRONLY | O_TRUNC;
-	command3->redirects->next->redirectee.word = ft_strdup("outfile");
-	command3->redirects->next->next = NULL;
+	// command3->redirects->next->direction = r_output;
+	// command3->redirects->next->flags = O_CREAT | O_WRONLY | O_TRUNC;
+	// command3->redirects->next->redirectee.word = ft_strdup("outfile");
+	// command3->redirects->next->next = NULL;
 
-	t_word_list *wd3 = malloc(sizeof(t_word_list));
-	wd3->curr_word_desc = malloc(sizeof(t_word_desc));
-	wd3->curr_word_desc->word = ft_strdup("grep");
+	// t_word_list *wd3 = malloc(sizeof(t_word_list));
+	// wd3->curr_word_desc = malloc(sizeof(t_word_desc));
+	// wd3->curr_word_desc->word = ft_strdup("grep");
 
-	wd3->next = malloc(sizeof(t_word_list));
-	wd3->next->curr_word_desc = malloc(sizeof(t_word_desc));
-	wd3->next->curr_word_desc->word = ft_strdup("1");
+	// wd3->next = malloc(sizeof(t_word_list));
+	// wd3->next->curr_word_desc = malloc(sizeof(t_word_desc));
+	// wd3->next->curr_word_desc->word = ft_strdup("1");
 
-	wd3->next->next = NULL;
-	command3->words = wd3;
+	// wd3->next->next = NULL;
+	// command3->words = wd3;
 
 
-	command1->next = command2;
-	command2->next = command3;
-	command3->next = NULL;
-	zundra.num_of_cmds = 3;
+	command1->next = NULL;
+	zundra.num_of_cmds = 1;
 	executor(command1);
-	// status_code();
+	status_code();
 	return 0;
 }
 

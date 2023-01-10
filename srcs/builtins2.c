@@ -46,25 +46,25 @@ int status_code()
  * @return int	Status code of child process after executing builtin OR ERROR_CODE 2
  * 				if not a builtin
  */
-int exec_builtin(t_command *cmd, char **argv)
+int exec_builtin(t_command *cmd)
 {
-	if (!argv || !argv[0])
+	if (!cmd->argv || !cmd->argv[0])
 		return (EXIT_SUCCESS);
-	if (ft_strncmp(argv[0], "cd", 2) == 0)
-		return (ft_cd(argv));
-	if (ft_strncmp(argv[0], "echo", 4) == 0 && argv[1] && ft_strncmp(argv[1], "$?", 2) == 0)
+	if (ft_strncmp(cmd->argv[0], "cd", 2) == 0)
+		return (ft_cd(cmd->argv));
+	if (ft_strncmp(cmd->argv[0], "echo", 4) == 0 && cmd->argv[1] && ft_strncmp(cmd->argv[1], "$?", 2) == 0)
 		return (status_code());
-	if (ft_strncmp(argv[0], "echo", 4) == 0)
-		return (ft_echo(argv));
-	if (ft_strncmp(argv[0], "pwd", 3) == 0)
-		return (ft_pwd());
-	if (ft_strncmp(argv[0], "exit", 4) == 0)
-		ft_exit(argv);
-	if (ft_strncmp(argv[0], "env", 3) == 0)
+	if (ft_strncmp(cmd->argv[0], "echo", 4) == 0)
+		return (ft_echo(cmd->argv));
+	if (ft_strncmp(cmd->argv[0], "pwd", 3) == 0)
+		return (ft_pwd(cmd->argv));
+	if (ft_strncmp(cmd->argv[0], "exit", 4) == 0)
+		ft_exit(cmd->argv);
+	if (ft_strncmp(cmd->argv[0], "env", 3) == 0)
 		return (ft_env());
-	if (ft_strncmp(argv[0], "unset", 5) == 0)
-		return (ft_unset(argv));
-	if (ft_strncmp(argv[0], "export", 6) == 0)
+	if (ft_strncmp(cmd->argv[0], "unset", 5) == 0)
+		return (ft_unset(cmd->argv));
+	if (ft_strncmp(cmd->argv[0], "export", 6) == 0)
 		return (ft_export(cmd));
 	return (EXIT_FAILURE);
 }
