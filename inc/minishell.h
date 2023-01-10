@@ -77,6 +77,8 @@ typedef struct s_command{
 	int exit_code;		 			/* Exit status of command */
 	int fd_in;
 	int fd_out;
+	int pipe_in;
+	int pipe_out;
 	struct s_command *next;
 	char **argv;
 }	t_command;
@@ -86,7 +88,7 @@ typedef struct s_shell
 	t_command *cmds;
 	int num_of_cmds;
 	int status_code;
-	int **pipes;
+	int pipes[2][2];
 	t_dict *env_mngr;
 	char **envp;
 	pid_t last_child_pid;
@@ -106,13 +108,16 @@ t_dict *generate_env_manager(char **envp);
 int ft_env();
 int ft_export(t_command *cmd);
 int ft_unset(char **argv);
-void lexer(char **argv);
+void lexer(char *argv);
 t_command *parser();
-int exec_simple_cmd(t_command *cmd, char **argv);
+int exec_simple_cmd(t_command *cmd);
 int executor(t_command *cmd);
 int perform_IO_redirections(t_command *cmd);
 
 #define ERROR_DURING_EXECUTION -99
+#define NO_EXECUTION_PERMISSION 126
 #define ERROR_COMMAND_NOT_FOUND 127
+#define CONTROL_C_INTERRUPT 130
+#define NO_PIPE -666
 
 #endif

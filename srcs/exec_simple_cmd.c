@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 20:35:27 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/09 20:02:29 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/10 16:23:22 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int search_absolute_path(char **argv)
 			{
 				perror("Error during execution of program: ");
 				if (zundra.num_of_cmds > 1)
-					exit(126);
+					exit(NO_EXECUTION_PERMISSION);
 			}
 			return (ERROR_DURING_EXECUTION);
 		}
@@ -68,7 +68,7 @@ static int search_relative_path(char **argv)
 		{
 			perror("Error during execution: ");
 			if (zundra.num_of_cmds > 1)
-				exit(126);
+				exit(NO_EXECUTION_PERMISSION);
 		}
 		perror("Error during execution: ");
 		return (ERROR_DURING_EXECUTION);
@@ -84,11 +84,11 @@ static int search_relative_path(char **argv)
  * @param av		command and its parameters for use by execve
  * @return int		Status code of child process after execution
  */
-int exec_simple_cmd(t_command *cmd, char **argv)
+int exec_simple_cmd(t_command *cmd)
 {
 	pid_t pid;
 
-	if (!cmd->next && exec_builtin(cmd, argv) == EXIT_SUCCESS)
+	if (!cmd->next && exec_builtin(cmd, cmd->argv) == EXIT_SUCCESS)
 		return (EXIT_SUCCESS);
 	pid = fork();
 	if (pid == -1)
@@ -100,13 +100,13 @@ int exec_simple_cmd(t_command *cmd, char **argv)
 	{
 		if (perform_IO_redirections(cmd) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
-		if (exec_builtin(cmd, argv) == EXIT_FAILURE &&
-				search_absolute_path(argv) == EXIT_FAILURE &&
-				search_relative_path(argv) == EXIT_FAILURE)
+		if (exec_builtin(cmd, cmd->argv) == EXIT_FAILURE &&
+				search_absolute_path(cmd->argv) == EXIT_FAILURE &&
+				search_relative_path(cmd->argv) == EXIT_FAILURE)
 		{
-			write(zundra.stdout_old, "Command not found\n", 19);
+			write(STDERR_FILENO, "Command not found\n", 19);
 			if (zundra.num_of_cmds > 1)
-				exit(127);
+				exit(ERROR_COMMAND_NOT_FOUND);
 		}
 	}
 	zundra.last_child_pid = pid;

@@ -6,39 +6,30 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 18:11:11 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/09 19:06:44 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/10 16:25:24 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 /**
- * @brief			Allocate memory for required number of pipes & open necessary file
- * 					descriptors.
+ * @brief			Configure the input and output pipes for every command in the pipeline
+ *
  * 					First and last pipe are dummy pipes with STDIN and STDOUT
  *
  */
-static int prepare_pipes()
+static int configure_pipes(t_command *cmd)
 {
-	int i;
-
-	i = 0;
-	zundra.pipes = malloc(sizeof(int *) * (zundra.num_of_cmds + 1));
-	while (i <= zundra.num_of_cmds)
+	while(cmd)
 	{
-		zundra.pipes[i] = malloc(sizeof(int) * 2);
-		if (i != 0 && i != zundra.num_of_cmds)
-			if (pipe(zundra.pipes[i]) == -1)
-			{
-				perror("PARENT - Failed to create pipe: ");
-				return (EXIT_FAILURE);
-			}
-		i++;
+		cmd->pipe_in = cmd->id % 2;
+		cmd->pipe_out = !(cmd->pipe_in);
+		if (cmd->id == 0)
+			cmd->pipe_in = NO_PIPE;
+		if (!cmd->next)
+			cmd->pipe_out = NO_PIPE;
+		cmd = cmd->next;
 	}
-	zundra.pipes[0][0] = STDIN_FILENO;
-	zundra.pipes[0][1] = STDOUT_FILENO;
-	zundra.pipes[zundra.num_of_cmds][0] = STDIN_FILENO;
-	zundra.pipes[zundra.num_of_cmds][1] = STDOUT_FILENO;
 	return (EXIT_SUCCESS);
 }
 
@@ -46,27 +37,20 @@ static int prepare_pipes()
  * @brief			Close all pipes safely from the parent process
  *
  */
-static int close_parent_pipes()
+static int close_used_pipes(int pipe_in)
 {
-	int i;
-
-	i = 1;
-	while (i < zundra.num_of_cmds)
+	if (pipe_in != NO_PIPE)
 	{
-		// printf("%d", i);
-		if (close(zundra.pipes[i][0]) == -1)
+		if (close(zundra.pipes[pipe_in][0]) == -1)
 		{
-			ft_printf("closing %d\n", zundra.pipes[i][0]);
 			perror("PARENT - Error while closing pipe read end: ");
 			return (EXIT_FAILURE);
 		}
-		if (close(zundra.pipes[i][1]) == -1)
+		if (close(zundra.pipes[pipe_in][1]) == -1)
 		{
-			ft_printf("closing %d\n", zundra.pipes[i][1]);
 			perror("PARENT - Error while closing pipe write end: ");
 			return (EXIT_FAILURE);
 		}
-		i++;
 	}
 	return (EXIT_SUCCESS);
 }
@@ -124,25 +108,25 @@ static char **prepare_cmd_args(t_word_list *word_lst)
  * @param cmd		Linked list of commands to execute in the current pipeline
  * @return int		Status code of last executed command
  */
-int executor(t_command *cmd)
+int executor(t_command *first_cmd)
 {
-	t_command *iterator;
+	t_command *curr;
 	int status;
 
-	iterator = cmd;
-	if (!cmd)
+	curr = first_cmd;
+	if (!first_cmd)
 		return (EXIT_SUCCESS);
-	zundra.stdout_old = dup(STDOUT_FILENO);
-	prepare_pipes();
-	while (iterator)
+	configure_pipes(first_cmd);
+	while (curr)
 	{
-		zundra.cmds = iterator;
-		iterator->argv = prepare_cmd_args(iterator->words);
-		exec_simple_cmd(iterator, iterator->argv);
-		iterator = iterator->next;
+		zundra.cmds = curr;
+		curr->argv = prepare_cmd_args(curr->words);
+		if (curr->pipe_out != NO_PIPE)
+			pipe(zundra.pipes[curr->pipe_out]);
+		exec_simple_cmd(curr);
+		close_used_pipes(curr->pipe_in);
+		curr = curr->next;
 	}
-	close(zundra.stdout_old);
-	close_parent_pipes();
 	waitpid(zundra.last_child_pid, &status, 0);
 	zundra.status_code = WEXITSTATUS(status);
 	while (waitpid(-1, &status, 0) > -1)

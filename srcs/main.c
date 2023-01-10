@@ -32,7 +32,7 @@ void sig_handler(int sig)
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
-		zundra.status_code = 130;
+		zundra.status_code = CONTROL_C_INTERRUPT;
 	}
 	if (sig == 4)
 	{
@@ -40,7 +40,7 @@ void sig_handler(int sig)
 		while (zundra.envp[++i])
 			free(zundra.envp[i]);
 		free(zundra.envp);
-		exit(0);
+		exit(EXIT_SUCCESS);
 	}
 }
 
@@ -48,7 +48,7 @@ void sig_handler(int sig)
  * @brief				Phase 1 of the shell - commands typed by th user are split into tokens
  *
  */
-void lexer(char **argv)
+void lexer(char *argv)
 {
 	(void)argv;
 }
@@ -78,7 +78,7 @@ int main(int argc, char **argv, char **envp)
 	{
 		s = readline("minishell ^-^ : ");
 		add_history(s);
-		lexer(argv);
+		lexer(s);
 		cmd = parser();
 		executor(cmd);
 		free(s);
