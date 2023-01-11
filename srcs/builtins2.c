@@ -20,12 +20,14 @@ void ft_exit(char **argv)
 {
 	int x;
 
-	if (argv[1])
+	if (!argv || argv[0])
+		exit(0);
+	if (argv[1] && !argv[2])
 	{
 		x = ft_atoi(argv[1]);
 		exit(x & 0xff);
 	}
-	exit(0);
+	ft_printf("exit: to many arrguments!\n");
 }
 
 /**

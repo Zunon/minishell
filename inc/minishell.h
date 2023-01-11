@@ -113,7 +113,7 @@ t_command *parser();
 int exec_simple_cmd(t_command *cmd);
 int executor(t_command *cmd);
 int perform_IO_redirections(t_command *cmd);
-void expansion_handler(t_word_list *words)
+void expansion_handler(t_word_list *words);
 
 #define ERROR_DURING_EXECUTION -99
 #define NO_EXECUTION_PERMISSION 126

@@ -75,16 +75,18 @@ int main(int argc, char **argv, char **envp)
 	signal(SIGINT, &sig_handler);
 	signal(SIGQUIT, SIG_IGN);
 	zundra.env_mngr = generate_env_manager(envp);
-	// while (2)
-	// {
-	// 	s = readline("minishell ^-^ : ");
-	// 	add_history(s);
-	// 	lexer(s);
-	// 	cmd = parser();
-	// 	executor(cmd);
-	// 	// ft_exit(argv);
-	// 	free(s);
-	// }
+	while (2)
+	{
+		s = readline("minishell ^-^ : ");
+		add_history(s);
+		if (!s)					/* Control D check */
+			ft_exit(NULL);
+		// lexer(s);
+		// cmd = parser();
+		// executor(cmd);
+		// ft_exit(argv);
+		free(s);
+	}
 	ft_exit(sup);
 	return (0);
 }

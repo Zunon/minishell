@@ -137,7 +137,7 @@ static int piper(t_command *cmd)
 /**
  * @brief			Function to open necessary files and perform all redirections from left->right.
  * 					If there are pipes, then the necessary piping is handled as well.
- * 					Handles input, output, output append, and heredoc
+ * 					Handles input, heredoc, output, output append
  *
  * @param cmd		Currently executing command
  * @return int		Status code (discard if not needed)
@@ -153,14 +153,10 @@ int perform_IO_redirections(t_command *cmd)
 		return (EXIT_FAILURE);
 	while (iterator && status != EXIT_FAILURE) /* Iterate through redirection list */
 	{
-		if (iterator->direction == r_input)
+		if (iterator->direction == r_input || iterator->direction == r_here_doc)
 			status = redirect_input(cmd, iterator);
 		else if (iterator->direction == r_output || iterator->direction == r_output_append)
 			status = redirect_output(cmd, iterator);
-		else
-		{
-			// heredoc
-		}
 		iterator = iterator->next;
 	}
 	return (status);
