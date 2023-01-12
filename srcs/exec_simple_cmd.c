@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 20:35:27 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/12 17:25:41 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/12 19:06:00 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ int exec_simple_cmd(t_command *cmd)
 			exit(ERROR_COMMAND_NOT_FOUND);
 		}
 	}
+	else
+		signal(SIGINT, SIG_IGN);
 	zundra.last_child_pid = pid;
 	return (EXIT_SUCCESS);
 }

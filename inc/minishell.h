@@ -135,12 +135,13 @@ int exec_simple_cmd(t_command *cmd);
 int executor(t_command *cmd);
 int perform_IO_redirections(t_command *cmd);
 void expansion_handler(t_word_list *words);
-t_token_node *tokenize(char *input)
+t_token_node *tokenize(char *input);
+void sig_handler(int sig);
 
 #define ERROR_DURING_EXECUTION -99
 #define NO_EXECUTION_PERMISSION 126
 #define ERROR_COMMAND_NOT_FOUND 127
-#define CONTROL_C_INTERRUPT 130
+#define CONTROL_C_INTERRUPT 1
 #define NO_PIPE -666
 
 #endif

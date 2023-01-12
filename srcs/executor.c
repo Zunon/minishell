@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 18:11:11 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/10 18:49:56 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/12 19:02:45 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,5 +131,7 @@ int executor(t_command *first_cmd)
 	zundra.status_code = WEXITSTATUS(status);
 	while (waitpid(-1, &status, 0) > -1)
 		;
+	signal(SIGINT, &sig_handler);
+	signal(SIGQUIT, SIG_IGN);
 	return (zundra.status_code);
 }
