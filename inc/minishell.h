@@ -88,8 +88,6 @@ typedef struct s_shell
 	char **envp;
 } t_shell;
 
-extern t_shell zundra;
-
 //builtins1.c
 int	ft_echo(char **cmd);
 int ft_cd(char **cmd);
@@ -123,4 +121,5 @@ int piper(char *cmd, char **argv, char **envp);
 int c1();
 int c2();
 
+extern t_shell zundra;
 #endif

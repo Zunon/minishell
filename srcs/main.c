@@ -40,7 +40,7 @@ int main(int argc, char **argv, char **envp)
 	signal(SIGINT, &sig_handler);
 	signal(SIGQUIT, &sig_handler);
 	zundra.envp = envp;
-	while (2)
+	while (true)
 	{
 		s = readline("minishell ^-^ : ");
 		add_history(s);
