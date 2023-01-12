@@ -57,6 +57,15 @@ enum r_direction
 	r_pipe_out
 };
 
+enum e_token_type
+{
+    BUILTIN,
+    VARIABLE,
+    WORD,
+    REDIRECTION,
+    PIPE
+};
+
 /**
  * @brief Linked list of redirections
  *
@@ -95,6 +104,18 @@ typedef struct s_shell
 	int stdout_old;
 } t_shell;
 
+typedef struct s_token
+{
+    enum e_token_type type;
+    char *contents;
+} t_token;
+
+typedef struct s_token_node
+{
+    t_token token;
+    struct s_token_node *next;
+} t_token_node;
+
 extern t_shell zundra;
 
 int	ft_echo(char **cmd);
@@ -114,6 +135,7 @@ int exec_simple_cmd(t_command *cmd);
 int executor(t_command *cmd);
 int perform_IO_redirections(t_command *cmd);
 void expansion_handler(t_word_list *words);
+t_token_node *tokenize(char *input)
 
 #define ERROR_DURING_EXECUTION -99
 #define NO_EXECUTION_PERMISSION 126
