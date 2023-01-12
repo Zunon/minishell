@@ -12,34 +12,61 @@
 
 #include "../inc/minishell.h"
 
-int ft_exit()
+/**
+ * @brief		Exit from minishell safely
+ *
+ */
+void ft_exit(char **argv)
 {
-	exit(0);
+	int x;
+
+	if (!argv || argv[0])
+		exit(0);
+	if (argv[1] && !argv[2])
+	{
+		x = ft_atoi(argv[1]);
+		exit(x & 0xff);
+	}
+	ft_printf("exit: to many arrguments!\n");
 }
 
+/**
+ * @brief 		Return status code of last executed command
+ *
+ * @return int 	Status code of operation
+ */
 int status_code()
 {
-	printf("%d\n", zundra.status_code);
-	return 0;
+	ft_printf("%d", zundra.status_code);
+	return (EXIT_SUCCESS);
 }
 
-int exec_builtin(char **cmd)
+/**
+ * @brief		Builtin function handler for cd, echo, pwd, exit, env, export, unset
+ *
+ * @param cmd	Currently executimg command
+ * @return int	Status code of child process after executing builtin OR ERROR_CODE 2
+ * 				if not a builtin
+ */
+int exec_builtin(t_command *cmd)
 {
-	if (ft_strncmp(cmd[0], "cd", 2) == 0)
-		return ft_cd(cmd);
-	if (ft_strncmp(cmd[0], "echo", 4) == 0 && cmd[1] && ft_strncmp(cmd[1], "$?", 2) == 0)
-		return status_code();
-	if (ft_strncmp(cmd[0], "echo", 4) == 0)
-		return ft_echo(cmd);
-	if (!cmd[1] && ft_strncmp(cmd[0], "pwd", 3) == 0)
-		return ft_pwd();
-	if (!cmd[1] && ft_strncmp(cmd[0], "exit", 4) == 0)
-		return ft_exit();
-	if (!cmd[1] && ft_strncmp(cmd[0], "env", 3) == 0)
-		return ft_env();
-	if (!cmd[1] && ft_strncmp(cmd[0], "export", 6) == 0)
-		return ft_export(cmd[1], cmd[2]);
-	if (!cmd[1] && ft_strncmp(cmd[0], "unset", 5) == 0)
-		return ft_unset(cmd[1]);
-	return 2;
+	if (!cmd->argv || !cmd->argv[0])
+		return (EXIT_SUCCESS);
+	if (ft_strncmp(cmd->argv[0], "cd", 2) == 0)
+		return (ft_cd(cmd->argv));
+	if (ft_strncmp(cmd->argv[0], "echo", 4) == 0 && cmd->argv[1] && ft_strncmp(cmd->argv[1], "$?", 2) == 0)
+		return (status_code());
+	if (ft_strncmp(cmd->argv[0], "echo", 4) == 0)
+		return (ft_echo(cmd->argv));
+	if (ft_strncmp(cmd->argv[0], "pwd", 3) == 0)
+		return (ft_pwd(cmd->argv));
+	if (ft_strncmp(cmd->argv[0], "exit", 4) == 0)
+		ft_exit(cmd->argv);
+	if (ft_strncmp(cmd->argv[0], "env", 3) == 0)
+		return (ft_env());
+	if (ft_strncmp(cmd->argv[0], "unset", 5) == 0)
+		return (ft_unset(cmd->argv));
+	if (ft_strncmp(cmd->argv[0], "export", 6) == 0)
+		return (ft_export(cmd));
+	return (EXIT_FAILURE);
 }

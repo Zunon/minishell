@@ -25,7 +25,7 @@ int	ft_echo(char **cmd)
 
 	nl = 1;
 	i = 0;
-	if (cmd[1] && ft_strncmp(cmd[1], "-n\0", 3) == 0)
+	if (cmd[1] && ft_strncmp(cmd[1], "-n", 2) == 0)
 	{
 		nl = 0;
 		i++;
@@ -38,7 +38,7 @@ int	ft_echo(char **cmd)
 	}
 	if (nl == 1)
 		write(1, "\n", 1);
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 /**
@@ -49,8 +49,18 @@ int	ft_echo(char **cmd)
  */
 int ft_cd(char **cmd)
 {
+	t_pair *pair;
 	/* Error Handling */
-	return (chdir(cmd[1]));
+	if (!cmd[1])
+		return (EXIT_SUCCESS);
+	if (chdir(cmd[1]) == -1)
+	{
+		perror(cmd[1]);
+		if (zundra.num_of_cmds > 1)
+			exit(1);
+		return (ERROR_DURING_EXECUTION);
+	}
+	return (EXIT_SUCCESS);
 }
 
 /**
@@ -58,14 +68,21 @@ int ft_cd(char **cmd)
  *
  * @return int	status code of execution
  */
-int ft_pwd()
+int ft_pwd(char **cmd)
 {
 	char *path;
 
-	path = malloc(1024 * sizeof(char));
-	getcwd(path, 1024);
+	if (cmd[1])
+		return (EXIT_SUCCESS);
+	path = getcwd(path, 1025);
+	if (!path)
+	{
+		perror("Error while getting current working directory: ");
+		return (ERROR_DURING_EXECUTION);
+	}
 	write(1, path, ft_strlen(path));
 	write(1, "\n", 1);
-	free(path);
-	return 0;
+	if (path)
+		free(path);
+	return (EXIT_SUCCESS);
 }
