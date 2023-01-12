@@ -2,7 +2,9 @@
 
 t_command   *parse_input(const char *input)
 {
-    // Tokenize
-    //
+    t_token_node *list;
+
+    list = tokenize(input);
+    // @TODO: Recursive Descent Parsing Using our Grammar rules
 }
 
