@@ -24,7 +24,7 @@ void sig_handler(int sig)
 	int i;
 
 	i = -1;
-	if (sig == SIGINT) //needs work
+	if (sig == SIGINT)
 	{
 		rl_on_new_line();
 		rl_redisplay();

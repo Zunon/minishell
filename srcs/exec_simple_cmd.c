@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 20:35:27 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/10 19:17:58 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/12 17:25:41 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ int exec_simple_cmd(t_command *cmd)
 	}
 	if (pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		if (perform_IO_redirections(cmd) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 		if (exec_builtin(cmd) == EXIT_FAILURE &&
