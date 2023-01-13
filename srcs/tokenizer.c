@@ -187,7 +187,13 @@ t_token *collapse_quotes(t_bool single, t_token *list) {
         if (remainder)
             remainder->prev = NULL;
         newtoken = merge_word(open_quote);
-//        clear_tokenlist(&open_quote);
+		if (!iterator)
+		{
+			list = newtoken;
+			if (!remainder)
+				return (list);
+		}
+        clear_tokenlist(&open_quote);
         if (iterator)
             iterator->next = newtoken;
         newtoken->prev = iterator;
@@ -306,15 +312,10 @@ t_token *tokenize(char *input)
 
     ft_printf("%p", expand("l"));
     list = preprocess_input(input);
-//    print_tokens(list);
     list = collapse_quotes(TRUE, list);
-//    print_tokens(list);
     list = expand_variables(list);
-//    print_tokens(list);
     list = collapse_quotes(FALSE, list);
-//    print_tokens(list);
     list = discard_whitespace(list);
-    print_tokens(list);
     return (list);
 }
 

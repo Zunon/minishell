@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 20:30:54 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/14 01:12:36 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/14 01:14:22 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 
 t_bool _WORD(t_token *tok)
 {
-	ft_printf("WORD: %d\n", tok->type);
+//	ft_printf("WORD: %d\n", tok->type);
 	return (tok->type == WORD);
 }
 
@@ -40,7 +40,7 @@ t_bool _REDIRECTION(t_token *tok)
 {
 	if (!tok->next)
 		return (FALSE);
-	ft_printf("REDIRECTION: %d\n", tok->type);
+//	ft_printf("REDIRECTION: %d\n", tok->type);
 	return (tok->type == REDIRECTION && tok->next->type == WORD);
 }
 
@@ -58,7 +58,7 @@ t_bool REDIRECTION_LIST(t_token *tok)
 
 t_bool SIMPLE_COMMAND_ELEMENT(t_token *tok)
 {
-	ft_printf("SIMPLE_COMMAND_ELEMENT: %d\n", tok->type);
+//	ft_printf("SIMPLE_COMMAND_ELEMENT: %d\n", tok->type);
 
 	return (REDIRECTION_LIST(tok) || _WORD(tok));
 }
@@ -102,8 +102,8 @@ t_command *recurs_desc_parser(t_token *list)
 	list->next->next->contents = ft_strdup(">");
 	list->next->next->type = REDIRECTION;
 	list->next->next->next = NULL;
-	if (PIPELINE(list) == TRUE)
-		write(1, "WORKS", 5);
+//	if (PIPELINE(list) == TRUE)
+//		write(1, "WORKS", 5);
 	// if (!PIPELINE(list))
 	// 	return (NULL);
 	// pipeline = token_to_cmd_converter(list);
