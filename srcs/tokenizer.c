@@ -121,7 +121,7 @@ t_token *collapse_quotes(t_bool single, t_token *list) {
         open_quote->prev = NULL;
         // find closed quote, null its next and its next's prev:
         close_quote = open_quote->next;
-        while (close_quote && close_quote != qtype)
+        while (close_quote && close_quote->type != qtype)
             close_quote = close_quote->next;
         if (!close_quote)
             return (NULL); // NULL on error (unclosed quote)
