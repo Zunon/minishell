@@ -59,11 +59,13 @@ enum r_direction
 
 enum e_token_type
 {
-    BUILTIN,
-    VARIABLE,
-    WORD,
-    REDIRECTION,
-    PIPE
+	VARIABLE,
+	WORD,
+	REDIRECTION,
+	PIPE,
+	SPACE,
+	SINGLE_QUOTE,
+	DOUBLE_QUOTE,
 };
 
 /**
@@ -108,13 +110,8 @@ typedef struct s_token
 {
     enum e_token_type type;
     char *contents;
+	struct s_token *next;
 } t_token;
-
-typedef struct s_token_node
-{
-    t_token token;
-    struct s_token_node *next;
-} t_token_node;
 
 extern t_shell zundra;
 

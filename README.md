@@ -1,7 +1,6 @@
 # minishell
 
 ## Tokens:
-### Builtins - `/(echo)|(pwd)|(cd)|(env)|(exit)|(export)|(unset)/`
 ### Variables - `/\$[^\d]\w+/`
 ### Words - `/[A-z]\w+/`
 ### Redirectors - `/(<<?)|(>>?)/`
@@ -13,7 +12,7 @@
 <input>  ::= <command> '|' <command>
             |   <command>
 
-<word-list>      ::= <word> 
+<word-list>      ::= <word>
             |   <word-list> <word>
             | '"' <word-list> '"' | '\'' <word-list> '\''
 <assignment-word>    ::= <word> '=' <word>
