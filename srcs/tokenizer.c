@@ -19,11 +19,12 @@ enum e_token_type get_token_type(char ch)
 	if (ft_isalpha(ch) || ft_isdigit(ch))
 			return (WORD);
 	if (ft_iswhitespace(ch))
-		return (SPACE);
+		return (WHITESPACE);
 	if (ch == '|')
 		return (PIPE);
 	if (ch == '>' || ch == '<')
 		return (REDIRECTION);
+    return (ERROR);
 }
 
 /**
@@ -38,15 +39,16 @@ t_token *get_next_token(char *line)
 {
     char *token_string;
 	t_token	*tok;
-	char first;
+	enum e_token_type first;
 	int i;
 
 	if (!line)
 		return (NULL);
-	first = line[0];
+	first = get_token_type(line[0]);
 	i = 0;
-	while (get_token_type(line[i]) == first)
+	while (line[i] && get_token_type(line[i]) == first)
 		i++;
+    ft_printf("i: %d", i);
 	tok = malloc(sizeof(t_token));
 	token_string = ft_substr(line, 0, i);
 	tok->contents = token_string;
@@ -54,20 +56,23 @@ t_token *get_next_token(char *line)
 	return (tok);
 }
 
-t_list **preprocess_input(char *input)
+t_token *preprocess_input(char *input)
 {
-    t_list *result;
-	t_bool opened_quote = false;
-    int i;
+    t_token *result;
+    t_token *iterator;
+    size_t offset;
 
-    i = 0;
-    result = ft_lstnew(NULL);
-    result.content = match_input(input);//cat Makefile > outfile | cat outfile | grep "hello    $USER"
-	// cat, Makefile, >, outfile, |, cat, outfile, |, grep, ", hello,     , $USER, "
-    while(nowhitespace[++i])
+    result = get_next_token(input);
+    iterator = result;
+    offset = ft_strlen(iterator->contents);
+    while(iterator)
     {
-
+        ft_printf("Ptr: %p, String: %s, Type: %d\n", iterator, iterator->contents, iterator->type);
+        iterator->next = get_next_token(input + offset);
+        offset += ft_strlen(iterator->contents);
+        iterator = iterator->next;
     }
+    return result;
 }
 
 /**
@@ -80,22 +85,18 @@ t_list **preprocess_input(char *input)
  * steps:
  * - Preprocess input, removing whitespace
  * - Tokenize:
- *  - Construct tokens
+ *  - Construct tokens [get_next_token()]
+ *  - Build them into a list [preprocess_input()]
  *  - Group together single-quoted strings
  *  - Expand any variables and replace the corresponding token
  *  - Group together double-quoted strings
  * - Return list
  */
-t_token_node *tokenize(char *input)
+t_token *tokenize(char *input)
 {
-    t_list **cleaned_input;
+    t_token *cleaned_input;
 
     cleaned_input = preprocess_input(input);
-	// combine single quotes
-
-	// <w 'cat'>, <w Makefile>, <rd >>, <w outfile>, <p>, <w cat>, <w outfile>, <p>, <w grep>, <dq>, <w hello>, <w     >, <var USER>, <dq>
-	// expand
-	// <w 'cat'>, <w Makefile>, <rd >>, <w outfile>, <p>, <w cat>, <w outfile>, <p>, <w grep>, <dq>, <w hello>, <w     >, <w rriyas>, <dq>
-	// <w 'cat'>, <w Makefile>, <rd >>, <w outfile>, <p>, <w cat>, <w outfile>, <p>, <w grep>, <w:q 'hello    rriyas'>
+    return 0;
 }
 

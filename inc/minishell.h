@@ -63,9 +63,10 @@ enum e_token_type
 	WORD,
 	REDIRECTION,
 	PIPE,
-	SPACE,
+	WHITESPACE,
 	SINGLE_QUOTE,
 	DOUBLE_QUOTE,
+    ERROR
 };
 
 /**
@@ -132,8 +133,9 @@ int exec_simple_cmd(t_command *cmd);
 int executor(t_command *cmd);
 int perform_IO_redirections(t_command *cmd);
 void expansion_handler(t_word_list *words);
-t_token_node *tokenize(char *input);
+t_token *tokenize(char *input);
 void sig_handler(int sig);
+t_command *parse_input(const char *input);
 
 #define ERROR_DURING_EXECUTION -99
 #define NO_EXECUTION_PERMISSION 126

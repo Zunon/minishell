@@ -81,8 +81,7 @@ int main(int argc, char **argv, char **envp)
 		add_history(s);
 		if (!s)					/* Control D check */
 			ft_exit(NULL);
-		// lexer(s);
-		// cmd = parser();
+        cmd = parse_input(s);
 		// executor(cmd);
 		// ft_exit(argv);
 		free(s);
