@@ -24,11 +24,11 @@ char * expand(char *word)
 	char *result;
 
 	if (!word || !*word)
-		return ;
+		return NULL;
 	pair = retrieve_from_dict(zundra.env_mngr, word);
 	if (pair)
 		result = ft_strdup(pair->value);
 	else
-		word = ft_strdup("");
+		result = ft_strdup("");
 	return (result);
 }
