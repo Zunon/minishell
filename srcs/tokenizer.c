@@ -73,6 +73,25 @@ t_token *preprocess_input(char *input)
     }
     return result;
 }
+/**
+ * @TODO:
+ * @param list
+ * @return
+ */
+t_token *collapse_quotes(t_bool single, t_token *list)
+{
+
+}
+
+/**
+ *
+ * @param list
+ * @return
+ */
+t_token *expand_variables(t_token *list)
+{
+
+}
 
 /**
  * @brief Turn a string into a list of tokens
@@ -93,9 +112,12 @@ t_token *preprocess_input(char *input)
  */
 t_token *tokenize(char *input)
 {
-    t_token *cleaned_input;
+    t_token *list;
 
-    cleaned_input = preprocess_input(input);
-    return 0;
+    list = preprocess_input(input);
+    list = collapse_quotes(true, list);
+    list = expand_variables(list);
+    list = collapse_quotes(false, list);
+    return (list);
 }
 
