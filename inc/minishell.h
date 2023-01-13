@@ -114,7 +114,7 @@ t_command *parser();
 int exec_simple_cmd(t_command *cmd);
 int executor(t_command *cmd);
 int perform_IO_redirections(t_command *cmd);
-void expansion_handler(t_list *words);
+char *expand(char *word);
 t_token *tokenize(char *input);
 void sig_handler(int sig);
 t_command *parse_input(const char *input);

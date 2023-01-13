@@ -178,7 +178,8 @@ t_token *collapse_quotes(t_bool single, t_token *list) {
  */
 t_token *expand_variables(t_token *list)
 {
- return list;
+    expan
+    return list;
 }
 
 /**
