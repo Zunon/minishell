@@ -6,6 +6,7 @@
 ### Words - `/[A-z]\w+/`
 ### Redirectors - `/(<<?)|(>>?)/`
 ### Pipes - `/\|/`
+### Quotations - `/'|"/`
 
 ## Grammar:
 ```bnf
