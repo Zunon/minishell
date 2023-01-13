@@ -60,6 +60,11 @@ t_token *get_next_token(char *line)
 	return (tok);
 }
 
+/**
+ * @brief Turn the input string into a list of tokens by calling get_next_token
+ * @param input string
+ * @return linked list of tokens to be processed further
+ */
 t_token *preprocess_input(char *input)
 {
     t_token *result;
@@ -69,7 +74,6 @@ t_token *preprocess_input(char *input)
 	result = get_next_token(input);
     iterator = result;
     offset = ft_strlen(iterator->contents);
-
     while(iterator)
       {
         ft_printf("token: '%s', input (with offset): '%s', offset: %d\n", iterator->contents, input + offset, offset);
@@ -83,6 +87,10 @@ t_token *preprocess_input(char *input)
     return result;
 }
 
+/**
+ * @brief Free the token list given to it fully
+ * @param list linked list of tokens
+ */
 void clear_tokenlist(t_token **list)
 {
     t_token	*holder;
@@ -99,6 +107,11 @@ void clear_tokenlist(t_token **list)
     list = NULL;
 }
 
+/**
+ * @brief Merge the list given to it into one big word token
+ * @param quote linked list of tokens to be merged
+ * @return the word token with the merged contents
+ */
 t_token *merge_word(t_token *quote)
 {
     char *final_content;
@@ -112,7 +125,7 @@ t_token *merge_word(t_token *quote)
     while (iterator->type != type)
     {
         final_content = ft_strjoin(final_content, iterator->contents);
-        iterator = iterator->next;
+		iterator = iterator->next;
     }
     result = malloc(sizeof(t_token));
     *result = (t_token){WORD, final_content};
@@ -120,9 +133,12 @@ t_token *merge_word(t_token *quote)
 }
 
 /**
- * @TODO:
- * @param list
- * @return
+ * @brief Collapse the quotations in the token list into word tokens
+ * @param single boolean indicating type of quotation to collapse
+ * @param list linked list of tokens we are operating on
+ * @return linked list of tokens after the collapse of the desired quotations
+ * @todo @bug if the quote is at the beginning of the list, trying to free it
+ *      will cause a segfault down the line since it frees the head of the list
  */
 t_token *collapse_quotes(t_bool single, t_token *list) {
     t_token *iterator;
@@ -148,7 +164,6 @@ t_token *collapse_quotes(t_bool single, t_token *list) {
     enclosed = FALSE;
     while (iterator)
     {
-        // find open quote, null its prev and its prev's next:
         while (iterator && (iterator->type != qtype || enclosed))
         {
             if (iterator->type == otype)
@@ -162,26 +177,17 @@ t_token *collapse_quotes(t_bool single, t_token *list) {
         if (iterator)
             iterator->next = NULL;
         open_quote->prev = NULL;
-        // find closed quote, null its next and its next's prev:
         close_quote = open_quote->next;
-
         while (close_quote && close_quote->type != qtype)
             close_quote = close_quote->next;
-
         if (!close_quote)
-            return (NULL); // NULL on error (unclosed quote)
-
-            remainder = close_quote->next;
-
+            return (NULL);
+        remainder = close_quote->next;
         close_quote->next = NULL;
         if (remainder)
             remainder->prev = NULL;
-
-        // merge everything between
         newtoken = merge_word(open_quote);
-
 //        clear_tokenlist(&open_quote);
-        // do surgery on list with new node
         if (iterator)
             iterator->next = newtoken;
         newtoken->prev = iterator;
@@ -195,6 +201,11 @@ t_token *collapse_quotes(t_bool single, t_token *list) {
     return list;
 }
 
+/**
+ * @brief Prune whitespace out of the token list
+ * @param list linked list of tokens
+ * @return pruned list
+ */
 t_token *discard_whitespace(t_token *list) {
     t_token *iterator;
     t_token *temp;
@@ -227,9 +238,9 @@ t_token *discard_whitespace(t_token *list) {
 }
 
 /**
- *
- * @param list
- * @return
+ * @brief Expand all variable tokens and replace them with the respective word
+ * @param list linked list of all tokens
+ * @return list but with no variable tokens
  */
 t_token *expand_variables(t_token *list) {
     t_token *iterator;
