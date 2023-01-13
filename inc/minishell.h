@@ -118,7 +118,7 @@ char *expand(char *word);
 t_token *tokenize(char *input);
 void sig_handler(int sig);
 t_command *parse_input(const char *input);
-
+t_command *recurs_desc_parser(t_token *list);
 #define ERROR_DURING_EXECUTION -99
 #define NO_EXECUTION_PERMISSION 126
 #define ERROR_COMMAND_NOT_FOUND 127

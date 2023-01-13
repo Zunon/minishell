@@ -114,60 +114,60 @@ t_token *merge_word(t_token *quote)
  * @return
  */
 t_token *collapse_quotes(t_bool single, t_token *list) {
-    t_token *iterator;
-    t_token *open_quote;
-    t_token *close_quote;
-    t_token *remainder;
-    t_token *newtoken;
-    enum e_token_type qtype;
-    enum e_token_type otype;
-    t_bool enclosed;
+    // t_token *iterator;
+    // t_token *open_quote;
+    // t_token *close_quote;
+    // t_token *remainder;
+    // t_token *newtoken;
+    // enum e_token_type qtype;
+    // enum e_token_type otype;
+    // t_bool enclosed;
 
-    if (single)
-    {
-        qtype = SINGLE_QUOTE;
-        otype = DOUBLE_QUOTE;
-    }
-    else
-    {
-        qtype = DOUBLE_QUOTE;
-        otype = SINGLE_QUOTE;
-    }
-    iterator = list;
-    enclosed = FALSE;
-    while (iterator)
-    {
-        // find open quote, null its prev and its prev's next:
-        while (iterator && (iterator->type != qtype || enclosed))
-        {
-            if (iterator->type == otype)
-                enclosed = !enclosed;
-            iterator = iterator->next;
-        }
-        if (!iterator)
-            return (list);
-        open_quote = iterator;
-        iterator = open_quote->prev;
-        iterator->next = NULL;
-        open_quote->prev = NULL;
-        // find closed quote, null its next and its next's prev:
-        close_quote = open_quote->next;
-        while (close_quote && close_quote->type != qtype)
-            close_quote = close_quote->next;
-        if (!close_quote)
-            return (NULL); // NULL on error (unclosed quote)
-        remainder = close_quote->next;
-        close_quote->next = NULL;
-        remainder->prev = NULL;
-        // merge everything between
-        newtoken = merge_word(open_quote);
-        clear_tokenlist(open_quote);
-        // do surgery on list with new node
-        iterator->next = newtoken;
-        newtoken->prev = iterator;
-        newtoken->next = remainder;
-        remainder->prev = newtoken;
-    }
+    // if (single)
+    // {
+    //     qtype = SINGLE_QUOTE;
+    //     otype = DOUBLE_QUOTE;
+    // }
+    // else
+    // {
+    //     qtype = DOUBLE_QUOTE;
+    //     otype = SINGLE_QUOTE;
+    // }
+    // iterator = list;
+    // enclosed = FALSE;
+    // while (iterator)
+    // {
+    //     // find open quote, null its prev and its prev's next:
+    //     while (iterator && (iterator->type != qtype || enclosed))
+    //     {
+    //         if (iterator->type == otype)
+    //             enclosed = !enclosed;
+    //         iterator = iterator->next;
+    //     }
+    //     if (!iterator)
+    //         return (list);
+    //     open_quote = iterator;
+    //     iterator = open_quote->prev;
+    //     iterator->next = NULL;
+    //     open_quote->prev = NULL;
+    //     // find closed quote, null its next and its next's prev:
+    //     close_quote = open_quote->next;
+    //     while (close_quote && close_quote->type != qtype)
+    //         close_quote = close_quote->next;
+    //     if (!close_quote)
+    //         return (NULL); // NULL on error (unclosed quote)
+    //     remainder = close_quote->next;
+    //     close_quote->next = NULL;
+    //     remainder->prev = NULL;
+    //     // merge everything between
+    //     newtoken = merge_word(open_quote);
+    //     clear_tokenlist(open_quote);
+    //     // do surgery on list with new node
+    //     iterator->next = newtoken;
+    //     newtoken->prev = iterator;
+    //     newtoken->next = remainder;
+    //     remainder->prev = newtoken;
+    // }
     return list;
 }
 
@@ -178,8 +178,8 @@ t_token *collapse_quotes(t_bool single, t_token *list) {
  */
 t_token *expand_variables(t_token *list)
 {
-    expan
-    return list;
+    // expan
+    // return list;
 }
 
 /**
