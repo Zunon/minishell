@@ -75,7 +75,7 @@ int main(int argc, char **argv, char **envp)
 	signal(SIGINT, &sig_handler);
 	signal(SIGQUIT, SIG_IGN);
 	zundra.env_mngr = generate_env_manager(envp);
-	while (2)
+	while (TRUE)
 	{
 		s = readline("minishell ^-^ : ");
 		add_history(s);
