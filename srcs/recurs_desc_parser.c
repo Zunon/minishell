@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 20:30:54 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/14 00:34:16 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/14 01:12:36 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,17 +44,17 @@ t_bool _REDIRECTION(t_token *tok)
 	return (tok->type == REDIRECTION && tok->next->type == WORD);
 }
 
-
-
 t_bool REDIRECTION_LIST(t_token *tok)
 {
 	if (!tok)
 		return (TRUE);
 	ft_printf("REDIRECTION LIST: %d\n", tok->type);
-	if (tok->next && tok->next->next && _REDIRECTION(tok) && REDIRECTION_LIST(tok->next->next))
+	if (_REDIRECTION(tok) && tok->next && REDIRECTION_LIST(tok->next->next))
 		return (TRUE);
 	return (_REDIRECTION(tok));
 }
+
+
 
 t_bool SIMPLE_COMMAND_ELEMENT(t_token *tok)
 {
@@ -64,8 +64,6 @@ t_bool SIMPLE_COMMAND_ELEMENT(t_token *tok)
 }
 t_bool SIMPLE_COMMAND(t_token *tok)
 {
-	if (!tok)
-		return (TRUE);
 	ft_printf("SIMPLE_COMMAND: %d\n", tok->type);
 	if (tok->next && SIMPLE_COMMAND_ELEMENT(tok) && SIMPLE_COMMAND(tok->next))
 		return (TRUE);
@@ -77,11 +75,14 @@ t_bool PIPELINE(t_token *tok)
 	if (!tok)
 		return (TRUE);
 	ft_printf("PIPELINE: %d\n", tok->type);
-	if (tok->next && SIMPLE_COMMAND(tok) && tok->next->type == PIPE && PIPELINE(tok->next->next))
+	if (tok->next && SIMPLE_COMMAND(tok) && PIPELINE(tok->next->next))
 		return (TRUE);
 	// write(1, "sup", 3);
 	return (SIMPLE_COMMAND(tok));
 }
+
+
+
 
 t_command *recurs_desc_parser(t_token *list)
 {

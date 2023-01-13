@@ -16,7 +16,7 @@ LIB			=	./lib/libft/libft.a
 CC			=	gcc
 RM			=	rm -rf
 SRCS		=	srcs/main.c srcs/executor.c srcs/exec_simple_cmd.c srcs/builtins1.c srcs/builtins2.c srcs/env_initiate.c srcs/env_utils.c srcs/dictionary.c \
-				srcs/dictionary_utils.c srcs/dictionary_cleanup.c srcs/redirect.c srcs/cleanup.c srcs/parser.c srcs/tokenizer.c srcs/expansions.c
+				srcs/dictionary_utils.c srcs/dictionary_cleanup.c srcs/redirect.c srcs/cleanup.c srcs/parser.c srcs/tokenizer.c srcs/expansions.c srcs/recurs_desc_parser.c
 OBJS		=	${SRCS:.c=.o}
 LEX_TEST_SRCS	=	srcs/executor.c srcs/exec_simple_cmd.c srcs/builtins1.c srcs/builtins2.c srcs/env_initiate.c srcs/env_utils.c srcs/dictionary.c \
 				srcs/dictionary_utils.c srcs/dictionary_cleanup.c srcs/redirect.c srcs/cleanup.c tests/lexer/*.c
