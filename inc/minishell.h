@@ -28,26 +28,8 @@
 #include <fcntl.h>
 #include <errno.h>
 
-// /* A structure which represents a word. */
-typedef struct s_word_desc
-{
-	char *word;						/* Zero terminated string. */
-	int dollar_present; 			/* Non-zero means dollar sign present. */
-	int quoted;						/* Non-zero means single, double, or back quote
-				   						or backslash is present. */
-	int assignment;					/* Non-zero means that this word contains an
-				   						assignment. */
-} t_word_desc;
-
-/* A linked list of words. */
-typedef struct s_word_list
-{
-	struct s_word_list *next;
-	t_word_desc *curr_word_desc;
-} t_word_list;
-
 /* Instructions describing what kind of thing to do for a redirection. */
-enum r_direction
+enum e_direction
 {
 	r_input,
 	r_output,
@@ -77,14 +59,14 @@ typedef struct s_redirect
 {
 	struct s_redirect *next;		/* Next element, or NULL. */
 	int flags;						/* Flag value for `open'. */
-	enum r_direction direction;		/* What to do with the information. */
-	t_word_desc redirectee;			/* File descriptor or filename */
+	enum e_direction direction;		/* What to do with the information. */
+	char* redirectee;			/* File descriptor or filename */
 	char *here_doc_delim;			/* Heredoc delimeter eg. << delim. */
 }	t_redirect;
 
 typedef struct s_command{
 	int id;
-	t_word_list *words;   			/* The program name, the arguments */
+	t_list *words;   			/* The program name, the arguments */
 	t_redirect *redirects; 			/* Redirections to perform. */
 	int exit_code;		 			/* Exit status of command */
 	int fd_in;
@@ -132,7 +114,7 @@ t_command *parser();
 int exec_simple_cmd(t_command *cmd);
 int executor(t_command *cmd);
 int perform_IO_redirections(t_command *cmd);
-void expansion_handler(t_word_list *words);
+void expansion_handler(t_list *words);
 t_token *tokenize(char *input);
 void sig_handler(int sig);
 t_command *parse_input(const char *input);

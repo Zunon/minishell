@@ -30,32 +30,11 @@ static void free_redirects(t_redirect *redir)
 		redir = redir->next;
 		if (temp->direction == r_here_doc)
 		{
-			if (unlink(temp->redirectee.word) == -1)
+			if (unlink(temp->redirectee) == -1)
 				perror("Error while deleting heredoc temp file: ");
 			free(temp->here_doc_delim);
 		}
-		free(temp->redirectee.word);
-		free(temp);
-	}
-}
-
-/**
- * @brief			Function to deallocate memory for any linked list of words
- *
- * @param word_list	List to clear
- */
-static void free_word_list(t_word_list *word_list)
-{
-	t_word_list *temp;
-
-	if (!word_list)
-		return;
-	while (word_list)
-	{
-		temp = word_list;
-		word_list = word_list->next;
-		free(temp->curr_word_desc->word);
-		free(temp->curr_word_desc);
+		free(temp->redirectee);
 		free(temp);
 	}
 }
@@ -78,7 +57,7 @@ void free_commands(t_command *cmd)
 		temp = cmd;
 		cmd = cmd->next;
 		free_redirects(temp->redirects);
-		free_word_list(temp->words);
+		ft_lstclear(&cmd->words, free);
 		while (cmd->argv[i])
 		{
 			free(cmd->argv[i]);

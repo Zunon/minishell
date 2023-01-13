@@ -28,7 +28,7 @@ int ft_env()
 /**
  * @brief				Update the environment variable manager dictionary after any
  * 						exports and/or unsets
- * 
+ *
  * @param env_manager	Envrionment manager dictionary to update
  */
 static void update_env(t_dict *env_manager)
@@ -49,7 +49,7 @@ static void update_env(t_dict *env_manager)
 /**
  * @brief				Print all envrioment variables in a sorted manner if there
  * 						are no arguments to export
- * 
+ *
  * @return int			Status code of operation (discard if not needed)
  */
 static int ft_export_no_args()
@@ -57,7 +57,7 @@ static int ft_export_no_args()
 	t_dict *dict;
 	int i;
 
-	i = 0;	
+	i = 0;
 	dict = sort_dictionary(zundra.env_mngr, ft_strncmp);
 	while (dict->table[i])
 	{
@@ -78,7 +78,7 @@ static int ft_export_no_args()
  */
 int ft_export(t_command *cmd)
 {
-	t_word_list *iterator;
+	t_list *iterator;
 	int i;
 
 	i = 1;
@@ -89,7 +89,7 @@ int ft_export(t_command *cmd)
 		iterator = cmd->words->next;
 		while (cmd->argv[i] && iterator)
 		{
-			if (iterator->curr_word_desc->assignment)
+			if (iterator->content)
 			{
 				if (cmd->argv[2])
 					insert_into_dict(&zundra.env_mngr, cmd->argv[1], cmd->argv[2]);
@@ -121,7 +121,7 @@ int ft_unset(char **argv)
 	{
 		remove_from_dict(zundra.env_mngr, argv[1]);
 		i++;
-	} 
+	}
 	update_env(zundra.env_mngr);
 	return (EXIT_SUCCESS);
 }

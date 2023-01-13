@@ -8,21 +8,19 @@
 ### Quotations - `/'|"/`
 
 ## Grammar:
-```bnf
-<input>  ::= <command> '|' <command>
-            |   <command>
 
-<word-list>      ::= <word>
-            |   <word-list> <word>
-            | '"' <word-list> '"' | '\'' <word-list> '\''
-<assignment-word>    ::= <word> '=' <word>
-<redirection>   ::= '>' <word>
-                |   '<' <word>
-                |   '>>' <word>
-                |   '<<' <word>
-<command-part>   ::= <word-list> | <assignment-word> | <redirection>
-<redirection-list>      ::= <redirection>
-                        |   <redirection-list> <redirection>
-<command>   ::= <command-part>
-            |   <command> <command-part>
+```
+<PIPELINE> 	::=	<SIMPLE-COMMAND>
+			|	<SIMPLE-COMMAND> '|' <PIPELINE>
+
+<SIMPLE-COMMAND> ::=  <SIMPLE-COMMAND-ELEMENT>
+                   |  <SIMPLE-COMMAND-ELEMENT> <SIMPLE-COMMAND>
+
+<SIMPLE-COMMAND-ELEMENT> ::= <WORD>
+                          |  <REDIRECTION-LIST>
+
+<REDIRECTION>   ::= <DIRECTION> <WORD>
+
+<REDIRECTION-LIST> ::= <REDIRECTION>
+                    | <REDIRECTION> <REDIRECTION-LIST>
 ```

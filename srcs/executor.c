@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 18:11:11 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/13 13:29:27 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/13 22:37:11 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static int close_used_pipes(int pipe_in)
  * @param word_lst 	t_word_lst variable to get the size of
  * @return int		Number of strings present (Excluding NULL element)
  */
-static int get_word_list_length(t_word_list *word_lst)
+static int get_list_length(t_list *word_lst)
 {
 	int i;
 
@@ -83,7 +83,7 @@ static int get_word_list_length(t_word_list *word_lst)
  * @param word_lst	linked list of words
  * @return char**	argv for the currently executing command
  */
-static char **prepare_cmd_args(t_word_list *word_lst)
+static char **prepare_cmd_args(t_list *word_lst)
 {
 	char **ret;
 	int i;
@@ -91,10 +91,10 @@ static char **prepare_cmd_args(t_word_list *word_lst)
 	if (!word_lst)
 		return (NULL);
 	i = 0;
-	ret = malloc(sizeof(char *) * (1 + get_word_list_length(word_lst)));
+	ret = malloc(sizeof(char *) * (1 + get_list_length(word_lst)));
 	while (word_lst)
 	{
-		ret[i] = word_lst->curr_word_desc->word;
+		ret[i] = (char *)(word_lst->content);
 		word_lst = word_lst->next;
 		i++;
 	}
