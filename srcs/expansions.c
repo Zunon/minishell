@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 19:28:13 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/14 00:43:57 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/14 00:45:10 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char * expand(char *word)
 	char *result;
 
 	if (!word || !*word)
-		return (NULL);
+		return NULL;
 	pair = retrieve_from_dict(zundra.env_mngr, word);
 	if (pair)
 		result = ft_strdup(pair->value);
