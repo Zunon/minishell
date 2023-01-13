@@ -16,15 +16,13 @@ enum e_token_type get_token_type(char ch)
 		return (DOUBLE_QUOTE);
 	if (ch == '$')
 		return (VARIABLE);
-	if (ft_isalpha(ch) || ft_isdigit(ch))
-		return (WORD);
 	if (ft_iswhitespace(ch))
 		return (WHITESPACE);
 	if (ch == '|')
 		return (PIPE);
 	if (ch == '>' || ch == '<')
 		return (REDIRECTION);
-    return (ERROR);
+    return (WORD);
 }
 
 /**
@@ -50,9 +48,7 @@ t_token *get_next_token(char *line)
 		i++;
 	tok = malloc(sizeof(t_token));
 	token_string = ft_substr(line, 0, i);
-	tok->contents = token_string;
-	tok->type = first;
-	tok->next = NULL;
+    *tok = (t_token){first, token_string, NULL, NULL};
 	return (tok);
 }
 
@@ -68,19 +64,111 @@ t_token *preprocess_input(char *input)
     while(iterator)
     {
         iterator->next = get_next_token(input + offset);
+        if (iterator->next)
+            iterator->next->prev = iterator;
         offset += ft_strlen(iterator->contents);
         iterator = iterator->next;
     }
     return result;
 }
+
+void clear_tokenlist(t_token **list)
+{
+    t_token	*holder;
+
+    if (!list || !*list)
+        return ;
+    while (*list)
+    {
+        holder = (*list)->next;
+        free((*list)->contents);
+        free(*list);
+        *list = holder;
+    }
+    list = NULL;
+}
+
+t_token *merge_word(t_token *quote)
+{
+    char *final_content;
+    enum e_token_type type;
+    t_token *iterator;
+    t_token *result;
+
+    final_content = ft_calloc(1, 1);
+    type = quote->type;
+    iterator = quote->next;
+    while (iterator->type != type)
+    {
+        final_content = ft_strjoin(final_content, iterator->contents);
+        iterator = iterator->next;
+    }
+    result = malloc(sizeof(t_token));
+    *result = (t_token){WORD, final_content};
+    return (result);
+}
+
 /**
  * @TODO:
  * @param list
  * @return
  */
-t_token *collapse_quotes(t_bool single, t_token *list)
-{
+t_token *collapse_quotes(t_bool single, t_token *list) {
+    t_token *iterator;
+    t_token *open_quote;
+    t_token *close_quote;
+    t_token *remainder;
+    t_token *newtoken;
+    enum e_token_type qtype;
+    enum e_token_type otype;
+    t_bool enclosed;
 
+    if (single)
+    {
+        qtype = SINGLE_QUOTE;
+        otype = DOUBLE_QUOTE;
+    }
+    else
+    {
+        qtype = DOUBLE_QUOTE;
+        otype = SINGLE_QUOTE;
+    }
+    iterator = list;
+    enclosed = FALSE;
+    while (iterator)
+    {
+        // find open quote, null its prev and its prev's next:
+        while (iterator && (iterator->type != qtype || enclosed))
+        {
+            if (iterator->type == otype)
+                enclosed = !enclosed;
+            iterator = iterator->next;
+        }
+        if (!iterator)
+            return (list);
+        open_quote = iterator;
+        iterator = open_quote->prev;
+        iterator->next = NULL;
+        open_quote->prev = NULL;
+        // find closed quote, null its next and its next's prev:
+        close_quote = open_quote->next;
+        while (close_quote && close_quote->type != qtype)
+            close_quote = close_quote->next;
+        if (!close_quote)
+            return (NULL); // NULL on error (unclosed quote)
+        remainder = close_quote->next;
+        close_quote->next = NULL;
+        remainder->prev = NULL;
+        // merge everything between
+        newtoken = merge_word(open_quote);
+        clear_tokenlist(open_quote);
+        // do surgery on list with new node
+        iterator->next = newtoken;
+        newtoken->prev = iterator;
+        newtoken->next = remainder;
+        remainder->prev = newtoken;
+    }
+    return list;
 }
 
 /**
@@ -90,7 +178,7 @@ t_token *collapse_quotes(t_bool single, t_token *list)
  */
 t_token *expand_variables(t_token *list)
 {
-
+ return list;
 }
 
 /**
@@ -115,9 +203,9 @@ t_token *tokenize(char *input)
     t_token *list;
 
     list = preprocess_input(input);
-    list = collapse_quotes(true, list);
+    list = collapse_quotes(TRUE, list);
     list = expand_variables(list);
-    list = collapse_quotes(false, list);
+    list = collapse_quotes(FALSE, list);
     return (list);
 }
 
