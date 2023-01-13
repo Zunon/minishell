@@ -187,7 +187,13 @@ t_token *collapse_quotes(t_bool single, t_token *list) {
         if (remainder)
             remainder->prev = NULL;
         newtoken = merge_word(open_quote);
-//        clear_tokenlist(&open_quote);
+		if (!iterator)
+		{
+			list = newtoken;
+			if (!remainder)
+				return (list);
+		}
+        clear_tokenlist(&open_quote);
         if (iterator)
             iterator->next = newtoken;
         newtoken->prev = iterator;

@@ -32,7 +32,7 @@
 
 t_bool _WORD(t_token *tok)
 {
-	ft_printf("WORD: %d\n", tok->type);
+//	ft_printf("WORD: %d\n", tok->type);
 	return (tok->type == WORD);
 }
 
@@ -40,7 +40,7 @@ t_bool _REDIRECTION(t_token *tok)
 {
 	if (!tok->next)
 		return (FALSE);
-	ft_printf("REDIRECTION: %d\n", tok->type);
+//	ft_printf("REDIRECTION: %d\n", tok->type);
 	return (tok->type == REDIRECTION && tok->next->type == WORD);
 }
 
@@ -50,7 +50,7 @@ t_bool REDIRECTION_LIST(t_token *tok)
 {
 	if (!tok)
 		return (TRUE);
-	ft_printf("REDIRECTION LIST: %d\n", tok->type);
+//	ft_printf("REDIRECTION LIST: %d\n", tok->type);
 	if (tok->next && tok->next->next && _REDIRECTION(tok) && REDIRECTION_LIST(tok->next->next))
 		return (TRUE);
 	return (_REDIRECTION(tok));
@@ -58,7 +58,7 @@ t_bool REDIRECTION_LIST(t_token *tok)
 
 t_bool SIMPLE_COMMAND_ELEMENT(t_token *tok)
 {
-	ft_printf("SIMPLE_COMMAND_ELEMENT: %d\n", tok->type);
+//	ft_printf("SIMPLE_COMMAND_ELEMENT: %d\n", tok->type);
 
 	return (REDIRECTION_LIST(tok) || _WORD(tok));
 }
@@ -66,7 +66,7 @@ t_bool SIMPLE_COMMAND(t_token *tok)
 {
 	if (!tok)
 		return (TRUE);
-	ft_printf("SIMPLE_COMMAND: %d\n", tok->type);
+//	ft_printf("SIMPLE_COMMAND: %d\n", tok->type);
 	if (tok->next && SIMPLE_COMMAND_ELEMENT(tok) && SIMPLE_COMMAND(tok->next))
 		return (TRUE);
 	return (SIMPLE_COMMAND_ELEMENT(tok));
@@ -76,7 +76,7 @@ t_bool PIPELINE(t_token *tok)
 {
 	if (!tok)
 		return (TRUE);
-	ft_printf("PIPELINE: %d\n", tok->type);
+//	ft_printf("PIPELINE: %d\n", tok->type);
 	if (tok->next && SIMPLE_COMMAND(tok) && tok->next->type == PIPE && PIPELINE(tok->next->next))
 		return (TRUE);
 	// write(1, "sup", 3);
@@ -101,8 +101,8 @@ t_command *recurs_desc_parser(t_token *list)
 	list->next->next->contents = ft_strdup(">");
 	list->next->next->type = REDIRECTION;
 	list->next->next->next = NULL;
-	if (PIPELINE(list) == TRUE)
-		write(1, "WORKS", 5);
+//	if (PIPELINE(list) == TRUE)
+//		write(1, "WORKS", 5);
 	// if (!PIPELINE(list))
 	// 	return (NULL);
 	// pipeline = token_to_cmd_converter(list);
