@@ -72,9 +72,40 @@ t_token *preprocess_input(char *input)
     return result;
 }
 
+void clear_tokenlist(t_token **list)
+{
+    t_token	*holder;
+
+    if (!list || !*list)
+        return ;
+    while (*list)
+    {
+        holder = (*list)->next;
+        free((*list)->contents);
+        free(*list);
+        *list = holder;
+    }
+    list = NULL;
+}
+
 t_token *merge_word(t_token *quote)
 {
+    char *final_content;
+    enum e_token_type type;
+    t_token *iterator;
+    t_token *result;
 
+    final_content = ft_calloc(1, 1);
+    type = quote->type;
+    iterator = quote->next;
+    while (iterator->type != type)
+    {
+        final_content = ft_strjoin(final_content, iterator->contents);
+        iterator = iterator->next;
+    }
+    result = malloc(sizeof(t_token));
+    *result = (t_token){WORD, final_content};
+    return (result);
 }
 
 /**
