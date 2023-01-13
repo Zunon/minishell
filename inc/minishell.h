@@ -65,8 +65,7 @@ enum e_token_type
 	PIPE,
 	WHITESPACE,
 	SINGLE_QUOTE,
-	DOUBLE_QUOTE,
-    ERROR
+	DOUBLE_QUOTE
 };
 
 /**
@@ -112,6 +111,7 @@ typedef struct s_token
     enum e_token_type type;
     char *contents;
 	struct s_token *next;
+    struct s_token *prev;
 } t_token;
 
 extern t_shell zundra;
