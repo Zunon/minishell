@@ -41,6 +41,8 @@ t_bool parse_simple_command(t_token **tracer) {
 t_bool parse_pipeline(t_token *list) {
 	t_token *tracer;
 
+	if (!list)
+		return (TRUE);
 	tracer = list;
 	if (!parse_simple_command(&tracer))
 		return FALSE;
@@ -59,7 +61,6 @@ t_command	*parse_input(const char *input)
 	t_token *list;
 
 	list = tokenize((char *)input);
-	print_tokens(list);
 	if (!parse_pipeline(list)) {
 		ft_printf("Parse Error!\n");
 		return (NULL);
