@@ -49,13 +49,14 @@ t_token *get_next_token(char *line)
     {
 		while (line[i] && get_token_type(line[i]) == WORD)
 			i++;
+		if (ft_isdigit(*(line+1)))
+			first = WORD;
 	}
 	else if (first == WORD || first == WHITESPACE)
 	{
 		while ( line[i] && get_token_type(line[i]) == first)
 			i++;
-		if (ft_isdigit(*(line+1)))
-			first = WORD;
+
 	}
 	else if (first == REDIRECTION && get_token_type(line[i]) == first)
 		i++;
