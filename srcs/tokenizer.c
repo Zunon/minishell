@@ -49,7 +49,7 @@ t_token *get_next_token(char *line)
 		while (line[i] && get_token_type(line[i]) == WORD)
 			i++;
 	}
-	else if (first == WORD)
+	else if (first == WORD || first == WHITESPACE)
 	{
 		while ( line[i] && get_token_type(line[i]) == first)
 			i++;
@@ -138,8 +138,6 @@ t_token *merge_word(t_token *quote)
  * @param single boolean indicating type of quotation to collapse
  * @param list linked list of tokens we are operating on
  * @return linked list of tokens after the collapse of the desired quotations
- * @todo @bug if the quote is at the beginning of the list, trying to free it
- *      will cause a segfault down the line since it frees the head of the list
  */
 t_token *collapse_quotes(t_bool single, t_token *list) {
     t_token *iterator;
@@ -220,7 +218,7 @@ t_token *discard_whitespace(t_token *list) {
     iterator = list;
     while (iterator)
     {
-        if (iterator->type == WHITESPACE)
+        if (iterator->type == WHITESPACE || !(iterator->contents))
         {
             if (iterator->prev && iterator->next)
             {
@@ -290,6 +288,11 @@ void print_tokens(t_token *list)
     ft_printf("TAIL\n");
 }
 
+t_token *discard_dollarquote(t_token *list)
+{
+
+}
+
 /**
  * @brief Turn a string into a list of tokens
  * @param input - input string
@@ -311,11 +314,19 @@ t_token *tokenize(char *input)
 {
     t_token *list;
 
+	if (!input || !*input)
+		return (NULL);
     list = preprocess_input(input);
+	print_tokens(list);
+	list = discard_dollarquote(list);
     list = collapse_quotes(TRUE, list);
+	print_tokens(list);
     list = expand_variables(list);
+	print_tokens(list);
     list = collapse_quotes(FALSE, list);
+	print_tokens(list);
     list = discard_whitespace(list);
-    return (list);
+	print_tokens(list);
+	return (list);
 }
 
