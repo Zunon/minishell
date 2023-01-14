@@ -288,9 +288,36 @@ void print_tokens(t_token *list)
     ft_printf("TAIL\n");
 }
 
-t_token *discard_dollarquote(t_token *list)
+t_token *discard_dollar(t_token *list)
 {
+	t_token *iterator;
+	t_token *temp;
 
+	iterator = list;
+	while (iterator)
+	{
+		if (iterator->type == VARIABLE && !((iterator->contents)[1]))
+		{
+			if (iterator->prev && iterator->next)
+			{
+				iterator->prev->next = iterator->next;
+				iterator->next->prev = iterator->prev;
+			}
+			else if (iterator->prev)
+				iterator->prev->next = NULL;
+			else if (iterator->next)
+				list = iterator->next;
+			else
+				list = NULL;
+			temp = iterator->next;
+			free(iterator->contents);
+			free(iterator);
+			iterator = temp;
+		}
+		else
+			iterator = iterator->next;
+	}
+	return (list);
 }
 
 /**
@@ -318,7 +345,7 @@ t_token *tokenize(char *input)
 		return (NULL);
     list = preprocess_input(input);
 	print_tokens(list);
-	list = discard_dollarquote(list);
+	list = discard_dollar(list);
     list = collapse_quotes(TRUE, list);
 	print_tokens(list);
     list = expand_variables(list);
