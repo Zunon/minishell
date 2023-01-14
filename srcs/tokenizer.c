@@ -124,14 +124,19 @@ t_token *merge_words(t_token *list)
 {
 	t_token *iterator;
 	t_token *new_item;
+	enum e_token_type merge_type;
 
 	iterator = list;
 	while (iterator)
 	{
-		if (iterator->next && iterator->type == WORD && iterator->next->type == WORD)
+		if (iterator->next && (iterator->type == WORD || iterator->type == QUOTED) && (iterator->next->type == WORD || iterator->next->type == QUOTED))
 		{
+			if (iterator->type == QUOTED || iterator->next->type == QUOTED)
+				merge_type = QUOTED;
+			else
+				merge_type = WORD;
 			new_item = malloc(sizeof(t_token));
-			new_item->type = WORD;
+			new_item->type = merge_type;
 			new_item->contents = ft_strjoin(iterator->contents, iterator->next->contents);
 			if (iterator->prev) {
 				iterator->prev->next = new_item;
@@ -336,6 +341,8 @@ void print_tokens(t_token *list)
             ft_printf("DOUBLE_QUOTE, ");
 		else if (list->type == ERROR)
 			ft_printf("ERROR, ");
+		else if (list->type == QUOTED)
+			ft_printf("QUOTED, ");
         ft_printf("CONTENTS: %s, PREV: %p, NEXT: %p\n", list->contents, list->prev, list->next);
         list = list->next;
     }
@@ -373,6 +380,20 @@ t_token *token_last(t_token *list)
 	while(iterator->next)
 		iterator = iterator->next;
 	return (iterator);
+}
+
+t_token *disquote(t_token *list)
+{
+	t_token *iterator;
+
+	iterator = list;
+	while (iterator)
+	{
+		if (iterator->type == QUOTED)
+			iterator->type = WORD;
+		iterator = iterator->next;
+	}
+	return (list);
 }
 
 t_token *split_words_on_whitespace(t_token *list)
@@ -481,8 +502,8 @@ t_token *tokenize(char *input)
 	list = merge_words(list);
 	list = split_words_on_whitespace(list);
 	list = discard_whitespace(list);
+	list = disquote(list);
 	print_tokens(list);
-
 	return (list);
 }
 
