@@ -61,7 +61,11 @@ t_command	*parse_input(const char *input)
 	t_token *list;
 
 	list = tokenize((char *)input);
-	if (!parse_pipeline(list)) {
+	print_tokens(list);
+	if (list->type == ERROR) {
+		ft_printf("Token Error: %s\n", list->contents);
+		return (NULL);
+	} else if (!parse_pipeline(list)) {
 		ft_printf("Parse Error!\n");
 		return (NULL);
 	}

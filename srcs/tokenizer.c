@@ -12,7 +12,7 @@ enum e_token_type get_token_type(char ch)
 {
 	if (ch == '\'')
 		return (SINGLE_QUOTE);
-	if (ch == '\"')
+	if (ch == '"')
 		return (DOUBLE_QUOTE);
 	if (ch == '$')
 		return (VARIABLE);
@@ -186,9 +186,13 @@ t_token *collapse_quotes(t_bool single, t_token *list) {
         close_quote = open_quote->next;
         while (close_quote && close_quote->type != qtype)
             close_quote = close_quote->next;
-        if (!close_quote)
-            return (NULL);
-        remainder = close_quote->next;
+        if (!close_quote) {
+			clear_tokenlist(&list);
+			list = malloc(sizeof(t_token));
+			*list = (t_token){ERROR, "UNCLOSED QUOTATION", NULL, NULL};
+			return (list);
+		}
+		remainder = close_quote->next;
         close_quote->next = NULL;
         if (remainder)
             remainder->prev = NULL;
@@ -225,7 +229,7 @@ t_token *discard_whitespace(t_token *list) {
     iterator = list;
     while (iterator)
     {
-        if (iterator->type == WHITESPACE || !(iterator->contents))
+        if (iterator->type == WHITESPACE || !(iterator->contents) || !(*(iterator->contents)))
         {
             if (iterator->prev && iterator->next)
             {
@@ -289,6 +293,8 @@ void print_tokens(t_token *list)
             ft_printf("SINGLE_QUOTE, ");
         else if (list->type == DOUBLE_QUOTE)
             ft_printf("DOUBLE_QUOTE, ");
+		else if (list->type == ERROR)
+			ft_printf("ERROR, ");
         ft_printf("CONTENTS: %s, PREV: %p, NEXT: %p\n", list->contents, list->prev, list->next);
         list = list->next;
     }
@@ -351,16 +357,11 @@ t_token *tokenize(char *input)
 	if (!input || !*input)
 		return (NULL);
     list = preprocess_input(input);
-	print_tokens(list);
 	list = discard_dollar(list);
     list = collapse_quotes(TRUE, list);
-	print_tokens(list);
     list = expand_variables(list);
-	print_tokens(list);
     list = collapse_quotes(FALSE, list);
-	print_tokens(list);
     list = discard_whitespace(list);
-	print_tokens(list);
 	return (list);
 }
 

@@ -45,7 +45,8 @@ enum e_token_type
 	PIPE,
 	WHITESPACE,
 	SINGLE_QUOTE,
-	DOUBLE_QUOTE
+	DOUBLE_QUOTE,
+	ERROR
 };
 
 /**
