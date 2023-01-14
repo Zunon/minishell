@@ -116,11 +116,52 @@ void clear_tokenlist(t_token **list)
 }
 
 /**
+ * @brief Merges adjacent words in the list
+ * @param list linked list of tokens to be scanned and merged
+ * @return list with merged adjacent words
+ */
+t_token *merge_words(t_token *list)
+{
+	t_token *iterator;
+	t_token *new_item;
+
+	iterator = list;
+	while (iterator)
+	{
+		if (iterator->next && iterator->type == WORD && iterator->next->type == WORD)
+		{
+			new_item = malloc(sizeof(t_token));
+			new_item->type = WORD;
+			new_item->contents = ft_strjoin(iterator->contents, iterator->next->contents);
+			if (iterator->prev) {
+				iterator->prev->next = new_item;
+				new_item->prev = iterator->prev;
+			} else {
+				list = new_item;
+				new_item->prev = NULL;
+			}
+			if (iterator->next->next) {
+				iterator->next->next->prev = new_item;
+				new_item->next = iterator->next->next;
+			}
+			else
+				new_item->next = NULL;
+			iterator->next->next = NULL;
+			clear_tokenlist(&iterator);
+			iterator = new_item;
+		}
+		else
+			iterator = iterator->next;
+	}
+	return (list);
+}
+
+/**
  * @brief Merge the list given to it into one big word token
  * @param quote linked list of tokens to be merged
  * @return the word token with the merged contents
  */
-t_token *merge_word(t_token *quote)
+t_token *merge_quotation_tokens(t_token *quote)
 {
     char *final_content;
     enum e_token_type type;
@@ -196,7 +237,7 @@ t_token *collapse_quotes(t_bool single, t_token *list) {
         close_quote->next = NULL;
         if (remainder)
             remainder->prev = NULL;
-        newtoken = merge_word(open_quote);
+        newtoken = merge_quotation_tokens(open_quote);
 		if (!iterator)
 		{
 			list = newtoken;
@@ -364,7 +405,8 @@ t_token *tokenize(char *input)
 	list = expand_variables(list);
 	// print_tokens(list);
 	list = collapse_quotes(FALSE, list);
-	// print_tokens(list);
+	print_tokens(list);
+	list = merge_words(list);
 	list = discard_whitespace(list);
 	print_tokens(list);
 
