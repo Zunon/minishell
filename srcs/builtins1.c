@@ -25,7 +25,7 @@ int	ft_echo(char **cmd)
 
 	nl = 1;
 	i = 0;
-	if (cmd[1] && ft_strncmp(cmd[1], "-n", 2) == 0)
+	if (cmd[1] && ft_strncmp(cmd[1], "-n", 3) == 0)
 	{
 		nl = 0;
 		i++;
@@ -74,6 +74,7 @@ int ft_pwd(char **cmd)
 
 	if (cmd[1])
 		return (EXIT_SUCCESS);
+	path = malloc(1025 * sizeof(char));
 	path = getcwd(path, 1025);
 	if (!path)
 	{
