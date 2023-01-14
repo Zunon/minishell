@@ -73,6 +73,8 @@ t_token *get_next_token(char *line)
  * @brief Turn the input string into a list of tokens by calling get_next_token
  * @param input string
  * @return linked list of tokens to be processed further
+ * @todo keep track of quoted status and do var/word $ accordingly
+ * @bug echo "$"
  */
 t_token *preprocess_input(char *input)
 {
@@ -489,8 +491,8 @@ t_token *tokenize(char *input)
 	if (!input || !*input)
 		return (NULL);
     list = preprocess_input(input);
-	list = discard_dollar(list);
 	list = collapse_quotes(TRUE, list);
+	list = discard_dollar(list);
 	list = expand_variables(list);
 	list = collapse_quotes(FALSE, list);
 	list = merge_words(list);
