@@ -120,7 +120,7 @@ void clear_tokenlist(t_token **list)
  * @param quote linked list of tokens to be merged
  * @return the word token with the merged contents
  */
-t_token *merge_word(t_token *quote)
+t_token *merge_quotation_tokens(t_token *quote)
 {
     char *final_content;
     enum e_token_type type;
@@ -196,7 +196,7 @@ t_token *collapse_quotes(t_bool single, t_token *list) {
         close_quote->next = NULL;
         if (remainder)
             remainder->prev = NULL;
-        newtoken = merge_word(open_quote);
+        newtoken = merge_quotation_tokens(open_quote);
 		if (!iterator)
 		{
 			list = newtoken;
