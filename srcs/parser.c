@@ -69,6 +69,6 @@ t_command	*parse_input(const char *input)
 		ft_printf("Parse Error!\n");
 		return (NULL);
 	}
-	ft_printf("Success!\n");
+	// ft_printf("Success!\n");
 	return (token_to_cmd_converter(list));
 }

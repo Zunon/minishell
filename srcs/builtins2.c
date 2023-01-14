@@ -37,7 +37,7 @@ void ft_exit(char **argv)
  */
 int status_code()
 {
-	ft_printf("%d", zundra.status_code);
+	ft_printf("%d\n", zundra.status_code);
 	return (EXIT_SUCCESS);
 }
 

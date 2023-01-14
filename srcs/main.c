@@ -64,7 +64,7 @@ t_command *parser()
 }
 
 
-void display_cmmand(t_command *cmd)
+void display_command(t_command *cmd)
 {
 	if (!cmd)
 	{
@@ -94,6 +94,8 @@ void display_cmmand(t_command *cmd)
 
 }
 
+//merge adjacent words with quotes
+//convert quotes b4 passing toparser
 
 int main(int argc, char **argv, char **envp)
 {
@@ -108,18 +110,15 @@ int main(int argc, char **argv, char **envp)
 	int i;
 	i = -1;
 	zundra.env_mngr = generate_env_manager(envp);
-	ft_env();
 	while (TRUE)
 	{
 		s = readline("minishell ^-^ : ");
 		add_history(s);
 		if (!s)					/* Control D check */
 			ft_exit(NULL);
-         cmd = parse_input(s);
-		display_cmmand(cmd);
-		// recurs_desc_parser(NULL);
-		// executor(cmd);
-		// ft_exit(argv);
+		cmd = parse_input(s);
+		// display_command(cmd);
+		executor(cmd);
 		free(s);
 	}
 	ft_exit(sup);

@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 20:30:54 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/14 23:22:41 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/14 23:56:05 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,18 @@ enum e_direction get_direction(char *direction)
 	return (INPUT);
 }
 
-t_redirect *extract_redirects(t_token *list)
+int get_file_open_flags(enum e_direction direction)
+{
+	if (direction == INPUT)
+		return (O_CREAT | O_RDONLY);
+	if (direction == OUTPUT)
+		return (O_CREAT | O_WRONLY | O_TRUNC);
+	// if (direction == OUTPUT_APPEND)
+		return (O_CREAT | O_WRONLY | O_APPEND);
+}
+
+	t_redirect *
+	extract_redirects(t_token *list)
 {
 	t_redirect *redirs;
 	t_redirect *iterator;
@@ -40,6 +51,7 @@ t_redirect *extract_redirects(t_token *list)
 		{
 			iterator->redirectee = list->next->contents;
 			iterator->direction = get_direction(list->contents);
+			iterator->flags = get_file_open_flags(iterator->direction);
 			iterator->next = malloc(sizeof(t_redirect));
 			iterator = iterator->next;
 			list = list->next;

@@ -358,13 +358,13 @@ t_token *tokenize(char *input)
 		return (NULL);
     list = preprocess_input(input);
 	list = discard_dollar(list);
-	print_tokens(list);
+	// print_tokens(list);
 	list = collapse_quotes(TRUE, list);
-	print_tokens(list);
+	// print_tokens(list);
 	list = expand_variables(list);
-	print_tokens(list);
+	// print_tokens(list);
 	list = collapse_quotes(FALSE, list);
-	print_tokens(list);
+	// print_tokens(list);
 	list = discard_whitespace(list);
 	print_tokens(list);
 
