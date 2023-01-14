@@ -50,7 +50,8 @@ t_token *get_next_token(char *line)
         while (line[i] && get_token_type(line[i]) == WORD)
             i++;
     }
-    else{
+    else
+	{
         while ( line[i] && get_token_type(line[i]) == first)
             i++;
     }

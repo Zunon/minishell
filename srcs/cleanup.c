@@ -28,7 +28,7 @@ static void free_redirects(t_redirect *redir)
 	{
 		temp = redir;
 		redir = redir->next;
-		if (temp->direction == r_here_doc)
+		if (temp->direction == HERE_DOC)
 		{
 			if (unlink(temp->redirectee) == -1)
 				perror("Error while deleting heredoc temp file: ");

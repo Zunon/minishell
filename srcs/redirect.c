@@ -153,9 +153,9 @@ int perform_IO_redirections(t_command *cmd)
 		return (EXIT_FAILURE);
 	while (iterator && status != EXIT_FAILURE) /* Iterate through redirection list */
 	{
-		if (iterator->direction == r_input || iterator->direction == r_here_doc)
+		if (iterator->direction == INPUT || iterator->direction == HERE_DOC)
 			status = redirect_input(cmd, iterator);
-		else if (iterator->direction == r_output || iterator->direction == r_output_append)
+		else if (iterator->direction == OUTPUT || iterator->direction == OUTPUT_APPEND)
 			status = redirect_output(cmd, iterator);
 		iterator = iterator->next;
 	}
