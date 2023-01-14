@@ -81,6 +81,8 @@ int ft_export(t_command *cmd)
 	t_list *iterator;
 	int i;
 	int pos;
+	char *key;
+	char *value;
 
 	pos = 0;
 	i = 1;
@@ -89,15 +91,22 @@ int ft_export(t_command *cmd)
 	else
 	{
 		iterator = cmd->words->next;
-		while (cmd->argv[i] && iterator)
+		while (iterator)
 		{
 			if (iterator->content)
 			{
-				// if (cmd->argv[2])
-				// 	insert_into_dict(&zundra.env_mngr, cmd->argv[1], cmd->argv[2]);
-				// else
-				// 	insert_into_dict(&zundra.env_mngr, cmd->argv[1], "");
-
+				pos = find_pos(iterator->content, '=');
+				if (pos == -1 )
+					insert_into_dict(&zundra.env_mngr, key, "");
+				else
+				{
+					key = ft_substr(iterator->content, 0, pos);
+					value = ft_substr(iterator->content, pos+1, -1);
+					insert_into_dict(&zundra.env_mngr, key, value);
+					free(key);
+					if (value)
+						free(value);
+				}
 				update_env(zundra.env_mngr);
 			}
 			iterator = iterator->next;
