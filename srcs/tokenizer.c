@@ -25,6 +25,11 @@ enum e_token_type get_token_type(char ch)
     return (WORD);
 }
 
+t_bool is_valid_identifier(char ch)
+{
+	return (ft_isalpha(ch) || ch == '_' || ch == '\'' || ch == '"');
+}
+
 /**
  * @brief			Construct the first token object (if any) of the line
  * 					passed to the function
@@ -47,16 +52,15 @@ t_token *get_next_token(char *line)
 	i = 1;
     if (first == VARIABLE)
     {
+		if (!line[1] || !is_valid_identifier(line[1]))
+			first = WORD;
 		while (line[i] && get_token_type(line[i]) == WORD)
 			i++;
-		if (ft_isdigit(*(line+1)))
-			first = WORD;
 	}
 	else if (first == WORD || first == WHITESPACE)
 	{
 		while ( line[i] && get_token_type(line[i]) == first)
 			i++;
-
 	}
 	else if (first == REDIRECTION && get_token_type(line[i]) == first)
 		i++;
