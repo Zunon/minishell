@@ -70,5 +70,5 @@ t_command	*parse_input(const char *input)
 		return (NULL);
 	}
 	ft_printf("Success!\n");
-	return (0);
+	return (token_to_cmd_converter(list));
 }

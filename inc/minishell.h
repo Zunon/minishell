@@ -119,6 +119,7 @@ void sig_handler(int sig);
 t_command *parse_input(const char *input);
 t_command *recurs_desc_parser(t_token *list);
 void print_tokens(t_token *list);
+t_command *token_to_cmd_converter(t_token *list);
 
 #define ERROR_DURING_EXECUTION -99
 #define NO_EXECUTION_PERMISSION 126

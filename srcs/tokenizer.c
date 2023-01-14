@@ -357,8 +357,6 @@ t_token *tokenize(char *input)
 	if (!input || !*input)
 		return (NULL);
     list = preprocess_input(input);
-	// print_tokens(list);
-
 	list = discard_dollar(list);
 	print_tokens(list);
 	list = collapse_quotes(TRUE, list);

@@ -64,6 +64,37 @@ t_command *parser()
 }
 
 
+void display_cmmand(t_command *cmd)
+{
+	if (!cmd)
+	{
+		ft_printf("EMPTY COMMAND!\n");
+		return ;
+	}
+	while (cmd)
+	{
+		ft_printf("id: %d", cmd->id);
+		t_list *iter = cmd->words;
+		ft_printf("\nWords: %p\n", iter);
+		while (iter)
+		{
+			ft_printf("\t%s\n", (char *)(iter->content));
+			iter = iter->next;
+		}
+		t_redirect *redir = cmd->redirects;
+		ft_printf("\nRedirects: %p\n", redir);
+		while (redir)
+		{
+			ft_printf("\t%d : ", redir->direction);
+			ft_printf("%s\n", redir->redirectee);
+			redir = redir->next;
+		}
+		cmd = cmd->next;
+	}
+
+}
+
+
 int main(int argc, char **argv, char **envp)
 {
 	char *s;
@@ -85,6 +116,7 @@ int main(int argc, char **argv, char **envp)
 		if (!s)					/* Control D check */
 			ft_exit(NULL);
          cmd = parse_input(s);
+		display_cmmand(cmd);
 		// recurs_desc_parser(NULL);
 		// executor(cmd);
 		// ft_exit(argv);
