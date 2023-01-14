@@ -177,7 +177,7 @@ t_token *merge_quotation_tokens(t_token *quote)
 		iterator = iterator->next;
     }
     result = malloc(sizeof(t_token));
-    *result = (t_token){WORD, final_content};
+    *result = (t_token){QUOTED, final_content};
     return (result);
 }
 
@@ -342,6 +342,76 @@ void print_tokens(t_token *list)
     ft_printf("TAIL\n");
 }
 
+t_token *token_split(char *string)
+{
+	char **array;
+	int iterator;
+	t_token *result;
+	t_token *tracer;
+
+	if (!string || !*string)
+		return NULL;
+	array = ft_split(string, ' ');
+	iterator = 0;
+	result = malloc(sizeof(t_token));
+	*result = (t_token){WORD, ft_strdup(array[iterator]), NULL, NULL};
+	tracer = result;
+	while (array[++iterator])
+	{
+		tracer->next = malloc(sizeof(t_token));
+		*(tracer->next) = (t_token){WORD, ft_strdup(array[iterator]), NULL, tracer};
+		tracer = tracer->next;
+	}
+	return (result);
+}
+
+t_token *token_last(t_token *list)
+{
+	t_token *iterator;
+
+	iterator = list;
+	while(iterator->next)
+		iterator = iterator->next;
+	return (iterator);
+}
+
+t_token *split_words_on_whitespace(t_token *list)
+{
+	t_token *iterator;
+	t_token *spliced_head;
+	t_token *spliced_tail;
+
+	iterator = list;
+	while (iterator)
+	{
+		if (iterator->type == WORD && ft_strchr(iterator->contents, ' '))
+		{
+			spliced_head = token_split(iterator->contents);
+			spliced_tail = token_last(spliced_head);
+			if (iterator->prev)
+			{
+				spliced_head->prev = iterator->prev;
+				iterator->prev->next = spliced_head;
+			}
+			else
+				list = spliced_head;
+			if (iterator->next)
+			{
+				spliced_tail->next = iterator->next;
+				iterator->next->prev = spliced_tail;
+			}
+			else
+				spliced_tail->next = NULL;
+			iterator->next = NULL;
+			clear_tokenlist(&iterator);
+			iterator = spliced_tail->next;
+		}
+		else
+			iterator = iterator->next;
+	}
+	return (list);
+}
+
 t_token *discard_dollar(t_token *list)
 {
 	t_token *iterator;
@@ -409,6 +479,7 @@ t_token *tokenize(char *input)
 	list = collapse_quotes(FALSE, list);
 	print_tokens(list);
 	list = merge_words(list);
+	list = split_words_on_whitespace(list);
 	list = discard_whitespace(list);
 	print_tokens(list);
 
