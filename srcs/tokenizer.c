@@ -35,7 +35,7 @@ enum e_token_type get_token_type(char ch)
  */
 t_token *get_next_token(char *line)
 {
-    char *token_string;
+	char *token_string;
 	t_token	*tok;
 	enum e_token_type first;
 	int i;
@@ -47,11 +47,7 @@ t_token *get_next_token(char *line)
     if (first == VARIABLE)
     {
 		while (line[i] && get_token_type(line[i]) == WORD)
-		{
-			if (ft_isdigit(*(line + 1)))
-				break;
 			i++;
-		}
 	}
 	else if (first == WORD)
 	{

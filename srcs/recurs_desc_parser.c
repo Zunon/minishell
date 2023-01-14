@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 20:30:54 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/14 17:29:47 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/14 17:45:31 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ t_list *extract_words(t_token *list)
 t_token *get_next_cmd(t_token *list)
 {
 }
+
 
 // more thtan 2 < or >, ||
 // variable expansions - first char after dollar sign should be underscore or alpha
