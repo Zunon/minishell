@@ -76,7 +76,6 @@ t_token *preprocess_input(char *input)
     offset = ft_strlen(iterator->contents);
     while(iterator)
       {
-        ft_printf("token: '%s', input (with offset): '%s', offset: %d\n", iterator->contents, input + offset, offset);
         iterator->next = get_next_token(input + offset);
         if (iterator->next) {
             iterator->next->prev = iterator;
@@ -310,7 +309,6 @@ t_token *tokenize(char *input)
 {
     t_token *list;
 
-    ft_printf("%p", expand("l"));
     list = preprocess_input(input);
     list = collapse_quotes(TRUE, list);
     list = expand_variables(list);
