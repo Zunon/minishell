@@ -43,18 +43,23 @@ t_token *get_next_token(char *line)
 	if (!line || !*line)
 		return (NULL);
 	first = get_token_type(line[0]);
-	i = 0;
+	i = 1;
     if (first == VARIABLE)
     {
-        i++;
-        while (line[i] && get_token_type(line[i]) == WORD)
-            i++;
-    }
-    else
+		while (line[i] && get_token_type(line[i]) == WORD)
+		{
+			if (ft_isdigit(*(line + 1)))
+				break;
+			i++;
+		}
+	}
+	else if (first == WORD)
 	{
-        while ( line[i] && get_token_type(line[i]) == first)
-            i++;
-    }
+		while ( line[i] && get_token_type(line[i]) == first)
+			i++;
+	}
+	else if (first == REDIRECTION && get_token_type(line[i]) == first)
+		i++;
 	tok = malloc(sizeof(t_token));
 	token_string = ft_substr(line, 0, i);
     *tok = (t_token){first, token_string, NULL, NULL};
