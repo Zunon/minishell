@@ -64,6 +64,39 @@ t_command *parser()
 }
 
 
+void display_command(t_command *cmd)
+{
+	if (!cmd)
+	{
+		ft_printf("EMPTY COMMAND!\n");
+		return ;
+	}
+	while (cmd)
+	{
+		ft_printf("id: %d", cmd->id);
+		t_list *iter = cmd->words;
+		ft_printf("\nWords: %p\n", iter);
+		while (iter)
+		{
+			ft_printf("\t%s\n", (char *)(iter->content));
+			iter = iter->next;
+		}
+		t_redirect *redir = cmd->redirects;
+		ft_printf("\nRedirects: %p\n", redir);
+		while (redir)
+		{
+			ft_printf("\t%d : ", redir->direction);
+			ft_printf("%s\n", redir->redirectee);
+			redir = redir->next;
+		}
+		cmd = cmd->next;
+	}
+
+}
+
+//merge adjacent words with quotes
+//convert quotes b4 passing toparser
+
 int main(int argc, char **argv, char **envp)
 {
 	char *s;
@@ -77,17 +110,15 @@ int main(int argc, char **argv, char **envp)
 	int i;
 	i = -1;
 	zundra.env_mngr = generate_env_manager(envp);
-	ft_env();
 	while (TRUE)
 	{
 		s = readline("minishell ^-^ : ");
 		add_history(s);
 		if (!s)					/* Control D check */
 			ft_exit(NULL);
-         cmd = parse_input(s);
-		// recurs_desc_parser(NULL);
-		// executor(cmd);
-		// ft_exit(argv);
+		cmd = parse_input(s);
+		// display_command(cmd);
+		executor(cmd);
 		free(s);
 	}
 	ft_exit(sup);

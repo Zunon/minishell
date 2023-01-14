@@ -115,6 +115,8 @@ static int close_child_pipes(t_command *cmd)
  */
 static int piper(t_command *cmd)
 {
+	if (!cmd->words)
+		return (EXIT_FAILURE);
 	if (cmd->pipe_in != NO_PIPE)
 	{
 		if (dup2(zundra.pipes[cmd->pipe_in][0], STDIN_FILENO) == -1)

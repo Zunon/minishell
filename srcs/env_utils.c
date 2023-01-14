@@ -80,7 +80,9 @@ int ft_export(t_command *cmd)
 {
 	t_list *iterator;
 	int i;
+	int pos;
 
+	pos = 0;
 	i = 1;
 	if (!cmd->argv[1]) /* export */
 		return ft_export_no_args();
@@ -91,10 +93,11 @@ int ft_export(t_command *cmd)
 		{
 			if (iterator->content)
 			{
-				if (cmd->argv[2])
-					insert_into_dict(&zundra.env_mngr, cmd->argv[1], cmd->argv[2]);
-				else
-					insert_into_dict(&zundra.env_mngr, cmd->argv[1], "");
+				// if (cmd->argv[2])
+				// 	insert_into_dict(&zundra.env_mngr, cmd->argv[1], cmd->argv[2]);
+				// else
+				// 	insert_into_dict(&zundra.env_mngr, cmd->argv[1], "");
+
 				update_env(zundra.env_mngr);
 			}
 			iterator = iterator->next;
