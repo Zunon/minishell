@@ -46,6 +46,7 @@ enum e_token_type
 	WHITESPACE,
 	SINGLE_QUOTE,
 	DOUBLE_QUOTE,
+	QUOTED,
 	ERROR
 };
 
