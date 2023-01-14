@@ -35,9 +35,9 @@ static void update_shlvl(t_dict *env_manager)
 }
 
 /**
- * @brief				Helper function to find the index of a specific character in a 
+ * @brief				Helper function to find the index of a specific character in a
  * 						string if it exists
- * 
+ *
  * @param s				String to search through
  * @param c				Character to look for
  * @return int			Index of occurance OR -1 if not found
@@ -53,14 +53,14 @@ static int find_pos(char *s, char c)
 			return (i);
 		i++;
 	}
-	return (EXIT_FAILURE);
+	return (-1);
 }
 
 /**
  * @brief				Function to generate an envrionment variable manager from
  * 						the envrionment variables passed into minishell by the
  * 						calling process.
- * 
+ *
  * @param envp			Pointer to array of characters with all variables
  * @return t_dict*		Pointer to generated dictionary of environment variables
  */
@@ -77,7 +77,7 @@ t_dict *generate_env_manager(char **envp)
 	while (envp[i])
 	{
 		pos = find_pos(envp[i], '=');
-		if (pos != EXIT_FAILURE)
+		if (pos != -1)
 		{
 			key = ft_substr(envp[i], 0, pos);
 			value = ft_substr(envp[i], pos + 1, -1);
@@ -87,7 +87,7 @@ t_dict *generate_env_manager(char **envp)
 		}
 		i++;
 	}
-	update_shlvl(env_manager);	
+	update_shlvl(env_manager);
 	zundra.envp = dict_to_string_arr(env_manager);
 	return (env_manager);
 }

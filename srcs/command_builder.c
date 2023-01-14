@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   recurs_desc_parser.c                               :+:      :+:    :+:   */
+/*   command_builder.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 20:30:54 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/14 17:45:31 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/14 21:03:14 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ t_redirect *extract_redirects(t_token *list)
 	// free(iterator);
 	// temp->next = NULL;
 	// return (redirs);
+	return (NULL);
 }
 
 t_list *extract_words(t_token *list)
@@ -92,10 +93,12 @@ t_list *extract_words(t_token *list)
 	// 		ft_lstdelone
 	// 	temp = temp->next;
 	// }
+	return (NULL);
 }
 
 t_token *get_next_cmd(t_token *list)
 {
+	return (NULL);
 }
 
 
@@ -124,4 +127,5 @@ t_command *token_to_cmd_converter(t_token *list)
 		cmd->words = extract_words(list);
 		iterator = get_next_cmd(iterator);
 	}
+	return (NULL);
 }
