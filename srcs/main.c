@@ -82,7 +82,7 @@ int main(int argc, char **argv, char **envp)
 		if (!s)					/* Control D check */
 			ft_exit(NULL);
          cmd = parse_input(s);
-//		recurs_desc_parser(NULL);
+		// recurs_desc_parser(NULL);
 		// executor(cmd);
 		// ft_exit(argv);
 		free(s);

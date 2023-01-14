@@ -31,12 +31,10 @@
 /* Instructions describing what kind of thing to do for a redirection. */
 enum e_direction
 {
-	r_input,
-	r_output,
-	r_output_append,
-	r_here_doc,
-	r_pipe_in,
-	r_pipe_out
+	INPUT,
+	OUTPUT,
+	OUTPUT_APPEND,
+	HERE_DOC,
 };
 
 enum e_token_type
