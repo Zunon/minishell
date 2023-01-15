@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_MINISHELL_H
-# define FT_MINISHELL_H
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
 # include "../lib/libft/libft.h"
 # include "dictionary.h"
@@ -62,83 +62,80 @@ enum e_token_type
  */
 typedef struct s_redirect
 {
-	struct s_redirect *next;		/* Next element, or NULL. */
-	int flags;						/* Flag value for `open'. */
-	enum e_direction direction;		/* What to do with the information. */
-	char* redirectee;			/* File descriptor or filename */
-	char *here_doc_delim;			/* Heredoc delimeter eg. << delim. */
+	struct s_redirect	*next;
+	int					flags;
+	enum e_direction	direction;
+	char				*redirectee;
+	char				*here_doc_delim;
 }	t_redirect;
 
-typedef struct s_command{
-	int id;
-	t_list *words;   			/* The program name, the arguments */
-	t_redirect *redirects; 			/* Redirections to perform. */
-	int exit_code;		 			/* Exit status of command */
-	int fd_in;
-	int fd_out;
-	int pipe_in;
-	int pipe_out;
-	struct s_command *next;
-	char **argv;
+typedef struct s_command
+{
+	int					id;
+	t_list				*words;
+	t_redirect			*redirects;
+	int					exit_code;
+	int					fd_in;
+	int					fd_out;
+	int					pipe_in;
+	int					pipe_out;
+	struct s_command	*next;
+	char				**argv;
 }	t_command;
 
 typedef struct s_shell
 {
-	t_command *cmds;
-	int num_of_cmds;
-	int status_code;
-	int **pipes;
-	t_dict *env_mngr;
-	char **envp;
-	pid_t last_child_pid;
-	int stdout_old;
-} t_shell;
+	t_command	*cmds;
+	int			num_of_cmds;
+	int			status_code;
+	int			**pipes;
+	t_dict		*env_mngr;
+	char		**envp;
+	pid_t		last_child_pid;
+	int			stdout_old;
+}	t_shell;
 
 typedef struct s_token
 {
-    enum e_token_type type;
-    char *contents;
-	struct s_token *next;
-    struct s_token *prev;
-} t_token;
+	enum e_token_type	type;
+	char				*contents;
+	struct s_token		*next;
+	struct s_token		*prev;
+}	t_token;
 
-int	ft_echo(char **cmd);
-int ft_cd(char **cmd);
-int ft_pwd(char **cmd);
-void ft_exit(char **);
-int status_code();
-int exec_builtin(t_command *cmd);
-void free_commands(t_command *cmd);
-t_dict *generate_env_manager(char **envp);
-int ft_env();
-int ft_export(t_command *cmd);
-int ft_unset(char **argv);
-void lexer(char *argv);
-t_command *parser();
-int exec_simple_cmd(t_command *cmd);
-int executor(t_command *cmd);
-int perform_IO_redirections(t_command *cmd);
-char *expand(char *word);
-t_token *tokenize(char *input);
-void sig_handler(int sig);
-t_command *parse_input(const char *input);
-t_command *recurs_desc_parser(t_token *list);
-void print_tokens(t_token *list);
-t_command *token_to_cmd_converter(t_token *list);
-int find_pos(char *s, char c);
-t_token *discard_dollar(t_token *list);
-t_token *split_words_on_whitespace(t_token *list);
-t_token *token_split(char *string);
-t_token *token_last(t_token *list);
-t_token *merge_quotation_tokens(t_token *quote);
-void print_tokens(t_token *list); // REMOVE BEFORE SUBMISSION
-t_token *discard_whitespace(t_token *list);
-t_token *expand_variables(t_token *list);
-t_token *disquote(t_token *list);
-void clear_tokenlist(t_token **list);
-t_token *collapse_quotes(t_bool single, t_token *list);
-t_token *merge_words(t_token *list);
+int			ft_echo(char **cmd);
+int			ft_cd(char **cmd);
+int			ft_pwd(char **cmd);
+void		ft_exit(char **cmd);
+int			exec_builtin(t_command *cmd);
+void		free_commands(t_command *cmd);
+t_dict		*generate_env_manager(char **envp);
+int			ft_env(void);
+int			ft_export(t_command *cmd);
+int			ft_unset(char **argv);
+int			exec_simple_cmd(t_command *cmd);
+int			executor(t_command *cmd);
+int			perform_IO_redirections(t_command *cmd);
+char		*expand(char *word);
+t_token		*tokenize(char *input);
+void		sig_handler(int sig);
+t_command	*parse_input(const char *input);
+t_command	*token_to_cmd_converter(t_token *list);
+int			find_pos(char *s, char c);
+t_token		*discard_dollar(t_token *list);
+t_token		*split_words_on_whitespace(t_token *list);
+t_token		*token_split(char *string);
+t_token		*token_last(t_token *list);
+t_token		*merge_quotation_tokens(t_token *quote);
+void		print_tokens(t_token *list); // REMOVE BEFORE SUBMISSION
+t_token		*discard_whitespace(t_token *list);
+t_token		*expand_variables(t_token *list);
+t_token		*disquote(t_token *list);
+void		clear_tokenlist(t_token **list);
+t_token		*collapse_quotes(t_bool single, t_token *list);
+t_token		*merge_words(t_token *list);
+t_bool		parse_pipeline(t_token *list);
 
-extern t_shell zundra;
+extern t_shell	zundra; // RENAME BEFORE SUBMISSION to g_krsh
 
 #endif
