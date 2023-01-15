@@ -27,7 +27,7 @@ enum e_token_type get_token_type(char ch)
 
 t_bool is_valid_identifier(char ch)
 {
-	return (ft_isalpha(ch) || ch == '_' || ch == '\'' || ch == '"');
+	return (ft_isalpha(ch) || ch == '_' || ch == '\'' || ch == '"' || ch == '?');
 }
 
 /**
@@ -54,8 +54,11 @@ t_token *get_next_token(char *line)
     {
 		if (!line[1] || !is_valid_identifier(line[1]))
 			first = WORD;
-		while (line[i] && get_token_type(line[i]) == WORD)
-			i++;
+		if (line[1] != '?')
+			while (line[i] && get_token_type(line[i]) == WORD)
+				i++;
+		else
+			i = 2;
 	}
 	else if (first == WORD || first == WHITESPACE)
 	{

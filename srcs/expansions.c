@@ -25,6 +25,10 @@ char * expand(char *word)
 
 	if (!word || !*word)
 		return NULL;
+	if (*word == '?')
+	{
+		return (ft_itoa(zundra.status_code));
+	}
 	pair = retrieve_from_dict(zundra.env_mngr, word);
 	if (pair)
 		result = ft_strdup(pair->value);
