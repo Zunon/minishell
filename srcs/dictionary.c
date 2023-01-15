@@ -56,6 +56,8 @@ t_pair *retrieve_from_dict(t_dict *t, char *key)
     index = 0;
     while (index <= t->capacity)
     {
+		if (t->table[index])
+
 		if (t->table[index] && ft_strncmp(t->table[index]->key, key, 1000000) == 0)
 			return t->table[index];
 		index = (index + 1) % t->capacity;

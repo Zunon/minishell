@@ -54,8 +54,6 @@ int exec_builtin(t_command *cmd)
 		return (EXIT_SUCCESS);
 	if (ft_strncmp(cmd->argv[0], "cd", 3) == 0)
 		return (ft_cd(cmd->argv));
-	if (ft_strncmp(cmd->argv[0], "echo", 5) == 0 && cmd->argv[1] && ft_strncmp(cmd->argv[1], "$?", 3) == 0)
-		return (status_code());
 	if (ft_strncmp(cmd->argv[0], "echo", 5) == 0)
 		return (ft_echo(cmd->argv));
 	if (ft_strncmp(cmd->argv[0], "pwd", 4) == 0)
