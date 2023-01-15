@@ -11,22 +11,28 @@
 /* ************************************************************************** */
 
 #ifndef FT_MINISHELL_H
-#define FT_MINISHELL_H
+# define FT_MINISHELL_H
 
-#include "../lib/libft/libft.h"
-#include "dictionary.h"
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <signal.h>
-#include <pthread.h>
-#include <dirent.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <fcntl.h>
-#include <errno.h>
+# include "../lib/libft/libft.h"
+# include "dictionary.h"
+# include <unistd.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <signal.h>
+# include <pthread.h>
+# include <dirent.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <fcntl.h>
+# include <errno.h>
+
+# define ERROR_DURING_EXECUTION -99
+# define NO_EXECUTION_PERMISSION 126
+# define ERROR_COMMAND_NOT_FOUND 127
+# define CONTROL_C_INTERRUPT 1
+# define NO_PIPE -666
 
 /* Instructions describing what kind of thing to do for a redirection. */
 enum e_direction
@@ -96,8 +102,6 @@ typedef struct s_token
     struct s_token *prev;
 } t_token;
 
-extern t_shell zundra;
-
 int	ft_echo(char **cmd);
 int ft_cd(char **cmd);
 int ft_pwd(char **cmd);
@@ -122,12 +126,19 @@ t_command *recurs_desc_parser(t_token *list);
 void print_tokens(t_token *list);
 t_command *token_to_cmd_converter(t_token *list);
 int find_pos(char *s, char c);
+t_token *discard_dollar(t_token *list);
+t_token *split_words_on_whitespace(t_token *list);
+t_token *token_split(char *string);
+t_token *token_last(t_token *list);
+t_token *merge_quotation_tokens(t_token *quote);
+void print_tokens(t_token *list); // REMOVE BEFORE SUBMISSION
+t_token *discard_whitespace(t_token *list);
+t_token *expand_variables(t_token *list);
+t_token *disquote(t_token *list);
+void clear_tokenlist(t_token **list);
+t_token *collapse_quotes(t_bool single, t_token *list);
+t_token *merge_words(t_token *list);
 
-
-#define ERROR_DURING_EXECUTION -99
-#define NO_EXECUTION_PERMISSION 126
-#define ERROR_COMMAND_NOT_FOUND 127
-#define CONTROL_C_INTERRUPT 1
-#define NO_PIPE -666
+extern t_shell zundra;
 
 #endif
