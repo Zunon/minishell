@@ -18,13 +18,13 @@
  * @param word		Variable that needs to be expanded
  * @return char*	Expanded variable
  */
-char * expand(char *word)
+char	*expand(char *word)
 {
-	t_pair *pair;
-	char *result;
+	t_pair	*pair;
+	char	*result;
 
 	if (!word || !*word)
-		return NULL;
+		return (NULL);
 	if (*word == '?')
 	{
 		return (ft_itoa(zundra.status_code));
