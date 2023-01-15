@@ -27,9 +27,9 @@ char	*expand(char *word)
 		return (NULL);
 	if (*word == '?')
 	{
-		return (ft_itoa(zundra.status_code));
+		return (ft_itoa(g_krsh.status_code));
 	}
-	pair = retrieve_from_dict(zundra.env_mngr, word);
+	pair = retrieve_from_dict(g_krsh.env_mngr, word);
 	if (pair)
 		result = ft_strdup(pair->value);
 	else

@@ -20,7 +20,7 @@
  */
 int ft_env()
 {
-	print_dict(zundra.env_mngr);
+	print_dict(g_krsh.env_mngr);
 	return (EXIT_SUCCESS);
 }
 
@@ -39,11 +39,11 @@ static void update_env(t_dict *env_manager)
 	i = -1;
 	if (!env_manager)
 		return ;
-	while (zundra.envp[++i])
-		free(zundra.envp[i]);
-	free(zundra.envp);
+	while (g_krsh.envp[++i])
+		free(g_krsh.envp[i]);
+	free(g_krsh.envp);
 	strs = dict_to_string_arr(env_manager);
-	zundra.envp = strs;
+	g_krsh.envp = strs;
 }
 
 /**
@@ -58,7 +58,7 @@ static int ft_export_no_args()
 	int i;
 
 	i = 0;
-	dict = sort_dictionary(zundra.env_mngr, ft_strncmp);
+	dict = sort_dictionary(g_krsh.env_mngr, ft_strncmp);
 	while (dict->table[i])
 	{
 		if (dict->table[i])
@@ -97,17 +97,17 @@ int ft_export(t_command *cmd)
 			{
 				pos = find_pos(iterator->content, '=');
 				if (pos == -1 )
-					insert_into_dict(&zundra.env_mngr, iterator->content, "");
+					insert_into_dict(&g_krsh.env_mngr, iterator->content, "");
 				else
 				{
 					key = ft_substr(iterator->content, 0, pos);
 					value = ft_substr(iterator->content, pos + 1, -1);
-					insert_into_dict(&zundra.env_mngr, key, value);
+					insert_into_dict(&g_krsh.env_mngr, key, value);
 					free(key);
 					if (value)
 						free(value);
 				}
-				update_env(zundra.env_mngr);
+				update_env(g_krsh.env_mngr);
 			}
 			iterator = iterator->next;
 			i++;
@@ -131,9 +131,9 @@ int ft_unset(char **argv)
 		return (EXIT_SUCCESS);
 	while (argv[i])
 	{
-		remove_from_dict(zundra.env_mngr, argv[1]);
+		remove_from_dict(g_krsh.env_mngr, argv[1]);
 		i++;
 	}
-	update_env(zundra.env_mngr);
+	update_env(g_krsh.env_mngr);
 	return (EXIT_SUCCESS);
 }

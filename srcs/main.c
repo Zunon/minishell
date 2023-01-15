@@ -12,7 +12,7 @@
 
 #include "../inc/minishell.h"
 
-t_shell zundra;
+t_shell g_krsh;
 
 /**
  * @brief				Function to handle various signals in the program
@@ -32,14 +32,14 @@ void sig_handler(int sig)
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
-		zundra.status_code = CONTROL_C_INTERRUPT;
+		g_krsh.status_code = CONTROL_C_INTERRUPT;
 	}
 	if (sig == 4)
 	{
-		destroy_dict(zundra.env_mngr);
-		while (zundra.envp[++i])
-			free(zundra.envp[i]);
-		free(zundra.envp);
+		destroy_dict(g_krsh.env_mngr);
+		while (g_krsh.envp[++i])
+			free(g_krsh.envp[i]);
+		free(g_krsh.envp);
 		exit(EXIT_SUCCESS);
 	}
 }
@@ -122,7 +122,7 @@ int main(int argc, char **argv, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	int i;
 	i = -1;
-	zundra.env_mngr = generate_env_manager(envp);
+	g_krsh.env_mngr = generate_env_manager(envp);
 	while (TRUE)
 	{
 		s = readline("minishell ^-^ : ");
@@ -130,7 +130,7 @@ int main(int argc, char **argv, char **envp)
 		if (!s) /* Control D check */
 			ft_exit(NULL);
 		cmd = parse_input(s);
-		zundra.num_of_cmds = get_cmd_size(cmd);
+		g_krsh.num_of_cmds = get_cmd_size(cmd);
 		executor(cmd);
 		free(s);
 	}

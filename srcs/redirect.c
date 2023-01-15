@@ -79,15 +79,15 @@ static int close_child_pipes(t_command *cmd)
 	int i;
 
 	i = 1;
-	while (i < zundra.num_of_cmds)
+	while (i < g_krsh.num_of_cmds)
 	{
-		if (close(zundra.pipes[i][1]) == -1)
+		if (close(g_krsh.pipes[i][1]) == -1)
 		{
 			perror("CHILD - Error while closing pipe write end: ");
 			return (EXIT_FAILURE);
 		}
 
-		if (close(zundra.pipes[i][0]) == -1)
+		if (close(g_krsh.pipes[i][0]) == -1)
 		{
 			perror("CHILD - Error while closing pipe read end: ");
 			return (EXIT_FAILURE);
@@ -108,20 +108,20 @@ static int close_child_pipes(t_command *cmd)
  */
 static int piper(t_command *cmd)
 {
-	if (zundra.num_of_cmds == 1)
+	if (g_krsh.num_of_cmds == 1)
 		return (EXIT_SUCCESS);
 	if (cmd->id != 0)
 	{
-		if (dup2(zundra.pipes[cmd->id][0], STDIN_FILENO) == -1)
+		if (dup2(g_krsh.pipes[cmd->id][0], STDIN_FILENO) == -1)
 		{
 			perror("CHILD - Error while duping pipe to STDIN: ");
 			return (EXIT_FAILURE);
 		}
 	}
-	if (cmd->id != zundra.num_of_cmds - 1)
+	if (cmd->id != g_krsh.num_of_cmds - 1)
 	{
 		// ft_printf("entered pipe out");
-		if (dup2(zundra.pipes[cmd->id + 1][1], STDOUT_FILENO) == -1)
+		if (dup2(g_krsh.pipes[cmd->id + 1][1], STDOUT_FILENO) == -1)
 		{
 			perror("CHILD - Error while duping pipe to STDOUT: ");
 			return (EXIT_FAILURE);

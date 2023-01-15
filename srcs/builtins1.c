@@ -82,7 +82,7 @@ int ft_cd(char **cmd)
 	if (chdir(cmd[1]) == -1)
 	{
 		perror(cmd[1]);
-		if (zundra.num_of_cmds > 1)
+		if (g_krsh.num_of_cmds > 1)
 			exit(1);
 		return (ERROR_DURING_EXECUTION);
 	}

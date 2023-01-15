@@ -27,7 +27,7 @@ static int search_absolute_path(char **argv)
 	char **paths;
 	t_pair *path;
 
-	path = retrieve_from_dict(zundra.env_mngr, "PATH");
+	path = retrieve_from_dict(g_krsh.env_mngr, "PATH");
 	if (!path || !path->value)
 		return (EXIT_FAILURE);
 	paths = ft_split(path->value, ':');
@@ -35,12 +35,12 @@ static int search_absolute_path(char **argv)
 	while (paths[i])
 	{
 		exec_path = ft_strjoin(ft_strjoin(paths[i], "/"), argv[0]);
-		if (access(exec_path, F_OK) != -1 && execve(exec_path, argv, zundra.envp) == -1)
+		if (access(exec_path, F_OK) != -1 && execve(exec_path, argv, g_krsh.envp) == -1)
 		{
 			if (access(exec_path, X_OK) == -1)
 			{
 				perror("Error during execution of program: ");
-				if (zundra.num_of_cmds > 1)
+				if (g_krsh.num_of_cmds > 1)
 					exit(NO_EXECUTION_PERMISSION);
 			}
 			return (ERROR_DURING_EXECUTION);
@@ -62,14 +62,14 @@ static int search_absolute_path(char **argv)
  */
 static int search_relative_path(char **argv)
 {
-	if (ft_strchr(argv[0], '/') != 0 && execve(argv[0], argv, zundra.envp) == -1)
+	if (ft_strchr(argv[0], '/') != 0 && execve(argv[0], argv, g_krsh.envp) == -1)
 	{
 		if (access(argv[0], X_OK) == -1)
 		{
 			perror("Error during execution: ");
-			if (zundra.num_of_cmds > 1)
+			if (g_krsh.num_of_cmds > 1)
 				exit(NO_EXECUTION_PERMISSION);
-			zundra.status_code = NO_EXECUTION_PERMISSION;
+			g_krsh.status_code = NO_EXECUTION_PERMISSION;
 			return (ERROR_COMMAND_NOT_FOUND);
 		}
 		perror("Error during execution: ");
@@ -105,11 +105,11 @@ int exec_single_builtin(t_command *cmd)
 	{
 		if (perform_IO_redirections(cmd) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
-		zundra.stdout_old = dup(STDOUT_FILENO);
+		g_krsh.stdout_old = dup(STDOUT_FILENO);
 		if (exec_builtin(cmd) == EXIT_SUCCESS)
 		{
-			dup2(zundra.stdout_old, STDOUT_FILENO);
-			close(zundra.stdout_old);
+			dup2(g_krsh.stdout_old, STDOUT_FILENO);
+			close(g_krsh.stdout_old);
 			return (EXIT_SUCCESS);
 		}
 		return (EXIT_SUCCESS);
@@ -150,10 +150,10 @@ int exec_simple_cmd(t_command *cmd)
 			write(STDERR_FILENO, " :Command not found\n", 19);
 			exit(ERROR_COMMAND_NOT_FOUND);
 		}
-		exit(zundra.status_code);
+		exit(g_krsh.status_code);
 	}
 	else
 		signal(SIGINT, SIG_IGN);
-	zundra.last_child_pid = pid;
+	g_krsh.last_child_pid = pid;
 	return (EXIT_SUCCESS);
 }

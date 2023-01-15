@@ -88,6 +88,6 @@ t_dict *generate_env_manager(char **envp)
 		i++;
 	}
 	update_shlvl(env_manager);
-	zundra.envp = dict_to_string_arr(env_manager);
+	g_krsh.envp = dict_to_string_arr(env_manager);
 	return (env_manager);
 }

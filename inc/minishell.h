@@ -136,6 +136,6 @@ t_token		*collapse_quotes(t_bool single, t_token *list);
 t_token		*merge_words(t_token *list);
 t_bool		parse_pipeline(t_token *list);
 
-extern t_shell	zundra; // RENAME BEFORE SUBMISSION to g_krsh
+extern t_shell	g_krsh; // RENAME BEFORE SUBMISSION to g_krsh
 
 #endif
