@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 20:35:27 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/15 19:07:52 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/15 19:14:46 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,7 @@ int exec_simple_cmd(t_command *cmd)
 			write(STDERR_FILENO, " :Command not found\n", 19);
 			exit(ERROR_COMMAND_NOT_FOUND);
 		}
+		exit(zundra.status_code);
 	}
 	else
 		signal(SIGINT, SIG_IGN);
