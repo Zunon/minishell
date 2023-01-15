@@ -29,7 +29,7 @@ void	go_to_eov(int *i, const char *str, enum e_token_type *type)
 {
 	*i--;
 	if (!*str || !(ft_isalpha(*str) || *str == '_' || *str == '\''
-		|| *str == '"' || *str == '?'))
+			|| *str == '"' || *str == '?'))
 		*type = WORD;
 	if (*str != '?')
 		while (str[*i] && get_token_type(str[*i]) == WORD)
