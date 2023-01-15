@@ -90,6 +90,7 @@ typedef struct s_shell
 	int			status_code;
 	int			**pipes;
 	t_dict		*env_mngr;
+	t_dict		*declared;
 	char		**envp;
 	pid_t		last_child_pid;
 	int			stdout_old;
