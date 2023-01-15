@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 18:11:11 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/15 16:19:47 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/15 18:21:35 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static int configure_pipes(t_command *cmd)
 			if (pipe(zundra.pipes[i]) == -1)
 			{
 				perror("PARENT - Failed to create pipe: ");
+				exit(1);
 				return (EXIT_FAILURE);
 			}
 		i++;
@@ -140,15 +141,10 @@ int executor(t_command *first_cmd)
 		curr = curr->next;
 	}
 	close_used_pipes();
-	// close(zundra.pipes[1][0]);
-	// close(zundra.pipes[1][1]);
-
 	waitpid(zundra.last_child_pid, &status, 0);
 	zundra.status_code = WEXITSTATUS(status);
 	while (waitpid(-1, &status, 0) > -1)
 		;
-	// waitpid(-1, 0, 0);
-	// waitpid(-1, 0, 0);
 	signal(SIGINT, &sig_handler);
 	signal(SIGQUIT, SIG_IGN);
 	return (zundra.status_code);

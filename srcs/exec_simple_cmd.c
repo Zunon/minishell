@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 20:35:27 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/15 16:54:01 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/15 18:41:40 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,45 @@ static int search_relative_path(char **argv)
 	return (EXIT_FAILURE);
 }
 
+t_bool is_builtin(t_command *cmd)
+{
+	if (!cmd->argv || !cmd->argv[0])
+		return (FALSE);
+	if (ft_strncmp(cmd->argv[0], "cd", 3) == 0)
+		return (TRUE);
+	if (ft_strncmp(cmd->argv[0], "echo", 5) == 0)
+		return (TRUE);
+	if (ft_strncmp(cmd->argv[0], "pwd", 4) == 0)
+		return (TRUE);
+	if (ft_strncmp(cmd->argv[0], "exit", 5) == 0)
+		return (TRUE);
+	if (ft_strncmp(cmd->argv[0], "env", 4) == 0)
+		return (TRUE);
+	if (ft_strncmp(cmd->argv[0], "unset", 6) == 0)
+		return (TRUE);
+	if (ft_strncmp(cmd->argv[0], "export", 7) == 0)
+		return (TRUE);
+	return (FALSE);
+}
+
+int exec_single_builtin(t_command *cmd)
+{
+	if (!cmd->next && is_builtin(cmd))
+	{
+		if (perform_IO_redirections(cmd) == EXIT_FAILURE)
+			return (EXIT_FAILURE);
+		zundra.stdout_old = dup(STDOUT_FILENO);
+		if (exec_builtin(cmd) == EXIT_SUCCESS)
+		{
+			dup2(zundra.stdout_old, STDOUT_FILENO);
+			close(zundra.stdout_old);
+			return (EXIT_SUCCESS);
+		}
+		return (EXIT_SUCCESS);
+	}
+	return (EXIT_FAILURE);
+}
+
 /**
  * @brief			Function to execute a simple command
  *
@@ -90,7 +129,7 @@ int exec_simple_cmd(t_command *cmd)
 {
 	pid_t pid;
 
-	if (!cmd->next && exec_builtin(cmd) == EXIT_SUCCESS)
+	if (exec_single_builtin(cmd) == EXIT_SUCCESS)
 		return (EXIT_SUCCESS);
 	pid = fork();
 	if (pid == -1)
@@ -104,13 +143,12 @@ int exec_simple_cmd(t_command *cmd)
 		signal(SIGQUIT, SIG_DFL);
 		if (perform_IO_redirections(cmd) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
-
 		if (exec_builtin(cmd) == EXIT_FAILURE &&
 				search_absolute_path(cmd->argv) == EXIT_FAILURE &&
 				search_relative_path(cmd->argv) == EXIT_FAILURE)
 		{
+			write(STDERR_FILENO, cmd->argv[0], ft_strlen(cmd->argv[0]));
 			write(STDERR_FILENO, "Command not found\n", 19);
-			ft_printf("%s", cmd->argv[0]);
 			exit(ERROR_COMMAND_NOT_FOUND);
 		}
 	}

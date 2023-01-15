@@ -60,6 +60,7 @@ static int redirect_output(t_command *cmd, t_redirect *current)
 		perror("CHILD - Error while duping pipe to STDOUT: ");
 		return (EXIT_FAILURE);
 	}
+	// ft_printf("heeeey");
 	if (close(cmd->fd_out) == -1)
 	{
 		perror("CHILD - Error while closing output file: ");
@@ -117,16 +118,15 @@ static int piper(t_command *cmd)
 			return (EXIT_FAILURE);
 		}
 	}
-
 	if (cmd->id != zundra.num_of_cmds - 1)
 	{
+		// ft_printf("entered pipe out");
 		if (dup2(zundra.pipes[cmd->id + 1][1], STDOUT_FILENO) == -1)
 		{
 			perror("CHILD - Error while duping pipe to STDOUT: ");
 			return (EXIT_FAILURE);
 		}
 	}
-
 	return (close_child_pipes(cmd));
 }
 
