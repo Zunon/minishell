@@ -117,7 +117,6 @@ int main(int argc, char **argv, char **envp)
 		if (!s)					/* Control D check */
 			ft_exit(NULL);
 		cmd = parse_input(s);
-		// display_command(cmd);
 		executor(cmd);
 		free(s);
 	}

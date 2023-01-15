@@ -97,11 +97,11 @@ int ft_export(t_command *cmd)
 			{
 				pos = find_pos(iterator->content, '=');
 				if (pos == -1 )
-					insert_into_dict(&zundra.env_mngr, key, "");
+					insert_into_dict(&zundra.env_mngr, iterator->content, "");
 				else
 				{
 					key = ft_substr(iterator->content, 0, pos);
-					value = ft_substr(iterator->content, pos+1, -1);
+					value = ft_substr(iterator->content, pos + 1, -1);
 					insert_into_dict(&zundra.env_mngr, key, value);
 					free(key);
 					if (value)
