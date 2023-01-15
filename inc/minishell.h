@@ -81,7 +81,7 @@ typedef struct s_shell
 	t_command *cmds;
 	int num_of_cmds;
 	int status_code;
-	int pipes[2][2];
+	int **pipes;
 	t_dict *env_mngr;
 	char **envp;
 	pid_t last_child_pid;
