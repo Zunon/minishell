@@ -97,7 +97,23 @@ void display_command(t_command *cmd)
 //merge adjacent words with quotes
 //convert quotes b4 passing toparser
 
-int main(int argc, char **argv, char **envp)
+int get_cmd_size(t_command *cmd)
+{
+	t_command *iterator;
+	int i;
+
+	i = 0;
+	iterator = cmd;
+	while(iterator)
+	{
+		i++;
+		iterator = iterator->next;
+	}
+	return (i);
+}
+
+	int
+	main(int argc, char **argv, char **envp)
 {
 	char *s;
 	char **sup;
@@ -117,6 +133,7 @@ int main(int argc, char **argv, char **envp)
 		if (!s)					/* Control D check */
 			ft_exit(NULL);
 		cmd = parse_input(s);
+		zundra.num_of_cmds = get_cmd_size(cmd);
 		executor(cmd);
 		free(s);
 	}

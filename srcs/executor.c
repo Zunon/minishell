@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 18:11:11 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/15 15:18:53 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/15 16:19:47 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,25 @@
  */
 static int configure_pipes(t_command *cmd)
 {
-	while(cmd)
+	int i;
+
+	i = 0;
+	zundra.pipes = malloc(sizeof(int *) * (zundra.num_of_cmds + 1));
+	while (i <= zundra.num_of_cmds)
 	{
-		cmd->pipe_in = cmd->id % 2;
-		cmd->pipe_out = !(cmd->pipe_in);
-		if (cmd->id == 0)
-			cmd->pipe_in = NO_PIPE;
-		if (!cmd->next)
-			cmd->pipe_out = NO_PIPE;
-		cmd = cmd->next;
+		zundra.pipes[i] = malloc(sizeof(int) * 2);
+		if (i != 0 && i != zundra.num_of_cmds)
+			if (pipe(zundra.pipes[i]) == -1)
+			{
+				perror("PARENT - Failed to create pipe: ");
+				return (EXIT_FAILURE);
+			}
+		i++;
 	}
+	zundra.pipes[0][0] = STDIN_FILENO;
+	zundra.pipes[0][1] = STDOUT_FILENO;
+	zundra.pipes[zundra.num_of_cmds][0] = STDIN_FILENO;
+	zundra.pipes[zundra.num_of_cmds][1] = STDOUT_FILENO;
 	return (EXIT_SUCCESS);
 }
 
@@ -37,20 +46,26 @@ static int configure_pipes(t_command *cmd)
  * @brief			Close all pipes safely from the parent process
  *
  */
-static int close_used_pipes(int pipe_in)
+static int close_used_pipes()
 {
-	if (pipe_in != NO_PIPE)
+	int i;
+
+	i = 1;
+	while (i < zundra.num_of_cmds)
 	{
-		if (close(zundra.pipes[pipe_in][0]) == -1)
+		if (close(zundra.pipes[i][0]) == -1)
 		{
+			ft_printf("closing %d\n", zundra.pipes[i][0]);
 			perror("PARENT - Error while closing pipe read end: ");
 			return (EXIT_FAILURE);
 		}
-		if (close(zundra.pipes[pipe_in][1]) == -1)
+		if (close(zundra.pipes[i][1]) == -1)
 		{
+			ft_printf("closing %d\n", zundra.pipes[i][1]);
 			perror("PARENT - Error while closing pipe write end: ");
 			return (EXIT_FAILURE);
 		}
+		i++;
 	}
 	return (EXIT_SUCCESS);
 }
@@ -121,16 +136,19 @@ int executor(t_command *first_cmd)
 	{
 		zundra.cmds = curr;
 		curr->argv = prepare_cmd_args(curr->words);
-		if (curr->pipe_out != NO_PIPE)
-			pipe(zundra.pipes[curr->pipe_out]);
 		exec_simple_cmd(curr);
-		close_used_pipes(curr->pipe_in);
 		curr = curr->next;
 	}
+	close_used_pipes();
+	// close(zundra.pipes[1][0]);
+	// close(zundra.pipes[1][1]);
+
 	waitpid(zundra.last_child_pid, &status, 0);
 	zundra.status_code = WEXITSTATUS(status);
 	while (waitpid(-1, &status, 0) > -1)
 		;
+	// waitpid(-1, 0, 0);
+	// waitpid(-1, 0, 0);
 	signal(SIGINT, &sig_handler);
 	signal(SIGQUIT, SIG_IGN);
 	return (zundra.status_code);
