@@ -36,3 +36,20 @@ char	*expand(char *word)
 		result = ft_strdup("");
 	return (result);
 }
+
+t_command	*parse_input(const char *input)
+{
+	t_token *list;
+
+	list = tokenize((char *)input);
+	// print_tokens(list);
+	if (list && list->type == ERROR) {
+		ft_printf("Token Error: %s\n", list->contents);
+		return (NULL);
+	} else if (!parse_pipeline(list)) {
+		ft_printf("Parse Error!\n");
+		return (NULL);
+	}
+	// ft_printf("Success!\n");
+	return (token_to_cmd_converter(list));
+}
