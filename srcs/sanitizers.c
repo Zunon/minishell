@@ -97,7 +97,7 @@ t_token *discard_whitespace(t_token *list) {
 	iterator = list;
 	while (iterator)
 	{
-		if (iterator->type == WHITESPACE || !(iterator->contents) || !(*(iterator->contents)))
+		if (iterator->type == WHITESPACE || !(iterator->contents) /*|| !(*(iterator->contents))*/)
 		{
 			if (iterator->prev && iterator->next)
 			{
