@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 18:11:11 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/15 18:21:35 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/15 19:07:43 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,12 @@ int executor(t_command *first_cmd)
 	{
 		zundra.cmds = curr;
 		curr->argv = prepare_cmd_args(curr->words);
-		exec_simple_cmd(curr);
+		if (curr->argv[0][0])
+			exec_simple_cmd(curr);
+		else
+		{
+			write(STDERR_FILENO, " :Command not found\n", 19);
+		}
 		curr = curr->next;
 	}
 	close_used_pipes();
