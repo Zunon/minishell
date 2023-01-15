@@ -75,31 +75,23 @@ static int redirect_output(t_command *cmd, t_redirect *current)
  */
 static int close_child_pipes(t_command *cmd)
 {
-	if (cmd->pipe_in != NO_PIPE)
+	int i;
+
+	i = 1;
+	while (i < zundra.num_of_cmds)
 	{
-		if (close(zundra.pipes[cmd->pipe_in][0]) == -1)
-		{
-			perror("CHILD - Error while closing pipe read end: ");
-			return (EXIT_FAILURE);
-		}
-		if (close(zundra.pipes[cmd->pipe_in][1]) == -1)
+		if (close(zundra.pipes[i][1]) == -1)
 		{
 			perror("CHILD - Error while closing pipe write end: ");
 			return (EXIT_FAILURE);
 		}
-	}
-	if (cmd->pipe_out != NO_PIPE)
-	{
-		if (close(zundra.pipes[cmd->pipe_out][0]) == -1)
+
+		if (close(zundra.pipes[i][0]) == -1)
 		{
 			perror("CHILD - Error while closing pipe read end: ");
 			return (EXIT_FAILURE);
 		}
-		if (close(zundra.pipes[cmd->pipe_out][1]) == -1)
-		{
-			perror("CHILD - Error while closing pipe write end: ");
-			return (EXIT_FAILURE);
-		}
+		i++;
 	}
 	return (EXIT_SUCCESS);
 }
@@ -115,24 +107,26 @@ static int close_child_pipes(t_command *cmd)
  */
 static int piper(t_command *cmd)
 {
-	if (!cmd->words)
-		return (EXIT_FAILURE);
-	if (cmd->pipe_in != NO_PIPE)
+	if (zundra.num_of_cmds == 1)
+		return (EXIT_SUCCESS);
+	if (cmd->id != 0)
 	{
-		if (dup2(zundra.pipes[cmd->pipe_in][0], STDIN_FILENO) == -1)
+		if (dup2(zundra.pipes[cmd->id][0], STDIN_FILENO) == -1)
 		{
 			perror("CHILD - Error while duping pipe to STDIN: ");
 			return (EXIT_FAILURE);
 		}
 	}
-	if (cmd->pipe_out != NO_PIPE)
+
+	if (cmd->id != zundra.num_of_cmds - 1)
 	{
-		if (dup2(zundra.pipes[cmd->pipe_out][1], STDOUT_FILENO) == -1)
+		if (dup2(zundra.pipes[cmd->id + 1][1], STDOUT_FILENO) == -1)
 		{
 			perror("CHILD - Error while duping pipe to STDOUT: ");
 			return (EXIT_FAILURE);
 		}
 	}
+
 	return (close_child_pipes(cmd));
 }
 
@@ -149,7 +143,7 @@ int perform_IO_redirections(t_command *cmd)
 	t_redirect *iterator;
 	int status;
 
-	status  = EXIT_SUCCESS;
+	status = EXIT_SUCCESS;
 	iterator = cmd->redirects;
 	if (piper(cmd) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
