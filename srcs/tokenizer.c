@@ -73,8 +73,6 @@ t_token *get_next_token(char *line)
  * @brief Turn the input string into a list of tokens by calling get_next_token
  * @param input string
  * @return linked list of tokens to be processed further
- * @todo keep track of quoted status and do var/word $ accordingly
- * @bug echo "$"
  */
 t_token *preprocess_input(char *input)
 {
@@ -439,11 +437,13 @@ t_token *discard_dollar(t_token *list)
 {
 	t_token *iterator;
 	t_token *temp;
+	enum e_token_type status;
 
 	iterator = list;
+	status = ERROR; // Unquoted
 	while (iterator)
 	{
-		if (iterator->type == VARIABLE && !((iterator->contents)[1]))
+		if (status == ERROR && iterator->type == VARIABLE && !((iterator->contents)[1]))
 		{
 			if (iterator->prev && iterator->next)
 			{
@@ -460,6 +460,16 @@ t_token *discard_dollar(t_token *list)
 			free(iterator->contents);
 			free(iterator);
 			iterator = temp;
+		}
+		else if (iterator->type == VARIABLE && !((iterator->contents)[1]))
+			iterator->type = WORD;
+		else if (iterator->type == SINGLE_QUOTE || iterator->type == DOUBLE_QUOTE)
+		{
+			if (status == iterator->type)
+				status = ERROR;
+			else if (status == ERROR)
+				status = iterator->type;
+			iterator = iterator->next;
 		}
 		else
 			iterator = iterator->next;
