@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 20:35:27 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/15 18:41:40 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/15 19:07:52 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,8 +147,7 @@ int exec_simple_cmd(t_command *cmd)
 				search_absolute_path(cmd->argv) == EXIT_FAILURE &&
 				search_relative_path(cmd->argv) == EXIT_FAILURE)
 		{
-			write(STDERR_FILENO, cmd->argv[0], ft_strlen(cmd->argv[0]));
-			write(STDERR_FILENO, "Command not found\n", 19);
+			write(STDERR_FILENO, " :Command not found\n", 19);
 			exit(ERROR_COMMAND_NOT_FOUND);
 		}
 	}
