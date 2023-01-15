@@ -20,7 +20,7 @@ void ft_exit(char **argv)
 {
 	int x;
 
-	if (!argv || argv[0])
+	if (!argv || !argv[0])
 		exit(0);
 	if (argv[1] && !argv[2])
 	{

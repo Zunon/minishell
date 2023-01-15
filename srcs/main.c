@@ -63,13 +63,12 @@ t_command *parser()
 	return NULL;
 }
 
-
 void display_command(t_command *cmd)
 {
 	if (!cmd)
 	{
 		ft_printf("EMPTY COMMAND!\n");
-		return ;
+		return;
 	}
 	while (cmd)
 	{
@@ -91,11 +90,10 @@ void display_command(t_command *cmd)
 		}
 		cmd = cmd->next;
 	}
-
 }
 
-//merge adjacent words with quotes
-//convert quotes b4 passing toparser
+// merge adjacent words with quotes
+// convert quotes b4 passing toparser
 
 int get_cmd_size(t_command *cmd)
 {
@@ -104,7 +102,7 @@ int get_cmd_size(t_command *cmd)
 
 	i = 0;
 	iterator = cmd;
-	while(iterator)
+	while (iterator)
 	{
 		i++;
 		iterator = iterator->next;
@@ -112,8 +110,7 @@ int get_cmd_size(t_command *cmd)
 	return (i);
 }
 
-	int
-	main(int argc, char **argv, char **envp)
+int main(int argc, char **argv, char **envp)
 {
 	char *s;
 	char **sup;
@@ -130,7 +127,7 @@ int get_cmd_size(t_command *cmd)
 	{
 		s = readline("minishell ^-^ : ");
 		add_history(s);
-		if (!s)					/* Control D check */
+		if (!s) /* Control D check */
 			ft_exit(NULL);
 		cmd = parse_input(s);
 		zundra.num_of_cmds = get_cmd_size(cmd);
