@@ -12,6 +12,32 @@
 
 #include "../inc/minishell.h"
 
+
+static int check_valid_option(char **cmd)
+{
+	int i;
+	int j;
+
+	i = 1;
+	while (cmd[i])
+	{
+		j = 0;
+		while (cmd[i][j])
+		{
+			if (cmd[i][j] == '-')
+			{
+				j++;
+				while (cmd[i][j] && cmd[i][j] == 'n')
+					j++;
+				if (cmd[i][j])
+					return (-1);
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
 /**
  * @brief		Execute echo command wih option -n for no trailing newline
  *
