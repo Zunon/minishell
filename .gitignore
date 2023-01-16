@@ -60,4 +60,3 @@ dkms.conf
 
 #Custom Folders
 .DS_Store
-lib/libft

@@ -95,7 +95,7 @@ t_command	*token_to_cmd_converter(t_token *list)
 	cmd = malloc(sizeof(t_command));
 	pipeline = cmd;
 	while (iterator)
-		construct_command(i, &iterator, &cmd);
+		construct_command(&i, &iterator, &cmd);
 	if (cmd == pipeline)
 	{
 		free(pipeline);

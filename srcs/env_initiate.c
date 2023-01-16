@@ -42,7 +42,7 @@ static void	update_shlvl(t_dict *env_manager)
  * @param c				Character to look for
  * @return int			Index of occurance OR -1 if not found
  */
-int	find_pos(char *s, char c)
+int	find_pos(const char *s, char c)
 {
 	int	i;
 

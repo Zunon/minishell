@@ -28,11 +28,11 @@
 # include <fcntl.h>
 # include <errno.h>
 
-# define ERROR_DURING_EXECUTION -99
+# define ERROR_DURING_EXECUTION (-99)
 # define NO_EXECUTION_PERMISSION 126
 # define ERROR_COMMAND_NOT_FOUND 127
 # define CONTROL_C_INTERRUPT 1
-# define NO_PIPE -666
+# define NO_PIPE (-666)
 
 /* Instructions describing what kind of thing to do for a redirection. */
 enum e_direction
@@ -122,7 +122,7 @@ t_token		*tokenize(char *input);
 void		sig_handler(int sig);
 t_command	*parse_input(const char *input);
 t_command	*token_to_cmd_converter(t_token *list);
-int			find_pos(char *s, char c);
+int			find_pos(const char *s, char c);
 t_token		*discard_dollar(t_token *list);
 t_token		*split_words_on_whitespace(t_token *list);
 t_token		*token_split(char *string);
