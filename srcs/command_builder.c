@@ -11,9 +11,9 @@
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+#include "minishell.h"
 
-
-enum e_direction get_direction(char *direction)
+enum e_direction	get_direction(char *direction)
 {
 	if (ft_strncmp(">>", direction, 3) == 0)
 		return (OUTPUT_APPEND);
@@ -24,45 +24,35 @@ enum e_direction get_direction(char *direction)
 	return (INPUT);
 }
 
-int get_file_open_flags(enum e_direction direction)
+/**
+ * @todo handle the HERE_DOC case
+ */
+int	get_file_open_flags(enum e_direction direction)
 {
 	if (direction == INPUT)
 		return (O_CREAT | O_RDONLY);
 	if (direction == OUTPUT)
 		return (O_CREAT | O_WRONLY | O_TRUNC);
-	// if (direction == OUTPUT_APPEND)
-		return (O_CREAT | O_WRONLY | O_APPEND);
+	return (O_CREAT | O_WRONLY | O_APPEND);
 }
 
-	t_redirect *
-	extract_redirects(t_token *list)
+t_redirect	*extract_redirects(t_token *list)
 {
-	t_redirect *redirs;
-	t_redirect *iterator;
-	t_redirect *temp;
+	t_redirect	*redirs;
+	t_redirect	*iterator;
+	t_redirect	*temp;
 
 	if (!list)
 		return (NULL);
 	redirs = malloc(sizeof(t_redirect));
 	iterator = redirs;
 	while (list && list->type != PIPE)
-	{
-		if (list->type == REDIRECTION)
-		{
-			iterator->redirectee = list->next->contents;
-			iterator->direction = get_direction(list->contents);
-			iterator->flags = get_file_open_flags(iterator->direction);
-			iterator->next = malloc(sizeof(t_redirect));
-			iterator = iterator->next;
-			list = list->next;
-		}
-		list = list->next;
-	}
+		push_redirection(&list, &iterator);
 	if (iterator == redirs)
 	{
 		free(redirs);
 		redirs = NULL;
-		return redirs;
+		return (redirs);
 	}
 	temp = redirs;
 	while (temp->next != iterator)
@@ -72,16 +62,16 @@ int get_file_open_flags(enum e_direction direction)
 	return (redirs);
 }
 
-t_list *extract_words(t_token *list)
+t_list	*extract_words(t_token *list)
 {
-	t_list *words;
-	t_list *iterator;
+	t_list	*words;
+	t_list	*iterator;
 
 	if (!list)
 		return (NULL);
 	iterator = words;
 	words = NULL;
-	while(list && list->type != PIPE)
+	while (list && list->type != PIPE)
 	{
 		if (!list->prev && list->type == WORD)
 			ft_lstadd_back(&words, ft_lstnew(ft_strdup(list->contents)));
@@ -92,30 +82,12 @@ t_list *extract_words(t_token *list)
 	return (words);
 }
 
-t_token *get_next_cmd(t_token *list)
+t_command	*token_to_cmd_converter(t_token *list)
 {
-	while (list && list->type != PIPE)
-		list = list->next;
-	if (list && list->type == PIPE)
-		list = list->next;
-	return (list);
-}
-
-
-// more thtan 2 < or >, ||
-// variable expansions - first char after dollar sign should be underscore or alpha
-// each quote should be each its own individial token
-// doolar sign next chraif not valid - then WORD U $
-// dollar sign then double quotes then name -
-// dollar sign then single quotes then name -
-
-t_command *token_to_cmd_converter(t_token *list)
-{
-	t_token *iterator;
-	t_command *cmd;
-	t_command *pipeline;
-	t_command *temp;
-	int i;
+	t_token		*iterator;
+	t_command	*cmd;
+	t_command	*pipeline;
+	int			i;
 
 	if (!list)
 		return (NULL);
@@ -124,25 +96,13 @@ t_command *token_to_cmd_converter(t_token *list)
 	cmd = malloc(sizeof(t_command));
 	pipeline = cmd;
 	while (iterator)
-	{
-		cmd->id = i;
-		cmd->redirects = extract_redirects(iterator);
-		cmd->words = extract_words(iterator);
-		iterator = get_next_cmd(iterator);
-		cmd->next = malloc(sizeof(t_command));
-		cmd = cmd->next;
-		i++;
-	}
+		construct_command(i, &iterator, &cmd);
 	if (cmd == pipeline)
 	{
 		free(pipeline);
 		pipeline = NULL;
 		return (pipeline);
 	}
-	temp = pipeline;
-	while (temp && temp->next != cmd)
-		temp = temp->next;
-	free(cmd);
-	temp->next = NULL;
+	free_cmdnode(cmd, pipeline);
 	return (pipeline);
 }

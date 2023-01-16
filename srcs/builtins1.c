@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 #include "../inc/minishell.h"
 
 static int	check_valid_option(char **cmd)
@@ -111,4 +112,15 @@ int	ft_pwd(char **cmd)
 	if (path)
 		free(path);
 	return (EXIT_SUCCESS);
+}
+
+void	construct_command(int *i, t_token **iterator, t_command **cmd)
+{
+	(*cmd)->id = *i;
+	(*cmd)->redirects = extract_redirects((*iterator));
+	(*cmd)->words = extract_words((*iterator));
+	(*iterator) = get_next_cmd((*iterator));
+	(*cmd)->next = malloc(sizeof(t_command));
+	(*cmd) = (*cmd)->next;
+	*i = *i + 1;
 }

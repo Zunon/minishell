@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 #include "../inc/minishell.h"
 
 /**
@@ -69,4 +70,38 @@ void	free_commands(t_command *cmd)
 		if (temp)
 			free(temp);
 	}
+}
+
+void	push_redirection(t_token **list, t_redirect **iterator)
+{
+	if ((*list)->type == REDIRECTION)
+	{
+		(*iterator)->redirectee = (*list)->next->contents;
+		(*iterator)->direction = get_direction((*list)->contents);
+		(*iterator)->flags = get_file_open_flags((*iterator)->direction);
+		(*iterator)->next = malloc(sizeof(t_redirect));
+		(*iterator) = (*iterator)->next;
+		(*list) = (*list)->next;
+	}
+	(*list) = (*list)->next;
+}
+
+t_token	*get_next_cmd(t_token *list)
+{
+	while (list && list->type != PIPE)
+		list = list->next;
+	if (list && list->type == PIPE)
+		list = list->next;
+	return (list);
+}
+
+void	free_cmdnode(t_command *cmd, t_command *pipeline)
+{
+	t_command	*temp;
+
+	temp = pipeline;
+	while (temp && temp->next != cmd)
+		temp = temp->next;
+	free(cmd);
+	temp->next = NULL;
 }
