@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "../inc/minishell.h"
 
 static int	check_valid_option(char **cmd)

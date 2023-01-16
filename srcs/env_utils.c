@@ -29,7 +29,7 @@ int	ft_env(void)
  *
  * @param env_manager	Envrionment manager dictionary to update
  */
-static void	update_env(t_dict *env_manager)
+void	update_env(t_dict *env_manager)
 {
 	int		i;
 	char	**strs;

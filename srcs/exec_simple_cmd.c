@@ -30,7 +30,7 @@ static void	ext_no_perms(const char *exec_path)
  * @param envp		Environment variables
  * @return int		Status code of execution (1 on SUCCESS, 0 on 'CMD NOT FOUND')
  */
-static int	search_absolute_path(char **argv)
+int	search_absolute_path(char **argv)
 {
 	int		i;
 	char	*exec_path;
@@ -69,7 +69,7 @@ static int	search_absolute_path(char **argv)
  * @return int		Status code of execution
  * 					(1 on SUCCESS, 0 on 'CMD NOT FOUND')
  */
-static int	search_relative_path(char **argv)
+int	search_relative_path(char **argv)
 {
 	if (ft_strchr(argv[0], '/') != 0 && execve(argv[0], argv, g_krsh.envp)
 		== -1)

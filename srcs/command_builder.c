@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-#include "minishell.h"
 
 enum e_direction	get_direction(char *direction)
 {

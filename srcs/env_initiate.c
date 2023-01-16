@@ -12,8 +12,6 @@
 
 #include "../inc/minishell.h"
 
-int			exec_simple_cmd(t_command *cmd);
-
 /**
  * @brief				Update the shell level of minishell on execution at startup
  * 						Note: If SHLVL is unset by calling process, SHLVL is exported

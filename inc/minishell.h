@@ -138,6 +138,21 @@ t_token		*merge_words(t_token *list);
 t_bool		parse_pipeline(t_token *list);
 void		splice_tokens(t_token **list, t_token **iterator);
 void		del_token(t_token **list, t_token **iterator);
+void		construct_command(int *i, t_token **iterator, t_command **cmd);
+void		export_string(char *argument, int pos, char *key, char *value);
+void		push_redirection(t_token **list, t_redirect **iterator);
+t_token		*get_next_cmd(t_token *list);
+void		free_cmdnode(t_command *cmd, t_command *pipeline);
+t_redirect	*extract_redirects(t_token *list);
+t_list		*extract_words(t_token *list);
+void		ext_not_found(t_command *cmd);
+t_bool		is_builtin(t_command *cmd);
+int			exec_single_builtin(t_command *cmd);
+void 		display_command(t_command *cmd);
+int			get_cmd_size(t_command *cmd);
+int			search_absolute_path(char **argv);
+int			search_relative_path(char **argv);
+void		update_env(t_dict *env_manager);
 
 extern t_shell	g_krsh;
 

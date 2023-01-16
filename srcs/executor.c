@@ -11,17 +11,17 @@
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-#include "minishell.h"
 
 /**
- * @brief			Configure the input and output pipes for every command in the pipeline
+ * @brief			Configure the input and output pipes for every command in
+ * 					the pipeline
  *
  * 					First and last pipe are dummy pipes with STDIN and STDOUT
  *
  */
-static int configure_pipes(t_command *cmd)
+static int	configure_pipes(t_command *cmd)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	g_krsh.pipes = malloc(sizeof(int *) * (g_krsh.num_of_cmds + 1));
@@ -33,7 +33,6 @@ static int configure_pipes(t_command *cmd)
 			{
 				perror("PARENT - Failed to create pipe: ");
 				exit(1);
-				return (EXIT_FAILURE);
 			}
 		i++;
 	}
@@ -48,7 +47,7 @@ static int configure_pipes(t_command *cmd)
  * @brief			Close all pipes safely from the parent process
  *
  */
-static int close_used_pipes()
+static int close_used_pipes(void)
 {
 	int i;
 
