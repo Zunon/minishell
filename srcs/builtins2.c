@@ -70,3 +70,23 @@ int	exec_builtin(t_command *cmd)
 		return (ft_export(cmd));
 	return (EXIT_FAILURE);
 }
+
+void	export_string(char *argument, int pos, char *key, char *value)
+{
+	if (argument)
+	{
+		pos = find_pos(argument, '=');
+		if (pos == -1)
+			insert_into_dict(&g_krsh.env_mngr, argument, "");
+		else
+		{
+			key = ft_substr(argument, 0, pos);
+			value = ft_substr(argument, pos + 1, -1);
+			insert_into_dict(&g_krsh.env_mngr, key, value);
+			free(key);
+			if (value)
+				free(value);
+		}
+		update_env(g_krsh.env_mngr);
+	}
+}

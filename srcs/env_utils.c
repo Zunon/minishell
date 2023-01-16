@@ -12,29 +12,27 @@
 
 #include "../inc/minishell.h"
 
-
 /**
  * @brief				Display all environment variables of the current shell
  *
  * @return int			status code of oepration (discard if not needed)
  */
-int ft_env()
+int	ft_env(void)
 {
 	print_dict(g_krsh.env_mngr);
 	return (EXIT_SUCCESS);
 }
 
-
 /**
- * @brief				Update the environment variable manager dictionary after any
- * 						exports and/or unsets
+ * @brief				Update the environment variable manager dictionary after
+ * 						any exports and/or unsets
  *
  * @param env_manager	Envrionment manager dictionary to update
  */
-static void update_env(t_dict *env_manager)
+static void	update_env(t_dict *env_manager)
 {
-	int i;
-	char **strs;
+	int		i;
+	char	**strs;
 
 	i = -1;
 	if (!env_manager)
@@ -47,22 +45,23 @@ static void update_env(t_dict *env_manager)
 }
 
 /**
- * @brief				Print all envrioment variables in a sorted manner if there
- * 						are no arguments to export
+ * @brief				Print all environment variables in a sorted manner if
+ * 						there are no arguments to export
  *
  * @return int			Status code of operation (discard if not needed)
  */
-static int ft_export_no_args()
+static int	ft_export_no_args(void)
 {
-	t_dict *dict;
-	int i;
+	t_dict	*dict;
+	int		i;
 
 	i = 0;
 	dict = sort_dictionary(g_krsh.env_mngr, ft_strncmp);
 	while (dict->table[i])
 	{
 		if (dict->table[i])
-			ft_printf("declare -x %s=\"%s\"\n", dict->table[i]->key, dict->table[i]->value);
+			ft_printf("declare -x %s=\"%s\"\n", dict->table[i]->key,
+				dict->table[i]->value);
 		i++;
 	}
 	destroy_dict(dict);
@@ -76,39 +75,24 @@ static int ft_export_no_args()
  * @param value			Variable value
  * @return int			Status code of insertion
  */
-int ft_export(t_command *cmd)
+int	ft_export(t_command *cmd)
 {
-	t_list *iterator;
-	int i;
-	int pos;
-	char *key;
-	char *value;
+	t_list	*iterator;
+	int		i;
+	int		pos;
+	char	*key;
+	char	*value;
 
 	pos = 0;
 	i = 1;
-	if (!cmd->argv[1]) /* export */
-		return ft_export_no_args();
+	if (!cmd->argv[1])
+		return (ft_export_no_args());
 	else
 	{
 		iterator = cmd->words->next;
 		while (iterator)
 		{
-			if (iterator->content)
-			{
-				pos = find_pos(iterator->content, '=');
-				if (pos == -1 )
-					insert_into_dict(&g_krsh.env_mngr, iterator->content, "");
-				else
-				{
-					key = ft_substr(iterator->content, 0, pos);
-					value = ft_substr(iterator->content, pos + 1, -1);
-					insert_into_dict(&g_krsh.env_mngr, key, value);
-					free(key);
-					if (value)
-						free(value);
-				}
-				update_env(g_krsh.env_mngr);
-			}
+			export_string(iterator->content, pos, key, value);
 			iterator = iterator->next;
 			i++;
 		}
@@ -122,9 +106,9 @@ int ft_export(t_command *cmd)
  * @param key			Name of variable to delete
  * @return int			Status code of deletion (remove if not needed)
  */
-int ft_unset(char **argv)
+int	ft_unset(char **argv)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	if (!argv[1])
