@@ -74,3 +74,50 @@ void	clear_tokenlist(t_token **list)
 	}
 	list = NULL;
 }
+
+void	del_token(t_token **list, t_token **iterator)
+{
+	t_token	*temp;
+
+	if ((*iterator)->prev && (*iterator)->next)
+	{
+		(*iterator)->prev->next = (*iterator)->next;
+		(*iterator)->next->prev = (*iterator)->prev;
+	}
+	else if ((*iterator)->prev)
+		(*iterator)->prev->next = NULL;
+	else if ((*iterator)->next)
+		(*list) = (*iterator)->next;
+	else
+		(*list) = NULL;
+	temp = (*iterator)->next;
+	free((*iterator)->contents);
+	free((*iterator));
+	(*iterator) = temp;
+}
+
+void	splice_tokens(t_token **list, t_token **iterator)
+{
+	t_token	*spliced_head;
+	t_token	*spliced_tail;
+
+	spliced_head = token_split((*iterator)->contents);
+	spliced_tail = token_last(spliced_head);
+	if ((*iterator)->prev)
+	{
+		spliced_head->prev = (*iterator)->prev;
+		(*iterator)->prev->next = spliced_head;
+	}
+	else
+		(*list) = spliced_head;
+	if ((*iterator)->next)
+	{
+		spliced_tail->next = (*iterator)->next;
+		(*iterator)->next->prev = spliced_tail;
+	}
+	else
+		spliced_tail->next = NULL;
+	(*iterator)->next = NULL;
+	clear_tokenlist(iterator);
+	(*iterator) = spliced_tail->next;
+}

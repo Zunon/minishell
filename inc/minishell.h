@@ -136,6 +136,8 @@ void		clear_tokenlist(t_token **list);
 t_token		*collapse_quotes(t_bool single, t_token *list);
 t_token		*merge_words(t_token *list);
 t_bool		parse_pipeline(t_token *list);
+void		splice_tokens(t_token **list, t_token **iterator);
+void		del_token(t_token **list, t_token **iterator);
 
 extern t_shell	g_krsh;
 
