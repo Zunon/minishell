@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/16 23:59:18 by kalmheir          #+#    #+#             */
+/*   Updated: 2023/01/16 23:59:23 by kalmheir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/minishell.h"
 
 /**
@@ -121,10 +133,10 @@ t_token	*tokenize(char *input)
 	if (!input || !*input)
 		return (NULL);
 	list = preprocess_input(input);
-	list = collapse_quotes(TRUE, list);
+	list = collapse_quotes(SINGLE_QUOTE, list);
 	list = discard_dollar(list);
 	list = expand_variables(list);
-	list = collapse_quotes(FALSE, list);
+	list = collapse_quotes(DOUBLE_QUOTE, list);
 	list = merge_words(list);
 	list = split_words_on_whitespace(list);
 	list = discard_whitespace(list);

@@ -18,50 +18,53 @@
  * @param s					Capacity of Dictionary
  * @return t_dict*			Newly created Dictionary of size s
  */
-t_dict *create_dict(int s)
+t_dict	*create_dict(int s)
 {
-    t_dict *dict;
-    int i;
+	t_dict	*dict;
+	int		i;
 
-    i = 0;
-    if (s <= 0)
-        return NULL;
-    dict = malloc(sizeof(t_dict));
-    if (!dict)
-        return NULL;
-    dict->table = malloc (sizeof(t_pair*) * s);
-    if (!dict->table)
-        return NULL;
-    while (i < s)
-    {
-        dict->table[i] = NULL;
-        i++;
-    }
-    dict->capacity = s;
-    dict->size = 0;
-    return dict;
+	i = 0;
+	if (s <= 0)
+		return (NULL);
+	dict = malloc(sizeof(t_dict));
+	if (!dict)
+		return (NULL);
+	dict->table = malloc (sizeof(t_pair *) * s);
+	if (!dict->table)
+		return (NULL);
+	while (i < s)
+	{
+		dict->table[i] = (NULL);
+		i++;
+	}
+	dict->capacity = s;
+	dict->size = 0;
+	return (dict);
 }
 
 /**
- * @brief 					Retrieve a key-value pair from the Dictionary with specific key
+ * @brief 					Retrieve a key-value pair from the Dictionary with
+ * 							a specific key
  *
  * @param t					Dictionary to search in
  * @param key				Key to look for
- * @return t_pair*			Key value pair that matches the given key on sucess, NULL on failed search
+ * @return t_pair*			Key value pair that matches the given key on sucess,
+ * 							NULL on failed search
  */
-t_pair *retrieve_from_dict(t_dict *t, char *key)
+t_pair	*retrieve_from_dict(t_dict *t, char *key)
 {
-    int index;
+	int	index;
 
-    index = 0;
-    while (index <= t->capacity)
-    {
-		if (t->table[index] && ft_strncmp(t->table[index]->key, key, 1000000) == 0)
-			return t->table[index];
+	index = 0;
+	while (index <= t->capacity)
+	{
+		if (t->table[index] && ft_strncmp(t->table[index]->key, key, 1000000)
+			== 0)
+			return (t->table[index]);
 		index = (index + 1) % t->capacity;
 		if (index == 0)
 			return (NULL);
-    }
+	}
 	return (NULL);
 }
 
@@ -72,29 +75,29 @@ t_pair *retrieve_from_dict(t_dict *t, char *key)
  * @param key				Key of new entry
  * @param value				Value of new entry
  */
-void insert_into_dict(t_dict **t, char* key, char* value)
+void	insert_into_dict(t_dict **t, char *key, char *value)
 {
-    int index;
-	t_pair *exists;
+	int		index;
+	t_pair	*exists;
 
 	index = 0;
-	exists = retrieve_from_dict(*t, key) ;
+	exists = retrieve_from_dict(*t, key);
 	if (exists)
 	{
 		free(exists->value);
 		exists->value = ft_strdup(value);
 		return ;
 	}
-    if ((*t)->size == (*t)->capacity)
-        *t = resize_dict(*t, 2 *(*t)->capacity + 1);
-    while ((*t)->table[index])
-        index = (index + 1) % (*t)->capacity;
-    (*t)->table[index] = malloc(sizeof(t_pair));
-    if (!(*t)->table[index])
-        return ;
-    (*t)->table[index]->key = ft_strdup(key);
-    (*t)->table[index]->value = ft_strdup(value);
-    (*t)->size++;
+	if ((*t)->size == (*t)->capacity)
+		*t = resize_dict(*t, 2 *(*t)->capacity + 1);
+	while ((*t)->table[index])
+		index = (index + 1) % (*t)->capacity;
+	(*t)->table[index] = malloc(sizeof(t_pair));
+	if (!(*t)->table[index])
+		return ;
+	(*t)->table[index]->key = ft_strdup(key);
+	(*t)->table[index]->value = ft_strdup(value);
+	(*t)->size++;
 }
 
 /**
@@ -103,14 +106,15 @@ void insert_into_dict(t_dict **t, char* key, char* value)
  * @param t					Dictionary to search in
  * @param key				Key of Dictionary entry to delete
  */
-void remove_from_dict(t_dict *t, char* key)
+void	remove_from_dict(t_dict *t, char *key)
 {
-    int index;
+	int	index;
 
-    index = 0;
+	index = 0;
 	while (index <= t->capacity)
 	{
-		if (t->table[index] && ft_strncmp(t->table[index]->key, key, ft_strlen(key)) == 0)
+		if (t->table[index] && ft_strncmp(t->table[index]->key, key,
+				ft_strlen(key)) == 0)
 		{
 			destroy_pair(t->table[index]);
 			t->table[index] = NULL;
@@ -131,10 +135,10 @@ void remove_from_dict(t_dict *t, char* key)
  * @param newCapacity		New capacity of Dictionary
  * @return t_dict*			New Dictionary after resizing
  */
-t_dict *resize_dict(t_dict *t, int newCapacity)
+t_dict	*resize_dict(t_dict *t, int newCapacity)
 {
-	int i;
-	t_dict *new_table;
+	int		i;
+	t_dict	*new_table;
 
 	i = 0;
 	if (newCapacity < 0 || newCapacity <= t->capacity)

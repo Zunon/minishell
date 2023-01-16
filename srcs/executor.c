@@ -29,11 +29,13 @@ static int	configure_pipes(t_command *cmd)
 	{
 		g_krsh.pipes[i] = malloc(sizeof(int) * 2);
 		if (i != 0 && i != g_krsh.num_of_cmds)
+		{
 			if (pipe(g_krsh.pipes[i]) == -1)
 			{
 				perror("PARENT - Failed to create pipe: ");
 				exit(1);
 			}
+		}
 		i++;
 	}
 	g_krsh.pipes[0][0] = STDIN_FILENO;
@@ -47,9 +49,9 @@ static int	configure_pipes(t_command *cmd)
  * @brief			Close all pipes safely from the parent process
  *
  */
-static int close_used_pipes(void)
+static int	close_used_pipes(void)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	while (i < g_krsh.num_of_cmds)
@@ -79,9 +81,9 @@ static int close_used_pipes(void)
  * @param word_lst 	t_word_lst variable to get the size of
  * @return int		Number of strings present (Excluding NULL element)
  */
-static int get_list_length(t_list *word_lst)
+static int	get_list_length(t_list *word_lst)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (word_lst)
@@ -99,10 +101,10 @@ static int get_list_length(t_list *word_lst)
  * @param word_lst	linked list of words
  * @return char**	argv for the currently executing command
  */
-static char **prepare_cmd_args(t_list *word_lst)
+static char	**prepare_cmd_args(t_list *word_lst)
 {
-	char **ret;
-	int i;
+	char	**ret;
+	int		i;
 
 	if (!word_lst)
 		return (NULL);
@@ -115,7 +117,7 @@ static char **prepare_cmd_args(t_list *word_lst)
 		i++;
 	}
 	ret[i] = NULL;
-	return ret;
+	return (ret);
 }
 
 /**
@@ -124,10 +126,10 @@ static char **prepare_cmd_args(t_list *word_lst)
  * @param cmd		Linked list of commands to execute in the current pipeline
  * @return int		Status code of last executed command
  */
-int executor(t_command *first_cmd)
+int	executor(t_command *first_cmd)
 {
-	t_command *curr;
-	int status;
+	t_command	*curr;
+	int			status;
 
 	curr = first_cmd;
 	if (!first_cmd)

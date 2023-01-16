@@ -12,16 +12,16 @@
 
 #include "../inc/minishell.h"
 
-t_shell g_krsh;
+t_shell	g_krsh;
 
 /**
  * @brief				Function to handle various signals in the program
  *
  * @param sig			Signal recieved by the program
  */
-void sig_handler(int sig)
+void	sig_handler(int sig)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	if (sig == SIGINT)
@@ -44,31 +44,37 @@ void sig_handler(int sig)
 	}
 }
 
-void display_command(t_command *cmd)
+void	print_cmd_redirs(t_command *cmd, t_list *iter)
+{
+	t_redirect	*redir;
+
+	while (iter)
+	{
+		ft_printf("\t%s\n", (char *)(iter->content));
+		iter = iter->next;
+	}
+	redir = cmd->redirects;
+	ft_printf("\nRedirects: %p\n", redir);
+	while (redir)
+	{
+		ft_printf("\t%d : ", redir->direction);
+		ft_printf("%s\n", redir->redirectee);
+		redir = redir->next;
+	}
+}
+
+void	display_command(t_command *cmd)
 {
 	if (!cmd)
 	{
 		ft_printf("EMPTY COMMAND!\n");
-		return;
+		return ;
 	}
 	while (cmd)
 	{
 		ft_printf("id: %d", cmd->id);
-		t_list *iter = cmd->words;
-		ft_printf("\nWords: %p\n", iter);
-		while (iter)
-		{
-			ft_printf("\t%s\n", (char *)(iter->content));
-			iter = iter->next;
-		}
-		t_redirect *redir = cmd->redirects;
-		ft_printf("\nRedirects: %p\n", redir);
-		while (redir)
-		{
-			ft_printf("\t%d : ", redir->direction);
-			ft_printf("%s\n", redir->redirectee);
-			redir = redir->next;
-		}
+		ft_printf("\nWords: %p\n", cmd->words);
+		print_cmd_redirs(cmd, cmd->words);
 		cmd = cmd->next;
 	}
 }
@@ -76,10 +82,10 @@ void display_command(t_command *cmd)
 // merge adjacent words with quotes
 // convert quotes b4 passing toparser
 
-int get_cmd_size(t_command *cmd)
+int	get_cmd_size(t_command *cmd)
 {
-	t_command *iterator;
-	int i;
+	t_command	*iterator;
+	int			i;
 
 	i = 0;
 	iterator = cmd;
@@ -91,30 +97,28 @@ int get_cmd_size(t_command *cmd)
 	return (i);
 }
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-	char *s;
-	char **sup;
-	t_command *cmd;
+	char		*s;
+	char		**sup;
+	t_command	*cmd;
+	int			i;
 
 	(void)argc;
 	(void)argv;
 	signal(SIGINT, &sig_handler);
 	signal(SIGQUIT, SIG_IGN);
-	int i;
 	i = -1;
 	g_krsh.env_mngr = generate_env_manager(envp);
 	while (TRUE)
 	{
 		s = readline("minishell ^-^ : ");
 		add_history(s);
-		if (!s) /* Control D check */
+		if (!s)
 			ft_exit(NULL);
 		cmd = parse_input(s);
 		g_krsh.num_of_cmds = get_cmd_size(cmd);
 		executor(cmd);
 		free(s);
 	}
-	ft_exit(sup);
-	return (0);
 }
