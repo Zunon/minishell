@@ -4,14 +4,14 @@
 
 #include "../inc/minishell.h"
 
-t_token *discard_dollar(t_token *list)
+t_token	*discard_dollar(t_token *list)
 {
-	t_token *iterator;
-	t_token *temp;
-	enum e_token_type status;
+	t_token				*iterator;
+	t_token				*temp;
+	enum e_token_type	status;
 
 	iterator = list;
-	status = ERROR; // Unquoted
+	status = ERROR;
 	while (iterator)
 	{
 		if (status == ERROR && iterator->type == VARIABLE && !((iterator->contents)[1]))
@@ -48,11 +48,11 @@ t_token *discard_dollar(t_token *list)
 	return (list);
 }
 
-t_token *split_words_on_whitespace(t_token *list)
+t_token	*split_words_on_whitespace(t_token *list)
 {
-	t_token *iterator;
-	t_token *spliced_head;
-	t_token *spliced_tail;
+	t_token	*iterator;
+	t_token	*spliced_head;
+	t_token	*spliced_tail;
 
 	iterator = list;
 	while (iterator)
@@ -90,9 +90,9 @@ t_token *split_words_on_whitespace(t_token *list)
  * @param list linked list of tokens
  * @return pruned list
  */
-t_token *discard_whitespace(t_token *list) {
-	t_token *iterator;
-	t_token *temp;
+t_token	*discard_whitespace(t_token *list) {
+	t_token	*iterator;
+	t_token	*temp;
 
 	iterator = list;
 	while (iterator)

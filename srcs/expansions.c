@@ -54,3 +54,23 @@ t_command	*parse_input(const char *input)
 	}
 	return (token_to_cmd_converter(list));
 }
+
+/**
+ * @brief Free the token list given to it fully
+ * @param list linked list of tokens
+ */
+void	clear_tokenlist(t_token **list)
+{
+	t_token	*holder;
+
+	if (!list || !*list)
+		return ;
+	while (*list)
+	{
+		holder = (*list)->next;
+		free((*list)->contents);
+		free(*list);
+		*list = holder;
+	}
+	list = NULL;
+}
