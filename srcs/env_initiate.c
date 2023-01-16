@@ -18,10 +18,10 @@
  * 						with default value 1
  * @param env_manager	Environment variable manager dictionary
  */
-static void update_shlvl(t_dict *env_manager)
+static void	update_shlvl(t_dict *env_manager)
 {
-	t_pair *shlvl;
-	char *temp;
+	t_pair	*shlvl;
+	char	*temp;
 
 	shlvl = retrieve_from_dict(env_manager, "SHLVL");
 	if (!shlvl)
@@ -42,9 +42,9 @@ static void update_shlvl(t_dict *env_manager)
  * @param c				Character to look for
  * @return int			Index of occurance OR -1 if not found
  */
-int find_pos(char *s, char c)
+int	find_pos(char *s, char c)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (s[i])
@@ -64,13 +64,13 @@ int find_pos(char *s, char c)
  * @param envp			Pointer to array of characters with all variables
  * @return t_dict*		Pointer to generated dictionary of environment variables
  */
-t_dict *generate_env_manager(char **envp)
+t_dict	*generate_env_manager(char **envp)
 {
-	t_dict *env_manager;
-	int i;
-	char *key;
-	char *value;
-	int pos;
+	t_dict	*env_manager;
+	int		i;
+	char	*key;
+	char	*value;
+	int		pos;
 
 	i = 0;
 	env_manager = create_dict(50);

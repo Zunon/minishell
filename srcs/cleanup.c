@@ -18,12 +18,12 @@
  *
  * @param redir		Linked list of redirections for the command
  */
-static void free_redirects(t_redirect *redir)
+static void	free_redirects(t_redirect *redir)
 {
-	t_redirect *temp;
+	t_redirect	*temp;
 
 	if (!redir)
-		return;
+		return ;
 	while (redir)
 	{
 		temp = redir;
@@ -40,18 +40,19 @@ static void free_redirects(t_redirect *redir)
 }
 
 /**
- * @brief			Function to deallocate memory for a linked list of commands in a pipeline
+ * @brief			Function to deallocate memory for a linked list of commands
+ * 					in a pipeline
  *
  * @param cmd		Linked list of commands
  */
-void free_commands(t_command *cmd)
+void	free_commands(t_command *cmd)
 {
-	t_command *temp;
-	int i;
+	t_command	*temp;
+	int			i;
 
 	i = 0;
 	if (!cmd)
-		return;
+		return ;
 	while (cmd)
 	{
 		temp = cmd;

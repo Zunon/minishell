@@ -17,10 +17,10 @@
  *
  * @param p					Key value pair to destroy
  */
-void destroy_pair(t_pair *p)
+void	destroy_pair(t_pair *p)
 {
 	if (!p)
-		return;
+		return ;
 	if (p->key)
 		free(p->key);
 	if (p->value)
@@ -33,13 +33,13 @@ void destroy_pair(t_pair *p)
  *
  * @param t					Dictionary to destroy
  */
-void destroy_dict(t_dict *t)
+void	destroy_dict(t_dict *t)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!t || !t->table || t->size == 0)
-		return;
+		return ;
 	while (i < t->size)
 	{
 		destroy_pair(t->table[i]);

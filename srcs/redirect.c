@@ -16,10 +16,11 @@
  * @brief			Redirect input to a specific file for a command
  *
  * @param cmd		Currently executing command
- * @param current	Current redirector in the list of redirections of the command cmd
+ * @param current	Current redirector in the list of redirections of the
+ * 					command cmd
  * @return int		Error code of operation (0 on SUCCESS, -1 on ERROR)
  */
-static int redirect_input(t_command *cmd, t_redirect *current)
+static int	redirect_input(t_command *cmd, t_redirect *current)
 {
 	cmd->fd_in = open(current->redirectee, current->flags, 0777);
 	if (cmd->fd_in == -1)
@@ -44,10 +45,10 @@ static int redirect_input(t_command *cmd, t_redirect *current)
  * @brief			Redirect output to a specific file for a command
  *
  * @param cmd		Currently executing command
- * @param current	Current redirector in the list of redirections of the command cmd
+ * @param current	Current redirector in the list of redirections of the cmd
  * @return int		Error code of operation (0 on SUCCESS, -1 on ERROR)
  */
-static int redirect_output(t_command *cmd, t_redirect *current)
+static int	redirect_output(t_command *cmd, t_redirect *current)
 {
 	cmd->fd_out = open(current->redirectee, current->flags, 0777);
 	if (cmd->fd_out == -1)
@@ -60,7 +61,6 @@ static int redirect_output(t_command *cmd, t_redirect *current)
 		perror("CHILD - Error while duping pipe to STDOUT: ");
 		return (EXIT_FAILURE);
 	}
-	// ft_printf("heeeey");
 	if (close(cmd->fd_out) == -1)
 	{
 		perror("CHILD - Error while closing output file: ");
@@ -74,9 +74,9 @@ static int redirect_output(t_command *cmd, t_redirect *current)
  *
  * @return int
  */
-static int close_child_pipes(t_command *cmd)
+static int	close_child_pipes(t_command *cmd)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	while (i < g_krsh.num_of_cmds)
@@ -86,7 +86,6 @@ static int close_child_pipes(t_command *cmd)
 			perror("CHILD - Error while closing pipe write end: ");
 			return (EXIT_FAILURE);
 		}
-
 		if (close(g_krsh.pipes[i][0]) == -1)
 		{
 			perror("CHILD - Error while closing pipe read end: ");
@@ -98,15 +97,17 @@ static int close_child_pipes(t_command *cmd)
 }
 
 /**
- * @brief			Function to pipe input and output to and from commands following and
- *					preceding the currently executing command. command[i] reads from pipe i and writes
-					to pipe[i+1]. To account for all varieties of commands, 2 artificial pipes are
-					created before the first command and after the last command mimicking STDIN & STDOUT
+ * @brief			Function to pipe input and output to and from commands
+ * 					following and preceding the currently executing command.
+ * 					command[i] reads from pipe i and writes to pipe[i+1]. To
+ * 					account for all varieties of commands, 2 artificial pipes
+ * 					are created before the first command and after the last
+ * 					command mimicking STDIN & STDOUT
  *
  * @param cmd		Currently executing command
  * @return int		Status code of the closing pipes and dupes done
  */
-static int piper(t_command *cmd)
+static int	piper(t_command *cmd)
 {
 	if (g_krsh.num_of_cmds == 1)
 		return (EXIT_SUCCESS);
@@ -120,7 +121,6 @@ static int piper(t_command *cmd)
 	}
 	if (cmd->id != g_krsh.num_of_cmds - 1)
 	{
-		// ft_printf("entered pipe out");
 		if (dup2(g_krsh.pipes[cmd->id + 1][1], STDOUT_FILENO) == -1)
 		{
 			perror("CHILD - Error while duping pipe to STDOUT: ");
@@ -131,27 +131,29 @@ static int piper(t_command *cmd)
 }
 
 /**
- * @brief			Function to open necessary files and perform all redirections from left->right.
- * 					If there are pipes, then the necessary piping is handled as well.
- * 					Handles input, heredoc, output, output append
+ * @brief			Function to open necessary files and perform all
+ * 					redirections from left->right. If there are pipes, then the
+ * 					necessary piping is handled as well. Handles input, heredoc,
+ * 					output, output append
  *
  * @param cmd		Currently executing command
  * @return int		Status code (discard if not needed)
  */
-int perform_IO_redirections(t_command *cmd)
+int	perform_io_redirections(t_command *cmd)
 {
-	t_redirect *iterator;
-	int status;
+	t_redirect	*iterator;
+	int			status;
 
 	status = EXIT_SUCCESS;
 	iterator = cmd->redirects;
 	if (piper(cmd) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	while (iterator && status != EXIT_FAILURE) /* Iterate through redirection list */
+	while (iterator && status != EXIT_FAILURE)
 	{
 		if (iterator->direction == INPUT || iterator->direction == HERE_DOC)
 			status = redirect_input(cmd, iterator);
-		else if (iterator->direction == OUTPUT || iterator->direction == OUTPUT_APPEND)
+		else if (iterator->direction == OUTPUT
+			|| iterator->direction == OUTPUT_APPEND)
 			status = redirect_output(cmd, iterator);
 		iterator = iterator->next;
 	}

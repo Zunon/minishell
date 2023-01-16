@@ -103,7 +103,7 @@ int exec_single_builtin(t_command *cmd)
 {
 	if (!cmd->next && is_builtin(cmd))
 	{
-		if (perform_IO_redirections(cmd) == EXIT_FAILURE)
+		if (perform_io_redirections(cmd) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 		g_krsh.stdout_old = dup(STDOUT_FILENO);
 		if (exec_builtin(cmd) == EXIT_SUCCESS)
@@ -141,7 +141,7 @@ int exec_simple_cmd(t_command *cmd)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		if (perform_IO_redirections(cmd) == EXIT_FAILURE)
+		if (perform_io_redirections(cmd) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 		if (exec_builtin(cmd) == EXIT_FAILURE &&
 				search_absolute_path(cmd->argv) == EXIT_FAILURE &&

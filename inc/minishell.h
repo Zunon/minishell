@@ -116,7 +116,7 @@ int			ft_export(t_command *cmd);
 int			ft_unset(char **argv);
 int			exec_simple_cmd(t_command *cmd);
 int			executor(t_command *cmd);
-int			perform_IO_redirections(t_command *cmd);
+int			perform_io_redirections(t_command *cmd);
 char		*expand(char *word);
 t_token		*tokenize(char *input);
 void		sig_handler(int sig);

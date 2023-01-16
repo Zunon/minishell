@@ -16,9 +16,9 @@
  * @brief		Exit from minishell safely
  *
  */
-void ft_exit(char **argv)
+void	ft_exit(char **argv)
 {
-	int x;
+	int	x;
 
 	if (!argv || !argv[1])
 		exit(0);
@@ -36,20 +36,21 @@ void ft_exit(char **argv)
  *
  * @return int 	Status code of operation
  */
-int status_code()
+int	status_code(void)
 {
 	ft_printf("%d\n", g_krsh.status_code);
 	return (EXIT_SUCCESS);
 }
 
 /**
- * @brief		Builtin function handler for cd, echo, pwd, exit, env, export, unset
+ * @brief		Builtin function handler for cd, echo, pwd, exit, env, export,
+ * 				and unset
  *
- * @param cmd	Currently executimg command
- * @return int	Status code of child process after executing builtin OR ERROR_CODE 2
- * 				if not a builtin
+ * @param cmd	Currently executing command
+ * @return int	Status code of child process after executing builtin OR
+ * 				ERROR_CODE 2 if not a builtin
  */
-int exec_builtin(t_command *cmd)
+int	exec_builtin(t_command *cmd)
 {
 	if (!cmd->argv || !cmd->argv[0])
 		return (EXIT_SUCCESS);

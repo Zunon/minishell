@@ -12,11 +12,10 @@
 
 #include "../inc/minishell.h"
 
-
-static int check_valid_option(char **cmd)
+static int	check_valid_option(char **cmd)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 1;
 	while (cmd[i])
