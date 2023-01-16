@@ -17,7 +17,7 @@
  *
  * @param p					{key : value} pair to print
  */
-void print_pair(t_pair *p)
+void	print_pair(t_pair *p)
 {
     if (!p)
         return ;

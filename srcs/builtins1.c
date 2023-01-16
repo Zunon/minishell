@@ -45,8 +45,8 @@ static int	check_valid_option(char **cmd)
  */
 int	ft_echo(char **cmd)
 {
-	int i;
-	int nl;
+	int	i;
+	int	nl;
 
 	nl = 1;
 	i = 0;
@@ -58,7 +58,7 @@ int	ft_echo(char **cmd)
 	while (cmd[++i])
 	{
 		write(1, cmd[i], ft_strlen(cmd[i]));
-		if (cmd[i+1])
+		if (cmd[i + 1])
 			write(1, " ", 1);
 	}
 	if (nl == 1)
@@ -72,10 +72,10 @@ int	ft_echo(char **cmd)
  * @param cmd	Command with arguments (incuding new path)
  * @return int	status code of execution
  */
-int ft_cd(char **cmd)
+int	ft_cd(char **cmd)
 {
-	t_pair *pair;
-	/* Error Handling */
+	t_pair	*pair;
+
 	if (!cmd[1])
 		return (EXIT_SUCCESS);
 	if (chdir(cmd[1]) == -1)
@@ -93,9 +93,9 @@ int ft_cd(char **cmd)
  *
  * @return int	status code of execution
  */
-int ft_pwd(char **cmd)
+int	ft_pwd(char **cmd)
 {
-	char *path;
+	char	*path;
 
 	if (cmd[1])
 		return (EXIT_SUCCESS);
