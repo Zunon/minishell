@@ -12,6 +12,8 @@
 
 #include "../inc/minishell.h"
 
+int			exec_simple_cmd(t_command *cmd);
+
 /**
  * @brief				Update the shell level of minishell on execution at startup
  * 						Note: If SHLVL is unset by calling process, SHLVL is exported
@@ -90,4 +92,50 @@ t_dict	*generate_env_manager(char **envp)
 	update_shlvl(env_manager);
 	g_krsh.envp = dict_to_string_arr(env_manager);
 	return (env_manager);
+}
+
+void	ext_not_found(t_command *cmd)
+{
+	if (exec_builtin(cmd) == EXIT_FAILURE
+		&& search_absolute_path(cmd->argv) == EXIT_FAILURE
+		&& search_relative_path(cmd->argv) == EXIT_FAILURE)
+	{
+		write(STDERR_FILENO, " :Command not found\n", 19);
+		exit(ERROR_COMMAND_NOT_FOUND);
+	}
+}
+
+/**
+ * @brief			Function to execute a simple command
+ *
+ * @param cmd		Command struct to execute
+ * @param c			command as a char *
+ * @param av		command and its parameters for use by execve
+ * @return int		Status code of child process after execution
+ */
+int	exec_simple_cmd(t_command *cmd)
+{
+	pid_t	pid;
+
+	if (exec_single_builtin(cmd) == EXIT_SUCCESS)
+		return (EXIT_SUCCESS);
+	pid = fork();
+	if (pid == -1)
+	{
+		ft_printf("Error while forking\n");
+		return (EXIT_FAILURE);
+	}
+	if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		if (perform_io_redirections(cmd) == EXIT_FAILURE)
+			return (EXIT_FAILURE);
+		ext_not_found(cmd);
+		exit(g_krsh.status_code);
+	}
+	else
+		signal(SIGINT, SIG_IGN);
+	g_krsh.last_child_pid = pid;
+	return (EXIT_SUCCESS);
 }

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+#include "minishell.h"
 
 /**
  * @brief			Configure the input and output pipes for every command in the pipeline
