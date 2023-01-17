@@ -113,7 +113,7 @@ int	main(int argc, char **argv, char **envp)
 	while (TRUE)
 	{
 		s = readline("minishell ^-^ : ");
-		if (s && *s !='\0')
+		if (s && *s != '\0')
 			add_history(s);
 		if (!s)
 			ft_exit(NULL);

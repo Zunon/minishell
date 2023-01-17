@@ -14,7 +14,7 @@
 
 t_bool	parse_redirection(t_token **tracer)
 {
-	if (!(*tracer)->next || (*tracer)->next->type != WORD)
+	if (!((*tracer)->next) || (*tracer)->next->type != WORD)
 		return (FALSE);
 	*tracer = (*tracer)->next;
 	return (TRUE);
@@ -73,5 +73,8 @@ t_bool	parse_pipeline(t_token *list)
 		tracer = tracer->next->next;
 		return (parse_pipeline(tracer));
 	}
-	return (TRUE);
+	if (!(tracer)->next)
+		return (TRUE);
+	else
+		return (FALSE);
 }
