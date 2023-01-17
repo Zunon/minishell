@@ -102,19 +102,23 @@ char	*accumulate_heredoc(char *delimiter)
 {
 	char	*result;
 	char	*buffer;
+	char	*temp;
 	t_bool	found_delimiter;
 	size_t	delim_length;
 
 	found_delimiter = FALSE;
 	delim_length = ft_strlen(delimiter);
+	result = ft_strdup("");	
 	while (!found_delimiter)
 	{
 		buffer = readline("> ");
-		found_delimiter = ft_strncmp(delimiter, buffer, delim_length) != 0;
+		found_delimiter = ft_strncmp(delimiter, buffer, delim_length + 1) == 0;
 		if (found_delimiter)
-			continue ;
+			break; ;
 		buffer = expand_all_variables(buffer);
+		temp = result;
 		result = ft_strjoin(result, buffer);
+		free(temp);
 	}
 	return (result);
 }

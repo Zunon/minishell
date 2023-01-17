@@ -29,11 +29,7 @@ static void	free_redirects(t_redirect *redir)
 		temp = redir;
 		redir = redir->next;
 		if (temp->direction == HERE_DOC)
-		{
-			if (unlink(temp->redirectee) == -1)
-				perror("Error while deleting heredoc temp file: ");
 			free(temp->here_doc_delim);
-		}
 		free(temp->redirectee);
 		free(temp);
 	}
@@ -75,9 +71,14 @@ void	push_redirection(t_token **list, t_redirect **iterator)
 {
 	if ((*list)->type == REDIRECTION)
 	{
-		(*iterator)->redirectee = (*list)->next->contents;
 		(*iterator)->direction = get_direction((*list)->contents);
-		(*iterator)->flags = get_file_open_flags((*iterator)->direction);
+		if ((*iterator)->direction == HERE_DOC)
+			(*iterator)->here_doc_delim = (*list)->next->contents;
+		else
+		{
+			(*iterator)->redirectee = (*list)->next->contents;
+			(*iterator)->flags = get_file_open_flags((*iterator)->direction);
+		}
 		(*iterator)->next = malloc(sizeof(t_redirect));
 		(*iterator) = (*iterator)->next;
 		(*list) = (*list)->next;

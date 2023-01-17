@@ -139,10 +139,10 @@ int	executor(t_command *first_cmd)
 	{
 		g_krsh.cmds = curr;
 		curr->argv = prepare_cmd_args(curr->words);
-		if (curr->argv[0][0])
+		if (curr->argv && curr->argv[0][0])
 			exec_simple_cmd(curr);
 		else
-			write(STDERR_FILENO, " :Command not found\n", 19);
+			write(STDERR_FILENO, " :Command not found\n", 21);
 		curr = curr->next;
 	}
 	close_used_pipes();
