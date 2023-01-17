@@ -53,7 +53,7 @@ static int	redirect_output(t_command *cmd, t_redirect *current)
 	cmd->fd_out = open(current->redirectee, current->flags, 0777);
 	if (cmd->fd_out == -1)
 	{
-		perror("CHILD - File does not exist!");
+		perror("CHILD - Error while opening file");
 		return (EXIT_FAILURE);
 	}
 	if (dup2(cmd->fd_out, STDOUT_FILENO) == -1)

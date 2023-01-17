@@ -22,6 +22,7 @@ static void	update_shlvl(t_dict *env_manager)
 {
 	t_pair	*shlvl;
 	char	*temp;
+	int curr_val;
 
 	shlvl = retrieve_from_dict(env_manager, "SHLVL");
 	if (!shlvl)
@@ -30,7 +31,15 @@ static void	update_shlvl(t_dict *env_manager)
 		return ;
 	}
 	temp = shlvl->value;
-	shlvl->value = ft_itoa(ft_atoi(temp) + 1);
+	curr_val = ft_atoi(temp) + 1;
+
+	if (curr_val == 10000)
+	{
+		write(STDERR_FILENO, "zrsh:: warning: shell level (10000) too high, \
+				resetting to 1\n", 62);
+		curr_val = 1;
+	}
+	shlvl->value = ft_itoa(curr_val);
 	free(temp);
 }
 
@@ -98,7 +107,8 @@ void	ext_not_found(t_command *cmd)
 		&& search_absolute_path(cmd->argv) == EXIT_FAILURE
 		&& search_relative_path(cmd->argv) == EXIT_FAILURE)
 	{
-		write(STDERR_FILENO, " :Command not found\n", 19);
+		write(STDERR_FILENO, cmd->argv[0], ft_strlen(cmd->argv[0]));
+		write(STDERR_FILENO, " :Command not found\n", 21);
 		exit(ERROR_COMMAND_NOT_FOUND);
 	}
 }
