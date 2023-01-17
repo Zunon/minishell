@@ -112,9 +112,11 @@ char	*accumulate_heredoc(char *delimiter)
 	while (!found_delimiter)
 	{
 		buffer = readline("> ");
+		if (!buffer)
+			break ;
 		found_delimiter = ft_strncmp(delimiter, buffer, delim_length + 1) == 0;
 		if (found_delimiter)
-			break; ;
+			break ;
 		buffer = expand_all_variables(buffer);
 		buffer = ft_strjoin(buffer, "\n");
 		temp = result;
