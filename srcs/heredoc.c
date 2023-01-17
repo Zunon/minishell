@@ -116,6 +116,7 @@ char	*accumulate_heredoc(char *delimiter)
 		if (found_delimiter)
 			break; ;
 		buffer = expand_all_variables(buffer);
+		buffer = ft_strjoin(buffer, "\n");
 		temp = result;
 		result = ft_strjoin(result, buffer);
 		free(temp);
