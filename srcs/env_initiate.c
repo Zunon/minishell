@@ -22,7 +22,7 @@ static void	update_shlvl(t_dict *env_manager)
 {
 	t_pair	*shlvl;
 	char	*temp;
-	int curr_val;
+	int		curr_val;
 
 	shlvl = retrieve_from_dict(env_manager, "SHLVL");
 	if (!shlvl)
@@ -32,7 +32,6 @@ static void	update_shlvl(t_dict *env_manager)
 	}
 	temp = shlvl->value;
 	curr_val = ft_atoi(temp) + 1;
-
 	if (curr_val == 10000)
 	{
 		write(STDERR_FILENO, "zrsh:: warning: shell level (10000) too high, \
