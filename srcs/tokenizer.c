@@ -39,8 +39,7 @@ enum e_token_type	get_token_type(char ch)
 
 void	go_to_eov(int *i, const char *str, enum e_token_type *type)
 {
-	if (!*str || !(ft_isalpha(*str) || *str == '_' || *str == '\''
-			|| *str == '"' || *str == '?'))
+	if (!*str || !is_valid_id_starter(*str) || *str != '\'' || *str != '"')
 		*type = WORD;
 	if (*str != '?')
 		while (str[*i - 1] && get_token_type(str[*i - 1]) == WORD)

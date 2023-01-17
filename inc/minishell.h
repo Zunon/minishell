@@ -154,6 +154,7 @@ int			search_absolute_path(char **argv);
 int			search_relative_path(char **argv);
 void		update_env(t_dict *env_manager);
 char		*accumulate_heredoc(char *delimiter);
+t_bool		is_valid_id_starter(char character);
 
 extern t_shell	g_krsh;
 

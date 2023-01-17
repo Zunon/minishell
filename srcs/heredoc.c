@@ -12,7 +12,7 @@
 
 #include "../inc/minishell.h"
 
-t_bool is_valid_id_starter(char character)
+t_bool	is_valid_id_starter(char character)
 {
 	return (character == '?' || character == '_' || ft_isalpha(character));
 }
@@ -27,7 +27,7 @@ t_bool is_valid_id_starter(char character)
  */
 t_bool	has_valid_variable(char *string, size_t *offset)
 {
-	char *dollar;
+	char	*dollar;
 
 	while (string[*offset])
 	{
@@ -77,12 +77,12 @@ char	*expand_all_variables(char *string)
 	while (has_valid_variable(string, &offset))
 	{
 		result = ft_strjoin(result, ft_substr(string, begin_off, offset
-			- begin_off - 1));
+					- begin_off - 1));
 		result = ft_strjoin(result, expand_and_increment(string, &offset));
 		begin_off = offset;
 	}
 	result = ft_strjoin(result, ft_substr(string, begin_off, offset
-		- begin_off));
+				- begin_off));
 	return (result);
 }
 
