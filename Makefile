@@ -21,7 +21,8 @@ SRCS		=	srcs/main.c srcs/executor.c srcs/exec_simple_cmd.c \
 				srcs/dictionary_cleanup.c srcs/redirect.c srcs/cleanup.c \
 				srcs/parser.c srcs/tokenizer.c srcs/expansions.c \
 				srcs/command_builder.c srcs/sanitizers.c srcs/tlist_ops.c \
-				srcs/merge_adjacent_words.c srcs/collapse_quotes.c
+				srcs/merge_adjacent_words.c srcs/collapse_quotes.c \
+				srcs/heredoc.c
 OBJS		=	${SRCS:.c=.o}
 LEX_TEST_SRCS	=	srcs/executor.c srcs/exec_simple_cmd.c srcs/builtins1.c \
 					srcs/builtins2.c srcs/env_initiate.c srcs/env_utils.c \

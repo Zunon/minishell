@@ -153,6 +153,7 @@ int			get_cmd_size(t_command *cmd);
 int			search_absolute_path(char **argv);
 int			search_relative_path(char **argv);
 void		update_env(t_dict *env_manager);
+char		*accumulate_heredoc(char *delimiter);
 
 extern t_shell	g_krsh;
 
