@@ -108,7 +108,7 @@ char	*accumulate_heredoc(char *delimiter)
 
 	found_delimiter = FALSE;
 	delim_length = ft_strlen(delimiter);
-	result = ft_strdup("");	
+	result = ft_strdup("");
 	while (!found_delimiter)
 	{
 		buffer = readline("> ");

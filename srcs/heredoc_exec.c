@@ -45,10 +45,10 @@ char	*generate_heredoc_fname(void)
  * @param lines		Array of strings entered by user in heredoc
  * @return char*	Name of temp file used to store heredoc buffer
  */
-char * save_heredoc_input(char *lines)
+char	*save_heredoc_input(char *lines)
 {
-	int fd;
-	char *fname;
+	int		fd;
+	char	*fname;
 
 	fname = generate_heredoc_fname();
 	fd = open(fname, O_CREAT | O_WRONLY | O_TRUNC, 0777);
@@ -66,10 +66,11 @@ char * save_heredoc_input(char *lines)
 	return (fname);
 }
 
-void heredoc_handler(t_command *cmd)
+void	heredoc_handler(t_command *cmd)
 {
-	t_redirect *iterator;
-	char *buffer;
+	t_redirect	*iterator;
+	char		*buffer;
+
 	while (cmd)
 	{
 		iterator = cmd->redirects;
