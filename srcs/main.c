@@ -119,6 +119,7 @@ int	main(int argc, char **argv, char **envp)
 			ft_exit(NULL);
 		cmd = parse_input(s);
 		g_krsh.num_of_cmds = get_cmd_size(cmd);
+		heredoc_handler(cmd);
 		executor(cmd);
 		free(s);
 	}

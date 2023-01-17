@@ -38,6 +38,8 @@ static int	redirect_input(t_command *cmd, t_redirect *current)
 		perror("CHILD - Error while closing input file: ");
 		return (EXIT_FAILURE);
 	}
+	if (current->direction == HERE_DOC && unlink(current->redirectee) == -1)
+		perror("Error while deleting heredoc temp file: ");
 	return (EXIT_SUCCESS);
 }
 
