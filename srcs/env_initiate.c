@@ -34,8 +34,7 @@ static void	update_shlvl(t_dict *env_manager)
 	curr_val = ft_atoi(temp) + 1;
 	if (curr_val == 10000)
 	{
-		write(STDERR_FILENO, "zrsh:: warning: shell level (10000) too high, \
-				resetting to 1\n", 62);
+		write(STDOUT_FILENO, "zrsh:: warning: shell level (10000) too high, resetting to 1\n", 62);
 		curr_val = 1;
 	}
 	shlvl->value = ft_itoa(curr_val);
