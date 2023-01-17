@@ -113,15 +113,17 @@ int	exec_single_builtin(t_command *cmd)
 {
 	if (!cmd->next && is_builtin(cmd))
 	{
+		g_krsh.stdout_old = dup(STDOUT_FILENO);
 		if (perform_io_redirections(cmd) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
-		g_krsh.stdout_old = dup(STDOUT_FILENO);
 		if (exec_builtin(cmd) == EXIT_SUCCESS)
 		{
 			dup2(g_krsh.stdout_old, STDOUT_FILENO);
 			close(g_krsh.stdout_old);
 			return (EXIT_SUCCESS);
 		}
+		dup2(g_krsh.stdout_old, STDOUT_FILENO);
+		close(g_krsh.stdout_old);
 		return (EXIT_SUCCESS);
 	}
 	return (EXIT_FAILURE);
