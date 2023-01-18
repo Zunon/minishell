@@ -29,7 +29,11 @@ static void	free_redirects(t_redirect *redir)
 		temp = redir;
 		redir = redir->next;
 		if (temp->direction == HERE_DOC)
+		{
 			free(temp->here_doc_delim);
+			if (unlink(temp->redirectee) == -1)
+				perror("HEREDOC -Error while deleting temp file: ");
+		}
 		free(temp->redirectee);
 		free(temp);
 	}
@@ -54,14 +58,9 @@ void	free_commands(t_command *cmd)
 		temp = cmd;
 		cmd = cmd->next;
 		free_redirects(temp->redirects);
-		ft_lstclear(&cmd->words, free);
-		while (cmd->argv[i])
-		{
-			free(cmd->argv[i]);
-			i++;
-		}
-		if (cmd->argv)
-			free(cmd->argv);
+		ft_lstclear(&(temp->words), free);
+		if (temp->argv)
+			free(temp->argv);
 		if (temp)
 			free(temp);
 	}

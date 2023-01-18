@@ -65,7 +65,8 @@ t_list	*extract_words(t_token *list)
 {
 	t_list	*words;
 	t_list	*iterator;
-
+	t_list	*node;
+	char	*cont;
 	if (!list)
 		return (NULL);
 	iterator = words;
@@ -73,9 +74,17 @@ t_list	*extract_words(t_token *list)
 	while (list && list->type != PIPE)
 	{
 		if (!list->prev && list->type == WORD)
-			ft_lstadd_back(&words, ft_lstnew(ft_strdup(list->contents)));
+		{
+			cont = ft_strdup(list->contents);
+			node = ft_lstnew(cont);
+			ft_lstadd_back(&words, node);
+		}
 		if (list->type == WORD && list->prev && list->prev->type != REDIRECTION)
-			ft_lstadd_back(&words, ft_lstnew(ft_strdup(list->contents)));
+		{
+			cont = ft_strdup(list->contents);
+			node = ft_lstnew(cont);
+			ft_lstadd_back(&words, node);
+		}
 		list = list->next;
 	}
 	return (words);

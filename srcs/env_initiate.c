@@ -103,9 +103,9 @@ t_dict	*generate_env_manager(char **envp)
 
 void	ext_not_found(t_command *cmd)
 {
-	if (exec_builtin(cmd) == EXIT_FAILURE
+	if (!cmd->argv[0][0] || (exec_builtin(cmd) == EXIT_FAILURE
 		&& search_absolute_path(cmd->argv) == EXIT_FAILURE
-		&& search_relative_path(cmd->argv) == EXIT_FAILURE)
+		&& search_relative_path(cmd->argv) == EXIT_FAILURE))
 	{
 		write(STDERR_FILENO, cmd->argv[0], ft_strlen(cmd->argv[0]));
 		write(STDERR_FILENO, " :Command not found\n", 21);
