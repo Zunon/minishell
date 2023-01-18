@@ -100,8 +100,10 @@ t_command	*token_to_cmd_converter(t_token *list)
 	{
 		free(pipeline);
 		pipeline = NULL;
+		clear_tokenlist(&list);
 		return (pipeline);
 	}
+	clear_tokenlist(&list);
 	free_cmdnode(cmd, pipeline);
 	return (pipeline);
 }
