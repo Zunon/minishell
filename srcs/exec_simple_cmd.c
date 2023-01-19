@@ -111,7 +111,7 @@ t_bool	is_builtin(t_command *cmd)
 
 int	exec_single_builtin(t_command *cmd)
 {
-	if (!g_krsh.num_of_cmds ==1 && is_builtin(cmd))
+	if (g_krsh.num_of_cmds == 1 && is_builtin(cmd))
 	{
 		g_krsh.stdout_old = dup(STDOUT_FILENO);
 		if (perform_io_redirections(cmd) == EXIT_FAILURE)
