@@ -72,10 +72,10 @@ void	push_redirection(t_token **list, t_redirect **iterator)
 	{
 		(*iterator)->direction = get_direction((*list)->contents);
 		if ((*iterator)->direction == HERE_DOC)
-			(*iterator)->here_doc_delim = (*list)->next->contents;
+			(*iterator)->here_doc_delim = ft_strdup((*list)->next->contents);
 		else
 		{
-			(*iterator)->redirectee = (*list)->next->contents;
+			(*iterator)->redirectee = ft_strdup((*list)->next->contents);
 			(*iterator)->flags = get_file_open_flags((*iterator)->direction);
 		}
 		(*iterator)->next = malloc(sizeof(t_redirect));
