@@ -54,9 +54,9 @@ $(LIB):
 		make -C ./lib/libft/
 
 fd_leaks:
-		make re && valgrind --track-fds=yes ./minishell
+		make && valgrind --track-fds=yes ./minishell
 leaks:
-		make && valgrind --show-leak-kinds=all --leak-check=full --show-reachable=yes --error-limit=no --suppressions=inc/readline.supp --log-file=valg_errors.log ./minishell
+		make && valgrind --trace-children=yes --show-leak-kinds=all --leak-check=full --show-reachable=yes --error-limit=no --suppressions=inc/readline.supp --log-file=valg_errors.log ./minishell
 		# make && valgrind --show-leak-kinds=all --leak-check=full --show-reachable=yes --error-limit=no --gen-suppressions=all --log-file=minimalraw.log ./minishell
 clean:
 		${RM} $(OBJS)

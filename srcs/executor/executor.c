@@ -21,27 +21,16 @@
  */
 static int	configure_pipes(t_command *cmd)
 {
-	int	i;
-
-	i = 0;
-	g_krsh.pipes = malloc(sizeof(int *) * (g_krsh.num_of_cmds + 1));
-	while (i <= g_krsh.num_of_cmds)
+	while(cmd)
 	{
-		g_krsh.pipes[i] = malloc(sizeof(int) * 2);
-		if (i != 0 && i != g_krsh.num_of_cmds)
-		{
-			if (pipe(g_krsh.pipes[i]) == -1)
-			{
-				perror("PARENT - Failed to create pipe: ");
-				exit(1);
-			}
-		}
-		i++;
+		cmd->pipe_in = cmd->id % 2;
+		cmd->pipe_out = !(cmd->pipe_in);
+		if (cmd->id == 0)
+			cmd->pipe_in = NO_PIPE;
+		if (!cmd->next)
+			cmd->pipe_out = NO_PIPE;
+		cmd = cmd->next;
 	}
-	g_krsh.pipes[0][0] = STDIN_FILENO;
-	g_krsh.pipes[0][1] = STDOUT_FILENO;
-	g_krsh.pipes[g_krsh.num_of_cmds][0] = STDIN_FILENO;
-	g_krsh.pipes[g_krsh.num_of_cmds][1] = STDOUT_FILENO;
 	return (EXIT_SUCCESS);
 }
 
@@ -49,33 +38,21 @@ static int	configure_pipes(t_command *cmd)
  * @brief			Close all pipes safely from the parent process
  *
  */
-static int	close_used_pipes(void)
+static int	close_used_pipes(int pipe_in)
 {
-	int	i;
-
-	i = 1;
-	while (i < g_krsh.num_of_cmds)
+	if (pipe_in != NO_PIPE)
 	{
-		if (close(g_krsh.pipes[i][0]) == -1)
+		if (close(g_krsh.pipes[pipe_in][0]) == -1)
 		{
-			ft_printf("closing %d\n", g_krsh.pipes[i][0]);
 			perror("PARENT - Error while closing pipe read end: ");
 			return (EXIT_FAILURE);
 		}
-		if (close(g_krsh.pipes[i][1]) == -1)
+		if (close(g_krsh.pipes[pipe_in][1]) == -1)
 		{
-			ft_printf("closing %d\n", g_krsh.pipes[i][1]);
 			perror("PARENT - Error while closing pipe write end: ");
 			return (EXIT_FAILURE);
 		}
-		free(g_krsh.pipes[i]);
-		i++;
 	}
-	if (g_krsh.num_of_cmds <= 1)
-		return (EXIT_SUCCESS);
-	free(g_krsh.pipes[0]);
-	free(g_krsh.pipes[g_krsh.num_of_cmds]);
-	free(g_krsh.pipes);
 	return (EXIT_SUCCESS);
 }
 
@@ -146,11 +123,13 @@ int	executor(t_command *first_cmd)
 	{
 		g_krsh.cmds = curr;
 		curr->argv = prepare_cmd_args(curr->words);
+		if (curr->pipe_out != NO_PIPE)
+			pipe(g_krsh.pipes[curr->pipe_out]);
 		if (curr->argv)
 			exec_simple_cmd(curr);
+		close_used_pipes(curr->pipe_in);
 		curr = curr->next;
 	}
-	close_used_pipes();
 	waitpid(g_krsh.last_child_pid, &status, 0);
 	g_krsh.status_code = WEXITSTATUS(status);
 	while (waitpid(-1, &status, 0) > -1)

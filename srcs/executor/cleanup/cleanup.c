@@ -62,3 +62,9 @@ void	free_commands(t_command *cmd)
 			free(temp);
 	}
 }
+
+void exit_minishell(t_command *cmd, int status)
+{
+	// free_commands(cmd);
+	exit(status);
+}

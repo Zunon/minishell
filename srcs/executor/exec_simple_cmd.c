@@ -97,8 +97,10 @@ static void	ext_not_found(t_command *cmd)
 	{
 		write(STDERR_FILENO, cmd->argv[0], ft_strlen(cmd->argv[0]));
 		write(STDERR_FILENO, " :Command not found\n", 21);
-		exit(ERROR_COMMAND_NOT_FOUND);
+		exit_minishell(cmd, ERROR_COMMAND_NOT_FOUND);
 	}
+	if (g_krsh.num_of_cmds != 1)
+		exit_minishell(cmd, EXIT_SUCCESS);
 }
 
 
@@ -129,7 +131,6 @@ int	exec_simple_cmd(t_command *cmd)
 		if (perform_io_redirections(cmd) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 		ext_not_found(cmd);
-		free_commands(cmd);
 	}
 	else
 		signal(SIGINT, SIG_IGN);

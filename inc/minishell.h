@@ -89,7 +89,7 @@ typedef struct s_shell
 	t_command	*cmds;
 	int			num_of_cmds;
 	int			status_code;
-	int			**pipes;
+	int			pipes[2][2];
 	int			**heredocs;
 	t_dict		*env_mngr;
 	t_dict		*declared;
@@ -147,6 +147,7 @@ int					exec_builtin_parent(t_command *cmd);
 void				update_env(t_dict *env_manager);
 char				*construct_heredoc(char *delimiter);
 void				handle_heredoc(t_command *cmd);
+void				exit_minishell(t_command *cmd, int status);
 
 extern t_shell	g_krsh;
 

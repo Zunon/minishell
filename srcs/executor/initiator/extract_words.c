@@ -18,6 +18,7 @@ t_list	*extract_words(t_token *list)
 	t_list	*iterator;
 	t_list	*node;
 	char	*cont;
+	
 	if (!list)
 		return (NULL);
 	iterator = words;

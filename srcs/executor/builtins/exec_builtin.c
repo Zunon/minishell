@@ -22,21 +22,26 @@
  */
 int	exec_builtin(t_command *cmd)
 {
+	int status;
+
+	status = EXIT_FAILURE;
 	if (!cmd->argv || !cmd->argv[0])
 		return (EXIT_SUCCESS);
 	if (ft_strncmp(cmd->argv[0], "cd", 3) == 0)
-		return (cd(cmd->argv));
+		status = cd(cmd->argv);
 	if (ft_strncmp(cmd->argv[0], "echo", 5) == 0)
-		return (echo(cmd->argv));
+		status = echo(cmd->argv);
 	if (ft_strncmp(cmd->argv[0], "pwd", 4) == 0)
-		return (pwd(cmd->argv));
+		status = pwd(cmd->argv);
 	if (ft_strncmp(cmd->argv[0], "exit", 5) == 0)
 		ft_exit(cmd->argv);
 	if (ft_strncmp(cmd->argv[0], "env", 4) == 0)
-		return (env());
+		status = env();
 	if (ft_strncmp(cmd->argv[0], "unset", 6) == 0)
-		return (unset(cmd->argv));
+		status = unset(cmd->argv);
 	if (ft_strncmp(cmd->argv[0], "export", 7) == 0)
-		return (export(cmd));
-	return (EXIT_FAILURE);
+		status = export(cmd);
+	if (g_krsh.num_of_cmds != 1 && status == EXIT_SUCCESS)
+		exit_minishell(cmd, status);
+	return (status);
 }

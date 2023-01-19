@@ -91,22 +91,31 @@ static int	redirect_heredoc(t_command *cmd, t_redirect *current)
  */
 static int	close_child_pipes(t_command *cmd)
 {
-	int	i;
-
-	i = 1;
-	while (i < g_krsh.num_of_cmds)
+	if (cmd->pipe_in != NO_PIPE)
 	{
-		if (close(g_krsh.pipes[i][1]) == -1)
-		{
-			perror("CHILD - Error while closing pipe write end: ");
-			return (EXIT_FAILURE);
-		}
-		if (close(g_krsh.pipes[i][0]) == -1)
+		if (close(g_krsh.pipes[cmd->pipe_in][0]) == -1)
 		{
 			perror("CHILD - Error while closing pipe read end: ");
 			return (EXIT_FAILURE);
 		}
-		i++;
+		if (close(g_krsh.pipes[cmd->pipe_in][1]) == -1)
+		{
+			perror("CHILD - Error while closing pipe write end: ");
+			return (EXIT_FAILURE);
+		}
+	}
+	if (cmd->pipe_out != NO_PIPE)
+	{
+		if (close(g_krsh.pipes[cmd->pipe_out][0]) == -1)
+		{
+			perror("CHILD - Error while closing pipe read end: ");
+			return (EXIT_FAILURE);
+		}
+		if (close(g_krsh.pipes[cmd->pipe_out][1]) == -1)
+		{
+			perror("CHILD - Error while closing pipe write end: ");
+			return (EXIT_FAILURE);
+		}
 	}
 	return (EXIT_SUCCESS);
 }
@@ -126,17 +135,17 @@ static int	piper(t_command *cmd)
 {
 	if (g_krsh.num_of_cmds == 1)
 		return (EXIT_SUCCESS);
-	if (cmd->id != 0)
+	if (cmd->pipe_in != NO_PIPE)
 	{
-		if (dup2(g_krsh.pipes[cmd->id][0], STDIN_FILENO) == -1)
+		if (dup2(g_krsh.pipes[cmd->pipe_in][0], STDIN_FILENO) == -1)
 		{
 			perror("CHILD - Error while duping pipe to STDIN: ");
 			return (EXIT_FAILURE);
 		}
 	}
-	if (cmd->id != g_krsh.num_of_cmds - 1)
+	if (cmd->pipe_out != NO_PIPE)
 	{
-		if (dup2(g_krsh.pipes[cmd->id + 1][1], STDOUT_FILENO) == -1)
+		if (dup2(g_krsh.pipes[cmd->pipe_out][1], STDOUT_FILENO) == -1)
 		{
 			perror("CHILD - Error while duping pipe to STDOUT: ");
 			return (EXIT_FAILURE);
