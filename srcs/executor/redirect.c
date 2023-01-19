@@ -69,6 +69,21 @@ static int	redirect_output(t_command *cmd, t_redirect *current)
 	return (EXIT_SUCCESS);
 }
 
+static int	redirect_heredoc(t_command *cmd, t_redirect *current)
+{
+	if (dup2(g_krsh.heredocs[current->here_doc_pipe][0], STDIN_FILENO) == -1)
+	{
+		perror("CHILD - Error while duping pipe to STDIN: ");
+		return (EXIT_FAILURE);
+	}
+	if (close(g_krsh.heredocs[current->here_doc_pipe][0]) == -1)
+	{
+		perror("CHILD - HEREDOC - Error while closing read pipe end: ");
+		return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
+
 /**
  * @brief			Close all pipes safely from the child process
  *
@@ -150,7 +165,9 @@ int	perform_io_redirections(t_command *cmd)
 		return (EXIT_FAILURE);
 	while (iterator && status != EXIT_FAILURE)
 	{
-		if (iterator->direction == INPUT || iterator->direction == HERE_DOC)
+		if (iterator->direction == HERE_DOC)
+			status = redirect_heredoc(cmd, iterator);
+		else if (iterator->direction == INPUT)
 			status = redirect_input(cmd, iterator);
 		else if (iterator->direction == OUTPUT
 			|| iterator->direction == OUTPUT_APPEND)

@@ -67,6 +67,7 @@ typedef struct s_redirect
 	enum e_direction	direction;
 	char				*redirectee;
 	char				*here_doc_delim;
+	int					here_doc_pipe;
 }	t_redirect;
 
 typedef struct s_command
@@ -89,6 +90,7 @@ typedef struct s_shell
 	int			num_of_cmds;
 	int			status_code;
 	int			**pipes;
+	int			**heredocs;
 	t_dict		*env_mngr;
 	t_dict		*declared;
 	char		**envp;
@@ -139,7 +141,6 @@ t_token				*merge_words(t_token *list);
 t_bool				parse_pipeline(t_token *list);
 void				splice_tokens(t_token **list, t_token **iterator);
 void				del_token(t_token **list, t_token **iterator);
-void				free_cmdnode(t_command *cmd, t_command *pipeline);
 t_redirect			*extract_redirects(t_token *list);
 t_list				*extract_words(t_token *list);
 int					exec_builtin_parent(t_command *cmd);

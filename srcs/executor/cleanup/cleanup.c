@@ -12,6 +12,7 @@
 
 #include "../../../inc/minishell.h"
 
+
 /**
  * @brief			Function to deallocate memory for the linked list of redirections
  * 					belongin to any command
@@ -29,11 +30,7 @@ static void	free_redirects(t_redirect *redir)
 		temp = redir;
 		redir = redir->next;
 		if (temp->direction == HERE_DOC)
-		{
 			free(temp->here_doc_delim);
-			if (unlink(temp->redirectee) == -1)
-				perror("HEREDOC -Error while deleting temp file: ");
-		}
 		free(temp->redirectee);
 		free(temp);
 	}
@@ -64,15 +61,4 @@ void	free_commands(t_command *cmd)
 		if (temp)
 			free(temp);
 	}
-}
-
-void	free_cmdnode(t_command *cmd, t_command *pipeline)
-{
-	t_command	*temp;
-
-	temp = pipeline;
-	while (temp && temp->next != cmd)
-		temp = temp->next;
-	free(cmd);
-	temp->next = NULL;
 }

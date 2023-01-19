@@ -14,7 +14,7 @@
 
 t_shell	g_krsh;
 
-void	print_cmd_redirs(t_command *cmd, t_list *iter)
+static void	print_cmd_redirs(t_command *cmd, t_list *iter)
 {
 	t_redirect	*redir;
 
@@ -33,7 +33,7 @@ void	print_cmd_redirs(t_command *cmd, t_list *iter)
 	}
 }
 
-void	display_command(t_command *cmd)
+static void	display_command(t_command *cmd)
 {
 	if (!cmd)
 	{

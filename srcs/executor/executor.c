@@ -141,11 +141,11 @@ int	executor(t_command *first_cmd)
 	if (!first_cmd)
 		return (EXIT_SUCCESS);
 	configure_pipes(first_cmd);
+	handle_heredoc(curr);
 	while (curr)
 	{
 		g_krsh.cmds = curr;
 		curr->argv = prepare_cmd_args(curr->words);
-		handle_heredoc(curr);
 		if (curr->argv)
 			exec_simple_cmd(curr);
 		curr = curr->next;

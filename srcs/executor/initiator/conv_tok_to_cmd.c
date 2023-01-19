@@ -28,6 +28,16 @@ static int	get_pipeline_size(t_command *cmd)
 	return (i);
 }
 
+static void	free_cmdnode(t_command *cmd, t_command *pipeline)
+{
+	t_command	*temp;
+
+	temp = pipeline;
+	while (temp && temp->next != cmd)
+		temp = temp->next;
+	free(cmd);
+	temp->next = NULL;
+}
 
 static t_token	*get_next_cmd(t_token *list)
 {
