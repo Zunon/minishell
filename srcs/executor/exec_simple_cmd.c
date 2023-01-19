@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 static void	ext_no_perms(const char *exec_path)
 {
@@ -30,7 +30,7 @@ static void	ext_no_perms(const char *exec_path)
  * @param envp		Environment variables
  * @return int		Status code of execution (1 on SUCCESS, 0 on 'CMD NOT FOUND')
  */
-int	search_absolute_path(char **argv)
+static int	search_absolute_path(char **argv)
 {
 	int		i;
 	char	*exec_path;
@@ -69,7 +69,7 @@ int	search_absolute_path(char **argv)
  * @return int		Status code of execution
  * 					(1 on SUCCESS, 0 on 'CMD NOT FOUND')
  */
-int	search_relative_path(char **argv)
+static int	search_relative_path(char **argv)
 {
 	if (ft_strchr(argv[0], '/') != 0 && execve(argv[0], argv, g_krsh.envp)
 		== -1)
@@ -88,43 +88,51 @@ int	search_relative_path(char **argv)
 	return (EXIT_FAILURE);
 }
 
-t_bool	is_builtin(t_command *cmd)
+
+static void	ext_not_found(t_command *cmd)
 {
-	if (!cmd->argv || !cmd->argv[0])
-		return (FALSE);
-	if (ft_strncmp(cmd->argv[0], "cd", 3) == 0)
-		return (TRUE);
-	if (ft_strncmp(cmd->argv[0], "echo", 5) == 0)
-		return (TRUE);
-	if (ft_strncmp(cmd->argv[0], "pwd", 4) == 0)
-		return (TRUE);
-	if (ft_strncmp(cmd->argv[0], "exit", 5) == 0)
-		return (TRUE);
-	if (ft_strncmp(cmd->argv[0], "env", 4) == 0)
-		return (TRUE);
-	if (ft_strncmp(cmd->argv[0], "unset", 6) == 0)
-		return (TRUE);
-	if (ft_strncmp(cmd->argv[0], "export", 7) == 0)
-		return (TRUE);
-	return (FALSE);
+	if (!cmd->argv[0][0] || (exec_builtin(cmd) == EXIT_FAILURE
+		&& search_absolute_path(cmd->argv) == EXIT_FAILURE
+		&& search_relative_path(cmd->argv) == EXIT_FAILURE))
+	{
+		write(STDERR_FILENO, cmd->argv[0], ft_strlen(cmd->argv[0]));
+		write(STDERR_FILENO, " :Command not found\n", 21);
+		exit(ERROR_COMMAND_NOT_FOUND);
+	}
 }
 
-int	exec_single_builtin(t_command *cmd)
+
+/**
+ * @brief			Function to execute a simple command
+ *
+ * @param cmd		Command struct to execute
+ * @param c			command as a char *
+ * @param av		command and its parameters for use by execve
+ * @return int		Status code of child process after execution
+ */
+int	exec_simple_cmd(t_command *cmd)
 {
-	if (g_krsh.num_of_cmds == 1 && is_builtin(cmd))
+	pid_t	pid;
+
+	if (exec_builtin_parent(cmd) == EXIT_SUCCESS)
+		return (EXIT_SUCCESS);
+	pid = fork();
+	if (pid == -1)
 	{
-		g_krsh.stdout_old = dup(STDOUT_FILENO);
+		ft_printf("Error while forking\n");
+		return (EXIT_FAILURE);
+	}
+	if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		if (perform_io_redirections(cmd) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
-		if (exec_builtin(cmd) == EXIT_SUCCESS)
-		{
-			dup2(g_krsh.stdout_old, STDOUT_FILENO);
-			close(g_krsh.stdout_old);
-			return (EXIT_SUCCESS);
-		}
-		dup2(g_krsh.stdout_old, STDOUT_FILENO);
-		close(g_krsh.stdout_old);
-		return (EXIT_SUCCESS);
+		ext_not_found(cmd);
+		free_commands(cmd);
 	}
-	return (EXIT_FAILURE);
+	else
+		signal(SIGINT, SIG_IGN);
+	g_krsh.last_child_pid = pid;
+	return (EXIT_SUCCESS);
 }

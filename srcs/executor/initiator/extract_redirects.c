@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command_builder.c                                  :+:      :+:    :+:   */
+/*   extract_redirs.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/13 20:30:54 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/14 23:56:05 by rriyas           ###   ########.fr       */
+/*   Created: 2023/01/19 19:33:02 by rriyas            #+#    #+#             */
+/*   Updated: 2023/01/19 19:33:02 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../../inc/minishell.h"
 
-enum e_direction	get_direction(char *direction)
+static enum e_direction	get_direction(char *direction)
 {
 	if (ft_strncmp(">>", direction, 3) == 0)
 		return (OUTPUT_APPEND);
@@ -23,16 +23,34 @@ enum e_direction	get_direction(char *direction)
 	return (INPUT);
 }
 
-/**
- * @todo handle the HERE_DOC case
- */
-int	get_file_open_flags(enum e_direction direction)
+static int	get_file_open_flags(enum e_direction direction)
 {
+	if (direction == HERE_DOC)
+		return (O_CREAT | O_WRONLY);
 	if (direction == INPUT)
 		return (O_CREAT | O_RDONLY);
 	if (direction == OUTPUT)
 		return (O_CREAT | O_WRONLY | O_TRUNC);
 	return (O_CREAT | O_WRONLY | O_APPEND);
+}
+
+static void	push_redirection(t_token **list, t_redirect **iterator)
+{
+	if ((*list)->type == REDIRECTION)
+	{
+		(*iterator)->direction = get_direction((*list)->contents);
+		if ((*iterator)->direction == HERE_DOC)
+			(*iterator)->here_doc_delim = ft_strdup((*list)->next->contents);
+		else
+		{
+			(*iterator)->redirectee = ft_strdup((*list)->next->contents);
+			(*iterator)->flags = get_file_open_flags((*iterator)->direction);
+		}
+		(*iterator)->next = malloc(sizeof(t_redirect));
+		(*iterator) = (*iterator)->next;
+		(*list) = (*list)->next;
+	}
+	(*list) = (*list)->next;
 }
 
 t_redirect	*extract_redirects(t_token *list)
@@ -59,60 +77,4 @@ t_redirect	*extract_redirects(t_token *list)
 	free(iterator);
 	temp->next = NULL;
 	return (redirs);
-}
-
-t_list	*extract_words(t_token *list)
-{
-	t_list	*words;
-	t_list	*iterator;
-	t_list	*node;
-	char	*cont;
-	if (!list)
-		return (NULL);
-	iterator = words;
-	words = NULL;
-	while (list && list->type != PIPE)
-	{
-		if (!list->prev && list->type == WORD)
-		{
-			cont = ft_strdup(list->contents);
-			node = ft_lstnew(cont);
-			ft_lstadd_back(&words, node);
-		}
-		if (list->type == WORD && list->prev && list->prev->type != REDIRECTION)
-		{
-			cont = ft_strdup(list->contents);
-			node = ft_lstnew(cont);
-			ft_lstadd_back(&words, node);
-		}
-		list = list->next;
-	}
-	return (words);
-}
-
-t_command	*token_to_cmd_converter(t_token *list)
-{
-	t_token		*iterator;
-	t_command	*cmd;
-	t_command	*pipeline;
-	int			i;
-
-	if (!list)
-		return (NULL);
-	i = 0;
-	iterator = list;
-	cmd = malloc(sizeof(t_command));
-	pipeline = cmd;
-	while (iterator)
-		construct_command(&i, &iterator, &cmd);
-	if (cmd == pipeline)
-	{
-		free(pipeline);
-		pipeline = NULL;
-		clear_tokenlist(&list);
-		return (pipeline);
-	}
-	clear_tokenlist(&list);
-	free_cmdnode(cmd, pipeline);
-	return (pipeline);
 }

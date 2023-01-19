@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../inc/minishell.h"
 
 /**
  * @brief			Configure the input and output pipes for every command in
@@ -145,7 +145,7 @@ int	executor(t_command *first_cmd)
 	{
 		g_krsh.cmds = curr;
 		curr->argv = prepare_cmd_args(curr->words);
-		heredoc_handler(curr);
+		handle_heredoc(curr);
 		if (curr->argv)
 			exec_simple_cmd(curr);
 		curr = curr->next;

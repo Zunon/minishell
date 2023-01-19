@@ -52,7 +52,7 @@ t_command	*parse_input(const char *input)
 		ft_printf("Parse Error!\n");
 		return (NULL);
 	}
-	return (token_to_cmd_converter(list));
+	return (conv_tok_to_cmd(list));
 }
 
 /**

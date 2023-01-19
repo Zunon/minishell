@@ -15,14 +15,29 @@ NAME		=	minishell
 LIB			=	./lib/libft/libft.a
 CC			=	gcc -g
 RM			=	rm -rf
-SRCS		=	srcs/main.c srcs/executor.c srcs/exec_simple_cmd.c \
-				srcs/builtins1.c srcs/builtins2.c srcs/env_initiate.c \
-				srcs/env_utils.c srcs/dictionary.c srcs/dictionary_utils.c \
-				srcs/dictionary_cleanup.c srcs/redirect.c srcs/cleanup.c \
-				srcs/parser.c srcs/tokenizer.c srcs/expansions.c \
-				srcs/command_builder.c srcs/sanitizers.c srcs/tlist_ops.c \
+SRCS		=	srcs/main.c srcs/parser.c srcs/tokenizer.c srcs/expansions.c \
+				srcs/sanitizers.c srcs/tlist_ops.c \
 				srcs/merge_adjacent_words.c srcs/collapse_quotes.c \
-				srcs/heredoc.c srcs/heredoc_exec.c
+				srcs/executor/exec_simple_cmd.c srcs/executor/executor.c \
+				srcs/executor/redirect.c srcs/executor/signals.c \
+				srcs/executor/initiator/conv_tok_to_cmd.c \
+				srcs/executor/initiator/extract_redirects.c \
+				srcs/executor/initiator/extract_words.c \
+				srcs/executor/heredoc/construct_heredoc.c \
+				srcs/executor/heredoc/handle_heredoc.c \
+				srcs/executor/cleanup/cleanup.c \
+				srcs/executor/builtins/cd.c srcs/executor/builtins/echo.c \
+				srcs/executor/builtins/exit.c srcs/executor/builtins/pwd.c \
+				srcs/executor/builtins/exec_builtin.c \
+				srcs/executor/builtins/exec_builtin_parent.c \
+				srcs/executor/builtins/env/dictionary_cleanup.c \
+				srcs/executor/builtins/env/dictionary_utils.c \
+				srcs/executor/builtins/env/dictionary.c \
+				srcs/executor/builtins/env/env_initiate.c \
+				srcs/executor/builtins/env/env.c \
+				srcs/executor/builtins/env/export.c \
+				srcs/executor/builtins/env/unset.c \
+				srcs/executor/builtins/env/update_env.c
 OBJS		=	${SRCS:.c=.o}
 
 HEADER		=	./lib/libft/libft.h

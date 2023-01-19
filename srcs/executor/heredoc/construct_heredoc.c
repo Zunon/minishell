@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "../../../inc/minishell.h"
 
 t_bool	is_valid_id_starter(char character)
 {
@@ -25,7 +25,7 @@ t_bool	is_valid_id_starter(char character)
  * @param offset	unsigned integer for the offset from the beginning of string
  * @return	boolean indicating if there was a variable found
  */
-t_bool	has_valid_variable(char *string, size_t *offset)
+static t_bool	has_valid_variable(char *string, size_t *offset)
 {
 	char	*dollar;
 
@@ -49,7 +49,7 @@ t_bool	has_valid_variable(char *string, size_t *offset)
  * @param offset	offset of the name of the variable
  * @return	expanded form of the variable
  */
-char	*expand_and_increment(char *string, size_t *offset)
+static char	*expand_and_increment(char *string, size_t *offset)
 {
 	size_t	start;
 
@@ -65,7 +65,7 @@ char	*expand_and_increment(char *string, size_t *offset)
  * @param string to be transformed
  * @return	the input string with all valid variables
  */
-char	*expand_all_variables(char *string)
+static char	*expand_all_variables(char *string)
 {
 	char	*result;
 	size_t	begin_off;
@@ -98,7 +98,7 @@ char	*expand_all_variables(char *string)
  * 				- $? should be expanded
  * @note <CTRL-D> could take the delimiter's place.
  */
-char	*accumulate_heredoc(char *delimiter)
+char	*construct_heredoc(char *delimiter)
 {
 	char	*result;
 	char	*buffer;
