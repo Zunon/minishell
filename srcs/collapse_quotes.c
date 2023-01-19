@@ -39,9 +39,8 @@ t_token	*catch_unclosed_quotes(t_token **list)
 	return (*list);
 }
 
-t_token	*splice_quote(t_token *iterator, t_token *remainder, t_token *newtoken)
+void splice_quote(t_token **list, t_token *iterator, t_token *remainder, t_token *newtoken)
 {
-	t_token	*list;
 
 	if (iterator)
 		iterator->next = newtoken;
@@ -50,8 +49,7 @@ t_token	*splice_quote(t_token *iterator, t_token *remainder, t_token *newtoken)
 	if (remainder)
 		remainder->prev = newtoken;
 	if (!newtoken->prev)
-		list = newtoken;
-	return (list);
+		*list = newtoken;
 }
 
 void	find_closed_quote(enum e_token_type *quote_type, t_token **iterator,
@@ -93,10 +91,8 @@ t_token	*collapse_quotes(enum e_token_type quote_type, t_token *list)
 		tokens[4] = merge_quotation_tokens(tokens[1]);
 		if (!tokens[0])
 			list = tokens[4];
-		if (!tokens[3])
-			return (list);
 		clear_tokenlist(&tokens[1]);
-		list = splice_quote(tokens[0], tokens[3], tokens[4]);
+		splice_quote(&list, tokens[0], tokens[3], tokens[4]);
 		tokens[0] = tokens[3];
 	}
 	return (list);
