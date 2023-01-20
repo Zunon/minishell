@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 20:35:27 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/20 14:32:35 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 15:10:07 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,15 @@
 
 static void	ext_no_perms(const char *exec_path)
 {
+	ft_printf("a\n");
 	if (access(exec_path, X_OK) == -1)
 	{
+		ft_printf("aa\n");
 		perror("No execution permissions: ");
 		if (g_krsh.num_of_cmds > 1)
 			exit(NO_EXECUTION_PERMISSION);
 	}
+	ft_printf("aaa\n");
 	if (g_krsh.num_of_cmds > 1)
 		exit(NO_EXECUTION_PERMISSION);
 	g_krsh.status_code = NO_EXECUTION_PERMISSION;
@@ -75,18 +78,20 @@ static int	search_absolute_path(char **argv)
  */
 static int	search_relative_path(char **argv)
 {
-	if (ft_strchr(argv[0], '/') != 0 && execve(argv[0], argv, g_krsh.envp)
-		== -1)
+	if (ft_strchr(argv[0], '/') != 0 && access(argv[0], F_OK) != -1)
 	{
+		// execve(argv[0], argv, g_krsh.envp) == -1
 		if (access(argv[0], X_OK) == -1)
 		{
-			perror("Error during execution: ");
+			perror("No execution permission : ");
 			if (g_krsh.num_of_cmds > 1)
 				exit(NO_EXECUTION_PERMISSION);
 			g_krsh.status_code = NO_EXECUTION_PERMISSION;
-			return (ERROR_COMMAND_NOT_FOUND);
+			return (NO_EXECUTION_PERMISSION);
 		}
-		perror("Error during execution: ");
+		if (execve(argv[0], argv, g_krsh.envp) == -1)
+			perror("Error during execution : ");
+		g_krsh.status_code  = ERROR_DURING_EXECUTION;
 		return (ERROR_DURING_EXECUTION);
 	}
 	return (EXIT_FAILURE);
@@ -135,6 +140,7 @@ int	exec_simple_cmd(t_command *cmd)
 		if (perform_io_redirections(cmd) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 		ext_not_found(cmd);
+		exit_minishell(cmd, g_krsh.status_code);
 	}
 	else
 		signal(SIGINT, SIG_IGN);

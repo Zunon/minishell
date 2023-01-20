@@ -6,14 +6,14 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 20:39:38 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/20 14:32:01 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 15:11:28 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../inc/minishell.h"
 
 
-static t_bool	is_builtin(t_command *cmd)
+t_bool	is_builtin(t_command *cmd)
 {
 	if (!cmd->argv || !cmd->argv[0])
 		return (FALSE);

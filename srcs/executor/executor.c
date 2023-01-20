@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 18:11:11 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/15 19:08:39 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 15:13:18 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,10 +130,13 @@ int	executor(t_command *first_cmd)
 		close_used_pipes(curr->pipe_in);
 		curr = curr->next;
 	}
-	waitpid(g_krsh.last_child_pid, &status, 0);
-	g_krsh.status_code = WEXITSTATUS(status);
-	while (waitpid(-1, &status, 0) > -1)
-		;
+	if (!is_builtin(first_cmd) || g_krsh.num_of_cmds > 1)
+	{
+		waitpid(g_krsh.last_child_pid, &status, 0);
+		g_krsh.status_code = WEXITSTATUS(status);
+		while (waitpid(-1, &status, 0) > -1)
+			;
+	}
 	signal(SIGINT, &sig_handler);
 	signal(SIGQUIT, SIG_IGN);
 	return (g_krsh.status_code);

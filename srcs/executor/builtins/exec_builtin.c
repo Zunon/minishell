@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 19:39:34 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/19 19:39:34 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 15:03:46 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,6 @@ int	exec_builtin(t_command *cmd)
 		status = export(cmd);
 	if (g_krsh.num_of_cmds != 1 && status == EXIT_SUCCESS)
 		exit_minishell(cmd, status);
+	g_krsh.status_code = status;
 	return (status);
 }

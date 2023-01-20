@@ -49,6 +49,19 @@ static void	display_command(t_command *cmd)
 	}
 }
 
+static void control_d_exit()
+{
+	int i;
+
+	i = -1;
+	destroy_dict(g_krsh.env_mngr);
+	destroy_dict(g_krsh.declared);
+	while (g_krsh.envp[++i])
+		free(g_krsh.envp[i]);
+	free(g_krsh.envp);
+	exit(EXIT_SUCCESS);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char		*s;
@@ -69,7 +82,7 @@ int	main(int argc, char **argv, char **envp)
 		if (s && *s != '\0')
 			add_history(s);
 		if (!s)
-			ft_exit(NULL);
+			control_d_exit();
 		cmd = parse_input(s);
 		executor(cmd);
 		free_commands(cmd);

@@ -28,7 +28,7 @@
 # include <fcntl.h>
 # include <errno.h>
 
-# define ERROR_DURING_EXECUTION (-99)
+# define ERROR_DURING_EXECUTION (126)
 # define NO_EXECUTION_PERMISSION 126
 # define ERROR_COMMAND_NOT_FOUND 127
 # define CONTROL_C_INTERRUPT 1
@@ -149,6 +149,7 @@ char				*construct_heredoc(char *delimiter);
 void				handle_heredoc(t_command *cmd);
 void				exit_minishell(t_command *cmd, int status);
 t_dict				*combine_dictionary(t_dict *d1, t_dict *d2);
-extern t_shell g_krsh;
+t_bool				is_builtin(t_command *cmd);
+	extern t_shell g_krsh;
 
 #endif
