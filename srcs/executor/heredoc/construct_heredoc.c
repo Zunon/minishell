@@ -100,7 +100,7 @@ void heredoc_sig_handler(int sig)
 		g_krsh.blocked = TRUE;
 		rl_on_new_line();
 		rl_redisplay();
-		write(STDOUT_FILENO, "  \n", 4);
+		write(STDERR_FILENO, "  \n", 4);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();

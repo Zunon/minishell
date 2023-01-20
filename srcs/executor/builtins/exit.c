@@ -40,5 +40,5 @@ void	ft_exit(t_command *cmd)
 		exit_minishell(cmd, x);
 	}
 	if (cmd->argv[2])
-		ft_printf("exit: too many arguments!\n");
+		write(STDERR_FILENO, "exit: too many arguments!\n", 27);
 }

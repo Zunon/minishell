@@ -44,12 +44,12 @@ t_command	*parse_input(const char *input)
 	list = tokenize((char *)input);
 	if (list && list->type == ERROR)
 	{
-		ft_printf("Token Error: %s\n", list->contents);
+		write(STDERR_FILENO, "Token Error!\n", 13);
 		return (NULL);
 	}
 	else if (!parse_pipeline(list))
 	{
-		ft_printf("Parse Error!\n");
+		write(STDERR_FILENO, "Parse Error!\n", 14);
 		return (NULL);
 	}
 	return (conv_tok_to_cmd(list));

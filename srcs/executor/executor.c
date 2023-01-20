@@ -108,8 +108,8 @@ static int get_signal_code(int code)
 {
 	if (code == SIGINT)
 		return (130);
-	if (code == SIGQUIT)
-		return (131);
+//	if (code == SIGQUIT)
+	return (131);
 }
 
 

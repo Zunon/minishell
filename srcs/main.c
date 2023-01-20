@@ -78,7 +78,8 @@ int	main(int argc, char **argv, char **envp)
 	g_krsh.status_code = EXIT_SUCCESS;
 	while (TRUE)
 	{
-		s = readline("〈krsh〉λ ⇾  ");
+		write(STDERR_FILENO, "〈krsh〉λ ⇾  ", 11);
+		s = readline("");
 		if (s && *s != '\0')
 			add_history(s);
 		if (!s)
