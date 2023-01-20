@@ -152,6 +152,6 @@ int					handle_heredoc(t_command *cmd);
 void				exit_minishell(t_command *cmd, int status);
 t_dict				*combine_dictionary(t_dict *d1, t_dict *d2);
 t_bool				is_builtin(t_command *cmd);
-	extern t_shell g_krsh;
+extern t_shell g_krsh;
 
 #endif
