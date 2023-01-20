@@ -65,7 +65,7 @@ int	main(int argc, char **argv, char **envp)
 	g_krsh.declared = create_dict(30);
 	while (TRUE)
 	{
-		s = readline("minishell ^-^ : ");
+		s = readline("〈krsh〉λ ⇾  ");
 		if (s && *s != '\0')
 			add_history(s);
 		if (!s)

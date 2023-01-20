@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 20:35:27 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/15 19:14:46 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 14:32:35 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,13 @@ static void	ext_no_perms(const char *exec_path)
 {
 	if (access(exec_path, X_OK) == -1)
 	{
-		perror("Error during execution of program: ");
+		perror("No execution permissions: ");
 		if (g_krsh.num_of_cmds > 1)
 			exit(NO_EXECUTION_PERMISSION);
 	}
+	if (g_krsh.num_of_cmds > 1)
+		exit(NO_EXECUTION_PERMISSION);
+	g_krsh.status_code = NO_EXECUTION_PERMISSION;
 }
 
 /**
@@ -49,6 +52,7 @@ static int	search_absolute_path(char **argv)
 				g_krsh.envp) == -1)
 		{
 			ext_no_perms(exec_path);
+			g_krsh.status_code = NO_EXECUTION_PERMISSION;
 			return (ERROR_DURING_EXECUTION);
 		}
 		free(exec_path);

@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 19:27:24 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/20 12:34:43 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 14:02:37 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,27 @@ static int	export_no_args(void)
 	return (EXIT_SUCCESS);
 }
 
+t_bool valid_identifier(char *variable)
+{
+	if (ft_isalpha(variable[0]) || variable[0] == '_')
+		return (TRUE);
+	ft_printf("minishell: export: `?=hey': not a valid identifier\n");
+	return (FALSE);
+}
+
 static void	export_var(char *argument, int pos, char *key, char *value)
 {
 	if (argument)
 	{
+		if (!valid_identifier(argument))
+			return ;
 		pos = find_pos(argument, '=');
 		if (pos == -1)
-			insert_into_dict(&g_krsh.declared, argument, NULL);
+		{
+			if (!retrieve_from_dict(g_krsh.declared, argument))
+				if (!retrieve_from_dict(g_krsh.env_mngr, argument))
+					insert_into_dict(&g_krsh.declared, argument, NULL);
+		}
 		else
 		{
 			key = ft_substr(argument, 0, pos);

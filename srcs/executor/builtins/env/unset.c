@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 19:27:22 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/19 19:27:22 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 13:54:39 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ int	unset(char **argv)
 		return (EXIT_SUCCESS);
 	while (argv[i])
 	{
-		remove_from_dict(g_krsh.env_mngr, argv[1]);
+		remove_from_dict(g_krsh.env_mngr, argv[i]);
+		remove_from_dict(g_krsh.declared, argv[i]);
 		i++;
 	}
 	update_env(g_krsh.env_mngr);

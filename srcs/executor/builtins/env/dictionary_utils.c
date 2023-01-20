@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 12:33:22 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/04 21:49:13 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 13:50:37 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,9 @@ t_dict	*duplicate_dictionary(t_dict *dict)
 		return (NULL);
 	while (i < dict->size)
 	{
-		insert_into_dict(&new_table, dict->table[i]->key,
-			dict->table[i]->value);
+		if (dict->table[i])
+			insert_into_dict(&new_table, dict->table[i]->key,
+				dict->table[i]->value);
 		i++;
 	}
 	return (new_table);
@@ -135,7 +136,7 @@ char	**dict_to_string_arr(t_dict *dict)
 			strs[j] = ft_strjoin(temp, dict->table[i]->value);
 			free(temp);
 			j++;
-		}		
+		}
 		i++;
 	}
 	strs[j] = NULL;

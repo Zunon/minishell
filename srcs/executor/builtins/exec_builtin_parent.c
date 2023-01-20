@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins2.c                                        :+:      :+:    :+:   */
+/*   exec_builtin_parent.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 20:39:38 by rriyas            #+#    #+#             */
-/*   Updated: 2022/10/23 17:45:58 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 14:32:01 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	exec_builtin_parent(t_command *cmd)
 		{
 			dup2(g_krsh.stdout_old, STDOUT_FILENO);
 			close(g_krsh.stdout_old);
+			g_krsh.status_code = EXIT_SUCCESS;
 			return (EXIT_SUCCESS);
 		}
 		dup2(g_krsh.stdout_old, STDOUT_FILENO);
