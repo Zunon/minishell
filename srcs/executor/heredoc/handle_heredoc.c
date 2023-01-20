@@ -69,17 +69,20 @@ int handle_heredoc(t_command *cmd)
 
 	index = 0;
 	construct_heredoc_pipes(cmd);
-	while (cmd)
+	while (cmd && !g_krsh.blocked)
 	{
 		iterator = cmd->redirects;
-		while (iterator)
+		while (iterator && !g_krsh.blocked)
 		{
 			if (iterator->direction == HERE_DOC)
 			{
 				buffer = construct_heredoc(iterator->here_doc_delim);
+				if (g_krsh.blocked)
+					break ;
 				iterator->here_doc_pipe = index;
 				iterator->redirectee = NULL;
 				save_heredoc_to_pipe(index, buffer);
+				free(buffer);
 				index++;
 			}
 			iterator = iterator->next;

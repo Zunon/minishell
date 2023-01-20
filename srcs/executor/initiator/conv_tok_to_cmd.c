@@ -70,7 +70,7 @@ t_command	*conv_tok_to_cmd(t_token *list)
 		return (NULL);
 	i = 0;
 	iterator = list;
-	cmd = malloc(sizeof(t_command));
+	cmd = ft_calloc(1, sizeof(t_command));
 	pipeline = cmd;
 	while (iterator)
 		construct_command(&i, &iterator, &cmd);

@@ -28,7 +28,7 @@ enum e_token_type	get_token_type(char ch)
 		return (DOUBLE_QUOTE);
 	if (ch == '$')
 		return (VARIABLE);
-	if (ft_iswhitespace(ch))
+	if (ch == ' ' || (ch >= '\t' && ch <= 12))
 		return (WHITESPACE);
 	if (ch == '|')
 		return (PIPE);

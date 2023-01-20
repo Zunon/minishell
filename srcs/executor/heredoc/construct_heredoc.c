@@ -52,11 +52,16 @@ static t_bool	has_valid_variable(char *string, size_t *offset)
 static char	*expand_and_increment(char *string, size_t *offset)
 {
 	size_t	start;
+	char 	*name;
+	char 	*value;
 
 	start = *offset;
 	while (string[*offset] && is_valid_id_starter(string[*offset]))
 		*offset = *offset + 1;
-	return (expand(ft_substr(string, start, *offset - start)));
+	name = ft_substr(string, start, *offset - start);
+	value = expand(name);
+	free(name);
+	return (value);
 }
 
 /**
@@ -76,13 +81,15 @@ static char	*expand_all_variables(char *string)
 	result = ft_calloc(1, sizeof(char));
 	while (has_valid_variable(string, &offset))
 	{
-		result = ft_strjoin(result, ft_substr(string, begin_off, offset
-					- begin_off - 1));
-		result = ft_strjoin(result, expand_and_increment(string, &offset));
+		result = join_and_free(result, ft_substr(string, begin_off, offset
+					- begin_off - 1), TRUE, TRUE);
+		result = join_and_free(result, expand_and_increment(string, &offset),
+					TRUE, TRUE);
 		begin_off = offset;
 	}
-	result = ft_strjoin(result, ft_substr(string, begin_off, offset
-				- begin_off));
+	result = join_and_free(result, ft_substr(string, begin_off, offset
+				- begin_off), TRUE, TRUE);
+	free(string);
 	return (result);
 }
 
@@ -135,10 +142,13 @@ char	*construct_heredoc(char *delimiter)
 		if (found_delimiter)
 			break ;
 		buffer = expand_all_variables(buffer);
-		buffer = ft_strjoin(buffer, "\n");
-		temp = result;
-		result = ft_strjoin(result, buffer);
-		free(temp);
+		buffer = join_and_free(buffer, "\n", TRUE, FALSE);
+		result = join_and_free(result, buffer, TRUE, TRUE);
+	}
+	if (g_krsh.blocked)
+	{
+		free(result);
+		result = NULL;
 	}
 	signal(SIGINT, &sig_handler);
 	return (result);

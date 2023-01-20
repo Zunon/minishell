@@ -31,7 +31,8 @@ static void	free_redirects(t_redirect *redir)
 		redir = redir->next;
 		if (temp->direction == HERE_DOC)
 			free(temp->here_doc_delim);
-		free(temp->redirectee);
+		if (temp->redirectee)
+			free(temp->redirectee);
 		free(temp);
 	}
 }
@@ -47,7 +48,6 @@ void	free_commands(t_command **cmd)
 	t_command	*temp;
 	int			i;
 
-	i = -1;
 	if (!cmd || !*cmd)
 		return ;
 	while (*cmd)
@@ -56,9 +56,18 @@ void	free_commands(t_command **cmd)
 		*cmd = (*cmd)->next;
 		free_redirects(temp->redirects);
 		ft_lstclear(&(temp->words), free);
-		free(temp->argv);
+		if (temp->argv)
+			free(temp->argv);
 		free(temp);
 	}
+	i = 0;
+	while (i < g_krsh.heredoc_count)
+	{
+		free(g_krsh.heredocs[i]);
+		i++;
+	}
+	if (g_krsh.heredoc_count > 0)
+		free(g_krsh.heredocs);
 	(*cmd) = NULL;
 }
 
@@ -73,13 +82,5 @@ void exit_minishell(t_command *cmd, int status)
 	while (g_krsh.envp[++i])
 		free(g_krsh.envp[i]);
 	free(g_krsh.envp);
-	i = 0;
-	while (i < g_krsh.heredoc_count)
-	{
-		free(g_krsh.heredocs[i]);
-		i++;
-	}
-	if (g_krsh.heredoc_count > 0)
-		free(g_krsh.heredocs);
 	exit(status);
 }

@@ -46,7 +46,7 @@ static void	push_redirection(t_token **list, t_redirect **iterator)
 			(*iterator)->redirectee = ft_strdup((*list)->next->contents);
 			(*iterator)->flags = get_file_open_flags((*iterator)->direction);
 		}
-		(*iterator)->next = malloc(sizeof(t_redirect));
+		(*iterator)->next = ft_calloc(1, sizeof(t_redirect));
 		(*iterator) = (*iterator)->next;
 		(*list) = (*list)->next;
 	}
@@ -61,7 +61,7 @@ t_redirect	*extract_redirects(t_token *list)
 
 	if (!list)
 		return (NULL);
-	redirs = malloc(sizeof(t_redirect));
+	redirs = ft_calloc(1, sizeof(t_redirect));
 	iterator = redirs;
 	while (list && list->type != PIPE)
 		push_redirection(&list, &iterator);
