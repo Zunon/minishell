@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 19:19:25 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/20 15:24:45 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 20:28:40 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	ft_exit(char **argv)
 			dup2(g_krsh.stdout_old, STDOUT_FILENO);
 			close(g_krsh.stdout_old);
 		}
-		exit_minishell(NULL, 0);
+		exit_minishell(NULL, g_krsh.status_code);
 	}
 	if (argv[1])
 	{

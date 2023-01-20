@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 21:21:53 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/05 18:35:46 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 18:50:18 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,20 +33,20 @@ void	destroy_pair(t_pair *p)
  *
  * @param t					Dictionary to destroy
  */
-void	destroy_dict(t_dict *t)
+void	destroy_dict(t_dict **t)
 {
 	int	i;
 
 	i = 0;
-	if (!t || !t->table || t->size == 0)
+	if (!(*t) || !(*t)->table)
 		return ;
-	while (i < t->size)
+	while (i < (*t)->capacity)
 	{
-		destroy_pair(t->table[i]);
+		destroy_pair((*t)->table[i]);
 		i++;
 	}
-	free(t->table);
-	t->table = NULL;
-	t->size = 0;
-	free(t);
+	free((*t)->table);
+	(*t)->table = NULL;
+	(*t)->size = 0;
+	free(*t);
 }

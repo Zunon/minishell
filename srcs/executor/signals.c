@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 19:49:43 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/19 19:49:43 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 21:01:16 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,6 @@ void	sig_handler(int sig)
 		rl_redisplay();
 		g_krsh.status_code = CONTROL_C_INTERRUPT;
 	}
-	if (sig == 4)
-	{
-		destroy_dict(g_krsh.env_mngr);
-		while (g_krsh.envp[++i])
-			free(g_krsh.envp[i]);
-		free(g_krsh.envp);
-		exit(EXIT_SUCCESS);
-	}
+	// if (sig == 4)
+		// exit_minishell(g_krsh.cmds, EXIT_SUCCESS);
 }

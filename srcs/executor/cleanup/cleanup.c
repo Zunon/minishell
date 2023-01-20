@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 22:04:06 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/20 15:24:57 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 20:26:06 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,24 +42,22 @@ static void	free_redirects(t_redirect *redir)
  *
  * @param cmd		Linked list of commands
  */
-void	free_commands(t_command *cmd)
+void	free_commands(t_command **cmd)
 {
 	t_command	*temp;
 	int			i;
 
-	i = 0;
-	if (!cmd)
+	i = -1;
+	if (!cmd || !*cmd)
 		return ;
-	while (cmd)
+	while (*cmd)
 	{
-		temp = cmd;
-		cmd = cmd->next;
+		temp = *cmd;
+		*cmd = (*cmd)->next;
 		free_redirects(temp->redirects);
 		ft_lstclear(&(temp->words), free);
-		if (temp->argv)
-			free(temp->argv);
-		if (temp)
-			free(temp);
+		free(temp->argv);
+		free(temp);
 	}
 }
 
@@ -67,11 +65,20 @@ void exit_minishell(t_command *cmd, int status)
 {
 	int i;
 
-	i = 0;
-	destroy_dict(g_krsh.env_mngr);
-	destroy_dict(g_krsh.declared);
+	i = -1;
+	free_commands(&g_krsh.cmds);
+	destroy_dict(&g_krsh.env_mngr);
+	destroy_dict(&g_krsh.declared);
 	while (g_krsh.envp[++i])
 		free(g_krsh.envp[i]);
 	free(g_krsh.envp);
+	i = 0;
+	while (i < g_krsh.heredoc_count)
+	{
+		free(g_krsh.heredocs[i]);
+		i++;
+	}
+	if (g_krsh.heredoc_count > 0)
+		free(g_krsh.heredocs);
 	exit(status);
 }

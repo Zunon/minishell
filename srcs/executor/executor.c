@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 18:11:11 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/20 15:13:18 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 21:10:31 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ int	executor(t_command *first_cmd)
 	handle_heredoc(curr);
 	while (curr)
 	{
-		g_krsh.cmds = curr;
 		curr->argv = prepare_cmd_args(curr->words);
 		if (curr->pipe_out != NO_PIPE)
 			pipe(g_krsh.pipes[curr->pipe_out]);
@@ -133,9 +132,13 @@ int	executor(t_command *first_cmd)
 	if (!is_builtin(first_cmd) || g_krsh.num_of_cmds > 1)
 	{
 		waitpid(g_krsh.last_child_pid, &status, 0);
-		g_krsh.status_code = WEXITSTATUS(status);
+		if (WIFSIGNALED(status))
+			g_krsh.status_code = WTERMSIG((status));
+		else
+			g_krsh.status_code = WEXITSTATUS(status);
 		while (waitpid(-1, &status, 0) > -1)
 			;
+
 	}
 	signal(SIGINT, &sig_handler);
 	signal(SIGQUIT, SIG_IGN);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   env_initiate.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 11:51:12 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/05 18:37:26 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 18:48:44 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,5 +98,6 @@ t_dict	*generate_env_manager(char **envp)
 	}
 	update_shlvl(env_manager);
 	g_krsh.envp = dict_to_string_arr(env_manager);
+	g_krsh.declared = create_dict(30);
 	return (env_manager);
 }

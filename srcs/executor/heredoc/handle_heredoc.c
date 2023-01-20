@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   heredoc_exec.c                                     :+:      :+:    :+:   */
+/*   handle_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 20:10:48 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/17 20:10:48 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 18:27:49 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int save_heredoc_to_pipe(int index, char *lines)
 	return (EXIT_SUCCESS);
 }
 
-static int construct_heredoc_pipes(t_command *pipeline)
+static void construct_heredoc_pipes(t_command *pipeline)
 {
 	t_command *cmd;
 	t_redirect *iterator;
@@ -48,6 +48,9 @@ static int construct_heredoc_pipes(t_command *pipeline)
 		}
 		cmd = cmd->next;
 	}
+	g_krsh.heredoc_count = heredoc_count;
+	if (heredoc_count == 0)
+		return ;
 	g_krsh.heredocs = malloc(sizeof(int*) * heredoc_count);
 	i = 0;
 	while (i < heredoc_count)

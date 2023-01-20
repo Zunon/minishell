@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   extract_redirs.c                                   :+:      :+:    :+:   */
+/*   extract_redirects.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 19:33:02 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/19 19:33:02 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 20:55:23 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	get_file_open_flags(enum e_direction direction)
 	if (direction == HERE_DOC)
 		return (O_CREAT | O_WRONLY);
 	if (direction == INPUT)
-		return (O_CREAT | O_RDONLY);
+		return (O_RDONLY);
 	if (direction == OUTPUT)
 		return (O_CREAT | O_WRONLY | O_TRUNC);
 	return (O_CREAT | O_WRONLY | O_APPEND);

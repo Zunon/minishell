@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 20:35:27 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/20 15:10:07 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 20:43:46 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ static int	search_absolute_path(char **argv)
 	char	*exec_path;
 	char	**paths;
 	t_pair	*path;
+	char	*temp;
 
 	path = retrieve_from_dict(g_krsh.env_mngr, "PATH");
 	if (!path || !path->value)
@@ -50,16 +51,22 @@ static int	search_absolute_path(char **argv)
 	i = 0;
 	while (paths[i])
 	{
-		exec_path = ft_strjoin(ft_strjoin(paths[i], "/"), argv[0]);
+		temp = ft_strjoin(paths[i], "/");
+		exec_path = ft_strjoin(temp, argv[0]);
 		if (access(exec_path, F_OK) != -1 && execve(exec_path, argv,
 				g_krsh.envp) == -1)
 		{
+			free(exec_path);
+			free(temp);
+			while (paths[i])
+				free(paths[i++]);
 			ext_no_perms(exec_path);
 			g_krsh.status_code = NO_EXECUTION_PERMISSION;
 			return (ERROR_DURING_EXECUTION);
 		}
 		free(exec_path);
 		free(paths[i]);
+		free(temp);
 		i++;
 	}
 	free(paths);
@@ -138,7 +145,7 @@ int	exec_simple_cmd(t_command *cmd)
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 		if (perform_io_redirections(cmd) == EXIT_FAILURE)
-			return (EXIT_FAILURE);
+			exit_minishell(cmd, EXIT_FAILURE);
 		ext_not_found(cmd);
 		exit_minishell(cmd, g_krsh.status_code);
 	}

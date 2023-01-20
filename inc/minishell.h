@@ -91,6 +91,7 @@ typedef struct s_shell
 	int			status_code;
 	int			pipes[2][2];
 	int			**heredocs;
+	int			heredoc_count;
 	t_dict		*env_mngr;
 	t_dict		*declared;
 	char		**envp;
@@ -111,7 +112,7 @@ int					cd(char **cmd);
 int					pwd(char **cmd);
 void				ft_exit(char **cmd);
 int					exec_builtin(t_command *cmd);
-void				free_commands(t_command *cmd);
+void				free_commands(t_command **cmd);
 t_dict				*generate_env_manager(char **envp);
 int					env(void);
 int					export(t_command *cmd);

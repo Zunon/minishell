@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 19:35:44 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/19 19:35:44 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 20:17:54 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,11 @@
 t_list	*extract_words(t_token *list)
 {
 	t_list	*words;
-	t_list	*iterator;
 	t_list	*node;
 	char	*cont;
-	
+
 	if (!list)
 		return (NULL);
-	iterator = words;
 	words = NULL;
 	while (list && list->type != PIPE)
 	{

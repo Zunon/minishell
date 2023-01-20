@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 22:00:33 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/05 16:05:15 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 20:42:32 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
  */
 static int	redirect_input(t_command *cmd, t_redirect *current)
 {
-	cmd->fd_in = open(current->redirectee, current->flags, 0777);
+	cmd->fd_in = open(current->redirectee, current->flags, 0644);
 	if (cmd->fd_in == -1)
 	{
 		perror("CHILD - File does not exist!");
@@ -50,7 +50,7 @@ static int	redirect_input(t_command *cmd, t_redirect *current)
  */
 static int	redirect_output(t_command *cmd, t_redirect *current)
 {
-	cmd->fd_out = open(current->redirectee, current->flags, 0777);
+	cmd->fd_out = open(current->redirectee, current->flags, 0644);
 	if (cmd->fd_out == -1)
 	{
 		perror("CHILD - Error while opening file");

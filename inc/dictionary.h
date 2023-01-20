@@ -60,6 +60,6 @@ char	**dict_to_string_arr(t_dict *dict);
 
 //dictionary_cleanup.c
 void	destroy_pair(t_pair *p);
-void	destroy_dict(t_dict *t);
+void	destroy_dict(t_dict **t);
 
 #endif

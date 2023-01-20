@@ -153,6 +153,6 @@ t_dict	*resize_dict(t_dict *t, int newCapacity)
 		insert_into_dict(&new_table, t->table[i]->key, t->table[i]->value);
 		i++;
 	}
-	destroy_dict(t);
+	destroy_dict(&t);
 	return (new_table);
 }

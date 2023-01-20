@@ -54,8 +54,8 @@ static void control_d_exit()
 	int i;
 
 	i = -1;
-	destroy_dict(g_krsh.env_mngr);
-	destroy_dict(g_krsh.declared);
+	destroy_dict(&g_krsh.env_mngr);
+	destroy_dict(&g_krsh.declared);
 	while (g_krsh.envp[++i])
 		free(g_krsh.envp[i]);
 	free(g_krsh.envp);
@@ -75,17 +75,17 @@ int	main(int argc, char **argv, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	i = -1;
 	g_krsh.env_mngr = generate_env_manager(envp);
-	g_krsh.declared = create_dict(30);
+	g_krsh.status_code = EXIT_SUCCESS;
 	while (TRUE)
 	{
 		s = readline("〈krsh〉λ ⇾  ");
 		if (s && *s != '\0')
 			add_history(s);
 		if (!s)
-			control_d_exit();
+			exit_minishell(cmd, g_krsh.status_code);
 		cmd = parse_input(s);
-		executor(cmd);
-		free_commands(cmd);
 		free(s);
+		executor(cmd);
+		free_commands(&cmd);
 	}
 }

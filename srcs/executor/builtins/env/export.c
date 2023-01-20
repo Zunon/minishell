@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 19:27:24 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/20 14:02:37 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 18:38:37 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ static int	export_no_args(void)
 			ft_printf("\n");
 		i++;
 	}
-	destroy_dict(sorted);
-	destroy_dict(merged);
+	destroy_dict(&sorted);
+	destroy_dict(&merged);
 	return (EXIT_SUCCESS);
 }
 
