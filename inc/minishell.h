@@ -148,7 +148,7 @@ void				update_env(t_dict *env_manager);
 char				*construct_heredoc(char *delimiter);
 void				handle_heredoc(t_command *cmd);
 void				exit_minishell(t_command *cmd, int status);
-
-extern t_shell	g_krsh;
+t_dict				*combine_dictionary(t_dict *d1, t_dict *d2);
+extern t_shell g_krsh;
 
 #endif

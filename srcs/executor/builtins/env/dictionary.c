@@ -82,7 +82,7 @@ void	insert_into_dict(t_dict **t, char *key, char *value)
 
 	index = 0;
 	exists = retrieve_from_dict(*t, key);
-	if (exists)
+	if (exists && value)
 	{
 		free(exists->value);
 		exists->value = ft_strdup(value);
@@ -96,7 +96,8 @@ void	insert_into_dict(t_dict **t, char *key, char *value)
 	if (!(*t)->table[index])
 		return ;
 	(*t)->table[index]->key = ft_strdup(key);
-	(*t)->table[index]->value = ft_strdup(value);
+	(*t)->table[index]->value = NULL;
+	if (value)(*t)->table[index]->value = ft_strdup(value);
 	(*t)->size++;
 }
 

@@ -62,6 +62,7 @@ int	main(int argc, char **argv, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	i = -1;
 	g_krsh.env_mngr = generate_env_manager(envp);
+	g_krsh.declared = create_dict(30);
 	while (TRUE)
 	{
 		s = readline("minishell ^-^ : ");
