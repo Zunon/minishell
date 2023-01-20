@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 20:10:48 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/20 18:27:49 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 22:56:22 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ static void construct_heredoc_pipes(t_command *pipeline)
 	}
 	g_krsh.heredoc_count = heredoc_count;
 	if (heredoc_count == 0)
-		return ;
-	g_krsh.heredocs = malloc(sizeof(int*) * heredoc_count);
+		return;
+	g_krsh.heredocs = malloc(sizeof(int *) * heredoc_count);
 	i = 0;
 	while (i < heredoc_count)
 	{
@@ -60,11 +60,12 @@ static void construct_heredoc_pipes(t_command *pipeline)
 	}
 }
 
-void	handle_heredoc(t_command *cmd)
+
+int handle_heredoc(t_command *cmd)
 {
-	t_redirect	*iterator;
-	char		*buffer;
-	int			index;
+	t_redirect *iterator;
+	char *buffer;
+	int index;
 
 	index = 0;
 	construct_heredoc_pipes(cmd);
@@ -85,4 +86,7 @@ void	handle_heredoc(t_command *cmd)
 		}
 		cmd = cmd->next;
 	}
+	if (g_krsh.blocked == TRUE)
+		return (CONTROL_C_INTERRUPT);
+	return (EXIT_SUCCESS);
 }

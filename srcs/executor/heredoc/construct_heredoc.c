@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   heredoc.c                                          :+:      :+:    :+:   */
+/*   construct_heredoc.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
+/*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 11:02:45 by kalmheir          #+#    #+#             */
-/*   Updated: 2023/01/17 11:02:50 by kalmheir         ###   ########.fr       */
+/*   Updated: 2023/01/20 22:56:45 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,22 @@ static char	*expand_all_variables(char *string)
 	return (result);
 }
 
+void heredoc_sig_handler(int sig)
+{
+	if (sig == SIGINT)
+	{
+		g_krsh.blocked = TRUE;
+		rl_on_new_line();
+		rl_redisplay();
+		write(STDOUT_FILENO, "  \n", 4);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+		ft_printf("Press enter to exit:");
+		g_krsh.status_code = CONTROL_C_INTERRUPT;
+	}
+}
+
 /**
  * @brief	Should work like gnl, looking for the delimiter using the prompt
  * 			expands variables within the prompts with no limits
@@ -109,7 +125,8 @@ char	*construct_heredoc(char *delimiter)
 	found_delimiter = FALSE;
 	delim_length = ft_strlen(delimiter);
 	result = ft_strdup("");
-	while (!found_delimiter)
+	signal(SIGINT, &heredoc_sig_handler);
+	while (!found_delimiter && !g_krsh.blocked)
 	{
 		buffer = readline("> ");
 		if (!buffer)
@@ -123,5 +140,6 @@ char	*construct_heredoc(char *delimiter)
 		result = ft_strjoin(result, buffer);
 		free(temp);
 	}
+	signal(SIGINT, &sig_handler);
 	return (result);
 }

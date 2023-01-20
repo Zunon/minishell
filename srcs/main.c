@@ -85,6 +85,7 @@ int	main(int argc, char **argv, char **envp)
 			exit_minishell(cmd, g_krsh.status_code);
 		cmd = parse_input(s);
 		free(s);
+		g_krsh.blocked = FALSE;
 		executor(cmd);
 		free_commands(&cmd);
 	}

@@ -97,6 +97,7 @@ typedef struct s_shell
 	char		**envp;
 	pid_t		last_child_pid;
 	int			stdout_old;
+	t_bool		blocked;
 }	t_shell;
 
 typedef struct s_token
@@ -147,7 +148,7 @@ t_list				*extract_words(t_token *list);
 int					exec_builtin_parent(t_command *cmd);
 void				update_env(t_dict *env_manager);
 char				*construct_heredoc(char *delimiter);
-void				handle_heredoc(t_command *cmd);
+int					handle_heredoc(t_command *cmd);
 void				exit_minishell(t_command *cmd, int status);
 t_dict				*combine_dictionary(t_dict *d1, t_dict *d2);
 t_bool				is_builtin(t_command *cmd);

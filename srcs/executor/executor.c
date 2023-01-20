@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 18:11:11 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/20 21:10:31 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 22:50:07 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,9 @@ int	executor(t_command *first_cmd)
 	curr = first_cmd;
 	if (!first_cmd)
 		return (EXIT_SUCCESS);
+	if (handle_heredoc(first_cmd) == CONTROL_C_INTERRUPT)
+		return (CONTROL_C_INTERRUPT);
 	configure_pipes(first_cmd);
-	handle_heredoc(curr);
 	while (curr)
 	{
 		curr->argv = prepare_cmd_args(curr->words);
