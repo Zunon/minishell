@@ -32,6 +32,4 @@ void	sig_handler(int sig)
 		rl_redisplay();
 		g_krsh.status_code = CONTROL_C_INTERRUPT;
 	}
-	// if (sig == 4)
-		// exit_minishell(g_krsh.cmds, EXIT_SUCCESS);
 }

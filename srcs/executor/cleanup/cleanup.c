@@ -59,6 +59,7 @@ void	free_commands(t_command **cmd)
 		free(temp->argv);
 		free(temp);
 	}
+	(*cmd) = NULL;
 }
 
 void exit_minishell(t_command *cmd, int status)
@@ -66,7 +67,7 @@ void exit_minishell(t_command *cmd, int status)
 	int i;
 
 	i = -1;
-	free_commands(&g_krsh.cmds);
+	free_commands(&cmd);
 	destroy_dict(&g_krsh.env_mngr);
 	destroy_dict(&g_krsh.declared);
 	while (g_krsh.envp[++i])

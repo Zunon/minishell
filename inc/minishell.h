@@ -111,7 +111,7 @@ typedef struct s_token
 int					echo(char **cmd);
 int					cd(char **cmd);
 int					pwd(char **cmd);
-void				ft_exit(char **cmd);
+void				ft_exit(t_command *cmd);
 int					exec_builtin(t_command *cmd);
 void				free_commands(t_command **cmd);
 t_dict				*generate_env_manager(char **envp);
@@ -152,6 +152,7 @@ int					handle_heredoc(t_command *cmd);
 void				exit_minishell(t_command *cmd, int status);
 t_dict				*combine_dictionary(t_dict *d1, t_dict *d2);
 t_bool				is_builtin(t_command *cmd);
+void				display_command(t_command *cmd);
 extern t_shell g_krsh;
 
 #endif

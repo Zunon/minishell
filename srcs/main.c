@@ -33,7 +33,7 @@ static void	print_cmd_redirs(t_command *cmd, t_list *iter)
 	}
 }
 
-static void	display_command(t_command *cmd)
+void	display_command(t_command *cmd)
 {
 	if (!cmd)
 	{

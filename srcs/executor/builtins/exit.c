@@ -16,29 +16,29 @@
  * @brief		Exit from minishell safely
  *
  */
-void	ft_exit(char **argv)
+void	ft_exit(t_command *cmd)
 {
 	int	x;
 
-	if (!argv || !argv[1])
+	if (!(cmd->argv) || !(cmd->argv[1]))
 	{
 		if (g_krsh.num_of_cmds == 1)
 		{
 			dup2(g_krsh.stdout_old, STDOUT_FILENO);
 			close(g_krsh.stdout_old);
 		}
-		exit_minishell(NULL, g_krsh.status_code);
+		exit_minishell(cmd, g_krsh.status_code);
 	}
-	if (argv[1])
+	if (cmd->argv[1])
 	{
-		x = ft_atoi(argv[1]);
+		x = ft_atoi(cmd->argv[1]);
 		if (g_krsh.num_of_cmds == 1)
 		{
 			dup2(g_krsh.stdout_old, STDOUT_FILENO);
 			close(g_krsh.stdout_old);
 		}
-		exit_minishell(NULL, x);
+		exit_minishell(cmd, x);
 	}
-	if (argv[2])
+	if (cmd->argv[2])
 		ft_printf("exit: too many arguments!\n");
 }

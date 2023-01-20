@@ -48,6 +48,7 @@ lib/libft
 *.idb
 *.pdb
 .vscode
+valg_errors.log
 
 # Kernel Module Compile Results
 *.mod*
