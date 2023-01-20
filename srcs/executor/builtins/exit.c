@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 19:19:25 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/19 19:19:25 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/20 15:24:45 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	ft_exit(char **argv)
 			dup2(g_krsh.stdout_old, STDOUT_FILENO);
 			close(g_krsh.stdout_old);
 		}
-		exit(0);
+		exit_minishell(NULL, 0);
 	}
 	if (argv[1])
 	{
@@ -37,7 +37,7 @@ void	ft_exit(char **argv)
 			dup2(g_krsh.stdout_old, STDOUT_FILENO);
 			close(g_krsh.stdout_old);
 		}
-		exit(x & 0xff);
+		exit_minishell(NULL, x);
 	}
 	if (argv[2])
 		ft_printf("exit: too many arguments!\n");
