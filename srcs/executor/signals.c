@@ -19,9 +19,6 @@
  */
 void	sig_handler(int sig)
 {
-	int	i;
-
-	i = -1;
 	if (sig == SIGINT)
 	{
 		rl_on_new_line();
@@ -62,7 +59,7 @@ t_bool	is_valid_identifier(char *str)
 		return (FALSE);
 	if (ft_isdigit(str[0]))
 		return (FALSE);
-	while (str[i])
+	while (str[i] && str[i] != '=')
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_')
 			return (FALSE);

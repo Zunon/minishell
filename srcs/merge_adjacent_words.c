@@ -33,21 +33,21 @@ void	clean_endpoints(t_token *new_item, t_token **list, t_token **iterator)
 		new_item->next = NULL;
 }
 
-void	merge_found(t_token *new_item, enum e_token_type *merge_type,
+void	merge_found(t_token **new_item, enum e_token_type *merge_type,
 					t_token **list, t_token **iterator)
 {
 	if ((*iterator)->type == QUOTED || (*iterator)->next->type == QUOTED)
 		(*merge_type) = QUOTED;
 	else
 		(*merge_type) = WORD;
-	new_item = ft_calloc(1, sizeof(t_token));
-	new_item->type = (*merge_type);
-	new_item->contents = ft_strjoin((*iterator)->contents,
+	*new_item = ft_calloc(1, sizeof(t_token));
+	(*new_item)->type = (*merge_type);
+	(*new_item)->contents = ft_strjoin((*iterator)->contents,
 			(*iterator)->next->contents);
-	clean_endpoints(new_item, list, iterator);
+	clean_endpoints(*new_item, list, iterator);
 	(*iterator)->next->next = NULL;
 	clear_tokenlist(iterator);
-	(*iterator) = new_item;
+	(*iterator) = *new_item;
 }
 
 /**
@@ -68,7 +68,7 @@ t_token	*merge_words(t_token *list)
 				== QUOTED) && (iterator->next->type == WORD
 				|| iterator->next->type == QUOTED))
 		{
-			merge_found(new_item, &merge_type, &list, &iterator);
+			merge_found(&new_item, &merge_type, &list, &iterator);
 		}
 		else
 			iterator = iterator->next;

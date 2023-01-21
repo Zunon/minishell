@@ -72,7 +72,7 @@ t_token	*merge_quotation_tokens(t_token *quote)
 		iterator = iterator->next;
 	}
 	result = ft_calloc(1, sizeof(t_token));
-	*result = (t_token){QUOTED, final_content};
+	*result = (t_token){QUOTED, final_content, NULL, NULL};
 	return (result);
 }
 

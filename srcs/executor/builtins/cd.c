@@ -16,7 +16,6 @@ static void	update_env_pwds(void)
 {
 	t_pair	*oldpwd;
 	t_pair	*pwd;
-	char	*old;
 	char	*newpwd;
 
 	oldpwd = retrieve_from_dict(g_krsh.env_mngr, "OLDPWD");

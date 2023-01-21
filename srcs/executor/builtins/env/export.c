@@ -58,8 +58,11 @@ static int	export_no_args(void)
 	return (EXIT_SUCCESS);
 }
 
-static void	export_var(char *argument, int pos, char *key, char *value)
+static void	export_var(char *argument, int pos)
 {
+	char	*key;
+	char	*value;
+
 	if (argument)
 	{
 		if (!is_valid_identifier(argument))
@@ -101,8 +104,6 @@ int	export(t_command *cmd)
 	t_list	*iterator;
 	int		i;
 	int		pos;
-	char	*key;
-	char	*value;
 
 	pos = 0;
 	i = 1;
@@ -113,7 +114,7 @@ int	export(t_command *cmd)
 		iterator = cmd->words->next;
 		while (iterator)
 		{
-			export_var(iterator->content, pos, key, value);
+			export_var(iterator->content, pos);
 			iterator = iterator->next;
 			i++;
 		}

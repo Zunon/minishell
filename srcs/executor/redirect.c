@@ -69,7 +69,7 @@ static int	redirect_output(t_command *cmd, t_redirect *current)
 	return (EXIT_SUCCESS);
 }
 
-static int	redirect_heredoc(t_command *cmd, t_redirect *current)
+static int	redirect_heredoc(t_redirect *current)
 {
 	if (dup2(g_krsh.heredocs[current->here_doc_pipe][0], STDIN_FILENO) == -1)
 	{
@@ -175,7 +175,7 @@ int	perform_io_redirections(t_command *cmd)
 	while (iterator && status != EXIT_FAILURE)
 	{
 		if (iterator->direction == HERE_DOC)
-			status = redirect_heredoc(cmd, iterator);
+			status = redirect_heredoc(iterator);
 		else if (iterator->direction == INPUT)
 			status = redirect_input(cmd, iterator);
 		else if (iterator->direction == OUTPUT

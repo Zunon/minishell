@@ -12,7 +12,7 @@
 
 #include "../../inc/minishell.h"
 
-static void	ext_no_perms(t_command *cmd, const char *exec_path)
+static void	ext_no_perms(const char *exec_path)
 {
 	if (access(exec_path, X_OK) == -1)
 	{
@@ -33,7 +33,7 @@ static void	ext_no_perms(t_command *cmd, const char *exec_path)
  * @param envp		Environment variables
  * @return int		Status code of execution (1 on SUCCESS, 0 on 'CMD NOT FOUND')
  */
-static int	search_env_path(t_command *cmd, char **argv)
+static int	search_env_path(char **argv)
 {
 	int		i;
 	char	*exec_path;
@@ -53,12 +53,12 @@ static int	search_env_path(t_command *cmd, char **argv)
 		if (access(exec_path, F_OK) != -1 && execve(exec_path, argv,
 				g_krsh.envp) == -1)
 		{
-			free(exec_path);
 			free(temp);
 			while (paths[i])
 				free(paths[i++]);
-			ext_no_perms(cmd, exec_path);
+			ext_no_perms(exec_path);
 			g_krsh.status_code = NO_EXECUTION_PERMISSION;
+			free(exec_path);
 			return (ERROR_DURING_EXECUTION);
 		}
 		free(exec_path);
@@ -74,13 +74,12 @@ static int	search_env_path(t_command *cmd, char **argv)
  * @brief 			Find and execute commands based on current directory
  * 					(Eg. run executables)
  *
- * @param cmd		The command to be executed
  * @param argv		The parameters to the command
  * @param envp		Environment variables
  * @return int		Status code of execution
  * 					(1 on SUCCESS, 0 on 'CMD NOT FOUND')
  */
-static int	search_for_executable(t_command *cmd, char **argv)
+static int	search_for_executable(char **argv)
 {
 	if (ft_strchr(argv[0], '/') != 0 && access(argv[0], F_OK) != -1)
 	{
@@ -115,8 +114,8 @@ static void	ext_not_found(t_command *cmd)
 		free(g_krsh.heredocs);
 	g_krsh.heredoc_count = 0;
 	if (!cmd->argv[0][0] || (exec_builtin(cmd) == EXIT_FAILURE
-							&& search_env_path(cmd, cmd->argv) == EXIT_FAILURE
-							&& search_for_executable(cmd, cmd->argv)
+							&& search_env_path(cmd->argv) == EXIT_FAILURE
+							&& search_for_executable(cmd->argv)
 							== EXIT_FAILURE))
 	{
 		write(STDERR_FILENO, cmd->argv[0], ft_strlen(cmd->argv[0]));

@@ -49,30 +49,15 @@ void	display_command(t_command *cmd)
 	}
 }
 
-static void	control_d_exit(void)
-{
-	int	i;
-
-	i = -1;
-	destroy_dict(&g_krsh.env_mngr);
-	destroy_dict(&g_krsh.declared);
-	while (g_krsh.envp[++i])
-		free(g_krsh.envp[i]);
-	free(g_krsh.envp);
-	exit(EXIT_SUCCESS);
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	char		*s;
 	t_command	*cmd;
-	int			i;
 
 	(void)argc;
 	(void)argv;
 	signal(SIGINT, &sig_handler);
 	signal(SIGQUIT, SIG_IGN);
-	i = -1;
 	g_krsh.env_mngr = generate_env_manager(envp);
 	g_krsh.status_code = EXIT_SUCCESS;
 	cmd = NULL;
