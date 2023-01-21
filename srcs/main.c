@@ -65,7 +65,6 @@ static void	control_d_exit(void)
 int	main(int argc, char **argv, char **envp)
 {
 	char		*s;
-	char		**sup;
 	t_command	*cmd;
 	int			i;
 
