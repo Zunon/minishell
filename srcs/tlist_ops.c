@@ -33,6 +33,10 @@ t_token	*token_split(char *string)
 			tracer};
 		tracer = tracer->next;
 	}
+	iterator = 0;
+	while(array[iterator])
+		free(array[iterator++]);
+	free(array);
 	return (result);
 }
 

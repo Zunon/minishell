@@ -109,7 +109,7 @@ typedef struct s_token
 	struct s_token		*prev;
 }	t_token;
 
-int					echo(char **cmd);
+int					echo(char **argv);
 int					cd(char **cmd);
 int					pwd(char **cmd);
 void				ft_exit(t_command *cmd);

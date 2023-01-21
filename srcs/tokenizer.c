@@ -75,7 +75,7 @@ t_token	*get_next_token(char *line)
 			i++;
 	else if (first == REDIRECTION && get_token_type(line[i]) == first)
 		i++;
-	token_string = ft_substr(line, 0, i);
+	token_string = ft_substr(line, 0, ++i);
 	*tok = (t_token){first, token_string, NULL, NULL};
 	return (tok);
 }
