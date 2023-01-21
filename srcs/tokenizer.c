@@ -134,6 +134,13 @@ t_token	*tokenize(char *input)
 	if (!input || !*input)
 		return (NULL);
 	list = preprocess_input(input);
+	list->prev = ft_calloc(1, sizeof(t_token));
+	token_last(list)->next = ft_calloc(1, sizeof(t_token));
+	if (!token_last(list)->next)
+		fd_printf(STDERR_FILENO, "Error: malloc failed\n");
+	*(list->prev) = (t_token){HEAD, NULL, list, NULL};
+	*(token_last(list)->next) = (t_token){TAIL, NULL, NULL, token_last(list)};
+	list = list->prev;
 	list = collapse_quotes(SINGLE_QUOTE, list);
 	list = discard_dollar(list);
 	list = expand_variables(list);

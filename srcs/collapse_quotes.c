@@ -49,8 +49,10 @@ void	splice_quote(t_token **list, t_token *iterator, t_token *remainder,
 	newtoken->next = remainder;
 	if (remainder)
 		remainder->prev = newtoken;
-	if (!newtoken->prev)
+	if (!newtoken->prev) {
+		fd_printf(STDERR_FILENO, "newtoken->prev is NULL");
 		*list = newtoken;
+	}
 }
 
 void	find_closed_quote(enum e_token_type *quote_type, t_token **iterator,
