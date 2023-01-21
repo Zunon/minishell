@@ -155,6 +155,8 @@ void				exit_minishell(t_command *cmd, int status);
 t_dict				*combine_dictionary(t_dict *d1, t_dict *d2);
 t_bool				is_builtin(t_command *cmd);
 void				display_command(t_command *cmd);
+void				wait_section(int *status);
+int					get_signal_code(int code);
 extern t_shell	g_krsh;
 
 #endif

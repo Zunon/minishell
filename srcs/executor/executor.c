@@ -103,25 +103,6 @@ static char	**prepare_cmd_args(t_list *word_lst)
 	return (ret);
 }
 
-static int	get_signal_code(int code)
-{
-	if (code == SIGINT)
-		return (130);
-	return (131);
-}
-
-void	wait_section(int *status)
-{
-	if (waitpid(g_krsh.last_child_pid, status, 0) == -1)
-		return ;
-	if (WIFSIGNALED((*status)))
-		g_krsh.status_code = get_signal_code(WTERMSIG((*status)));
-	else
-		g_krsh.status_code = WEXITSTATUS((*status));
-	while (waitpid(-1, status, 0) > -1)
-		;
-}
-
 /**
  * @brief			Phase 3 of the shell - execution of commands takes place here
  *
