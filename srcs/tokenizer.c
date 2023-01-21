@@ -140,5 +140,7 @@ t_token	*tokenize(char *input)
 	list = split_words_on_whitespace(list);
 	list = discard_whitespace(list);
 	list = disquote(list);
+	list->prev = NULL;
+	token_last(list)->next = NULL;
 	return (list);
 }
