@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 19:23:17 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/21 19:10:49 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/21 19:54:04 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,5 @@ t_command	*conv_tok_to_cmd(t_token *list)
 	clear_tokenlist(&list);
 	free_cmdnode(cmd, pipeline);
 	g_krsh.num_of_cmds = get_pipeline_size(pipeline);
-	ft_printf("number of cmds = %d", g_krsh.num_of_cmds);
 	return (pipeline);
 }
