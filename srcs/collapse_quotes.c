@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   collapse_quotes.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
+/*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 01:05:14 by kalmheir          #+#    #+#             */
-/*   Updated: 2023/01/17 01:05:17 by kalmheir         ###   ########.fr       */
+/*   Updated: 2023/01/21 16:13:26 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_token	*find_open_quote(enum e_token_type *quote_type, t_token *iterator)
 t_token	*catch_unclosed_quotes(t_token **list)
 {
 	clear_tokenlist(list);
-	(*list) = malloc(sizeof(t_token));
+	(*list) = ft_calloc(1, sizeof(t_token));
 	*(*list) = (t_token){ERROR, "UNCLOSED QUOTATION", NULL, NULL};
 	return (*list);
 }

@@ -26,10 +26,10 @@ t_dict	*create_dict(int s)
 	i = 0;
 	if (s <= 0)
 		return (NULL);
-	dict = malloc(sizeof(t_dict));
+	dict = ft_calloc(1, sizeof(t_dict));
 	if (!dict)
 		return (NULL);
-	dict->table = malloc (sizeof(t_pair *) * s);
+	dict->table = ft_calloc(s, sizeof(t_pair *));
 	if (!dict->table)
 		return (NULL);
 	while (i < s)
@@ -92,7 +92,7 @@ void	insert_into_dict(t_dict **t, char *key, char *value)
 		*t = resize_dict(*t, 2 *(*t)->capacity + 1);
 	while ((*t)->table[index])
 		index = (index + 1) % (*t)->capacity;
-	(*t)->table[index] = malloc(sizeof(t_pair));
+	(*t)->table[index] = ft_calloc(1, sizeof(t_pair));
 	if (!(*t)->table[index])
 		return ;
 	(*t)->table[index]->key = ft_strdup(key);

@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 19:20:39 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/19 19:20:39 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/21 16:15:01 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	pwd(char **cmd)
 
 	if (cmd[1])
 		return (EXIT_SUCCESS);
-	path = malloc(1025 * sizeof(char));
+	path = ft_calloc(1025, sizeof(char));
 	path = getcwd(path, 1025);
 	if (!path)
 	{

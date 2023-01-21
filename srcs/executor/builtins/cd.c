@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 19:20:41 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/21 16:05:58 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/21 16:14:53 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	update_env_pwds(void)
 		pwd = retrieve_from_dict(g_krsh.env_mngr, "PWD");
 		if (pwd)
 			insert_into_dict(&g_krsh.env_mngr, "OLDPWD", pwd->value);
-		newpwd = malloc(sizeof(char) * 1025);
+		newpwd = ft_calloc(1025, sizeof(char));
 		if (!getcwd(newpwd, -1))
 			perror("Error while gettign current working directory: ");
 		insert_into_dict(&g_krsh.env_mngr, "PWD", newpwd);

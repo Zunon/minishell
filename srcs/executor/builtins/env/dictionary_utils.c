@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 12:33:22 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/20 13:50:37 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/21 16:15:21 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ char	**dict_to_string_arr(t_dict *dict)
 	i = 0;
 	if (!dict || !dict->table)
 		return (NULL);
-	strs = malloc(sizeof(char *) * (dict->size + 1));
+	strs = ft_calloc(dict->size + 1, sizeof(char *));
 	while (i < dict->capacity)
 	{
 		if (dict->table[i])
