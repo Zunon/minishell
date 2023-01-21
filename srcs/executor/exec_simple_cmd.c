@@ -102,7 +102,7 @@ static int	search_for_executable(t_command *cmd, char **argv)
 
 static void	ext_not_found(t_command *cmd)
 {
-	if ((cmd->argv && !cmd->argv[0][0] )|| (exec_builtin(cmd) == EXIT_FAILURE
+	if ((cmd->argv && !cmd->argv[0][0]) || (exec_builtin(cmd) == EXIT_FAILURE
 							&& search_env_path(cmd, cmd->argv) == EXIT_FAILURE
 							&& search_for_executable(cmd, cmd->argv)
 							== EXIT_FAILURE))

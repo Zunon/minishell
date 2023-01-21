@@ -180,8 +180,7 @@ int	perform_io_redirections(t_command *cmd)
 			status = redirect_input(cmd, iterator);
 		else if (iterator->direction == OUTPUT
 			|| iterator->direction == OUTPUT_APPEND)
-			ft_printf("sup\n") , status = redirect_output(cmd, iterator);
-		;
+			status = redirect_output(cmd, iterator);
 		iterator = iterator->next;
 	}
 	return (status);
