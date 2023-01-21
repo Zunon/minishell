@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 19:20:39 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/21 16:15:01 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/22 02:56:13 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ int	pwd(char **cmd)
 
 	if (cmd[1])
 		return (EXIT_SUCCESS);
-	path = ft_calloc(1025, sizeof(char));
-	path = getcwd(path, 1025);
+	path = NULL;
+	path = getcwd(path, 0);
 	if (!path)
 	{
 		perror("Error while getting current working directory: ");
@@ -32,7 +32,6 @@ int	pwd(char **cmd)
 	}
 	write(1, path, ft_strlen(path));
 	write(1, "\n", 1);
-	if (path)
-		free(path);
+	free(path);
 	return (EXIT_SUCCESS);
 }
