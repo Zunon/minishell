@@ -6,13 +6,13 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 20:35:27 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/21 16:28:18 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/21 19:36:24 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/minishell.h"
 
-static void	ext_no_perms(const char *exec_path)
+static void	ext_no_perms(t_command *cmd, const char *exec_path)
 {
 	ft_printf("a\n");
 	if (access(exec_path, X_OK) == -1)
@@ -20,11 +20,11 @@ static void	ext_no_perms(const char *exec_path)
 		ft_printf("aa\n");
 		perror("No execution permissions: ");
 		if (g_krsh.num_of_cmds > 1)
-			exit(NO_EXECUTION_PERMISSION);
+			exit_minishell(&cmd, NO_EXECUTION_PERMISSION);
 	}
 	ft_printf("aaa\n");
 	if (g_krsh.num_of_cmds > 1)
-		exit(NO_EXECUTION_PERMISSION);
+		exit_minishell(&cmd, NO_EXECUTION_PERMISSION);
 	g_krsh.status_code = NO_EXECUTION_PERMISSION;
 }
 
@@ -36,7 +36,7 @@ static void	ext_no_perms(const char *exec_path)
  * @param envp		Environment variables
  * @return int		Status code of execution (1 on SUCCESS, 0 on 'CMD NOT FOUND')
  */
-static int	search_env_path(char **argv)
+static int	search_env_path(t_command *cmd, char **argv)
 {
 	int		i;
 	char	*exec_path;
@@ -60,7 +60,7 @@ static int	search_env_path(char **argv)
 			free(temp);
 			while (paths[i])
 				free(paths[i++]);
-			ext_no_perms(exec_path);
+			ext_no_perms(cmd, exec_path);
 			g_krsh.status_code = NO_EXECUTION_PERMISSION;
 			return (ERROR_DURING_EXECUTION);
 		}
@@ -83,7 +83,7 @@ static int	search_env_path(char **argv)
  * @return int		Status code of execution
  * 					(1 on SUCCESS, 0 on 'CMD NOT FOUND')
  */
-static int	search_for_executable(char **argv)
+static int	search_for_executable(t_command *cmd, char **argv)
 {
 	if (ft_strchr(argv[0], '/') != 0 && access(argv[0], F_OK) != -1)
 	{
@@ -91,7 +91,7 @@ static int	search_for_executable(char **argv)
 		{
 			perror("No execution permission : ");
 			if (g_krsh.num_of_cmds > 1)
-				exit(NO_EXECUTION_PERMISSION);
+				exit_minishell(&cmd, NO_EXECUTION_PERMISSION);
 			g_krsh.status_code = NO_EXECUTION_PERMISSION;
 			return (NO_EXECUTION_PERMISSION);
 		}
@@ -106,8 +106,8 @@ static int	search_for_executable(char **argv)
 static void	ext_not_found(t_command *cmd)
 {
 	if (!cmd->argv[0][0] || (exec_builtin(cmd) == EXIT_FAILURE
-							&& search_env_path(cmd->argv) == EXIT_FAILURE
-							&& search_for_executable(cmd->argv)
+							&& search_env_path(cmd, cmd->argv) == EXIT_FAILURE
+							&& search_for_executable(cmd, cmd->argv)
 							== EXIT_FAILURE))
 	{
 		write(STDERR_FILENO, cmd->argv[0], ft_strlen(cmd->argv[0]));
@@ -132,6 +132,7 @@ int	exec_simple_cmd(t_command *cmd)
 
 	if (exec_builtin_parent(cmd) == EXIT_SUCCESS)
 		return (EXIT_SUCCESS);
+	g_krsh.last_child_pid = -1;
 	pid = fork();
 	if (pid == -1)
 	{

@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 01:05:14 by kalmheir          #+#    #+#             */
-/*   Updated: 2023/01/21 16:13:26 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/21 17:11:02 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_token	*catch_unclosed_quotes(t_token **list)
 	if (*list)
 		clear_tokenlist(list);
 	(*list) = ft_calloc(1, sizeof(t_token));
-	*(*list) = (t_token){ERROR, "UNCLOSED QUOTATION", NULL, NULL};
+	*(*list) = (t_token){ERROR, ft_strdup("UNCLOSED QUOTATION"), NULL, NULL};
 	return (*list);
 }
 
