@@ -52,3 +52,21 @@ void	wait_section(int *status)
 	while (waitpid(-1, status, 0) > -1)
 		;
 }
+
+t_bool	is_valid_identifier(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str || !str[0])
+		return (FALSE);
+	if (ft_isdigit(str[0]))
+		return (FALSE);
+	while (str[i])
+	{
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (FALSE);
+		i++;
+	}
+	return (TRUE);
+}

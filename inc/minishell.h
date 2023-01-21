@@ -75,7 +75,6 @@ typedef struct s_command
 	int					id;
 	t_list				*words;
 	t_redirect			*redirects;
-	int					exit_code;
 	int					fd_in;
 	int					fd_out;
 	int					pipe_in;
@@ -134,7 +133,6 @@ t_token				*split_words_on_whitespace(t_token *list);
 t_token				*token_split(char *string);
 t_token				*token_last(t_token *list);
 t_token				*merge_quotation_tokens(t_token *quote);
-void				print_tokens(t_token *list); // REMOVE BEFORE SUBMISSION
 t_token				*discard_whitespace(t_token *list);
 t_token				*expand_variables(t_token *list);
 t_token				*disquote(t_token *list);
@@ -154,9 +152,9 @@ int					handle_heredoc(t_command *cmd);
 void				exit_minishell(t_command *cmd, int status);
 t_dict				*combine_dictionary(t_dict *d1, t_dict *d2);
 t_bool				is_builtin(t_command *cmd);
-void				display_command(t_command *cmd);
 void				wait_section(int *status);
 int					get_signal_code(int code);
+t_bool				is_valid_identifier(char *str);
 extern t_shell	g_krsh;
 
 #endif

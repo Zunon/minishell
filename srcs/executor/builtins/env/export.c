@@ -58,20 +58,15 @@ static int	export_no_args(void)
 	return (EXIT_SUCCESS);
 }
 
-t_bool	valid_identifier(char *variable)
-{
-	if (ft_isalpha(variable[0]) || variable[0] == '_')
-		return (TRUE);
-	ft_printf("minishell: export: `%s`: not a valid identifier\n", variable);
-	return (FALSE);
-}
-
 static void	export_var(char *argument, int pos, char *key, char *value)
 {
 	if (argument)
 	{
-		if (!valid_identifier(argument))
+		if (!is_valid_identifier(argument))
+		{
+			fd_printf(STDERR_FILENO, "export: '%s': not a valid identifier\n", argument);
 			return ;
+		}
 		pos = find_pos(argument, '=');
 		if (pos == -1)
 		{
