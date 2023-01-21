@@ -22,7 +22,7 @@
  */
 int	exec_builtin(t_command *cmd)
 {
-	int status;
+	int	status;
 
 	status = EXIT_FAILURE;
 	if (!cmd->argv || !cmd->argv[0])

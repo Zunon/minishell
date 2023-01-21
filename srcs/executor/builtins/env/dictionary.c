@@ -97,7 +97,8 @@ void	insert_into_dict(t_dict **t, char *key, char *value)
 		return ;
 	(*t)->table[index]->key = ft_strdup(key);
 	(*t)->table[index]->value = NULL;
-	if (value)(*t)->table[index]->value = ft_strdup(value);
+	if (value)
+		(*t)->table[index]->value = ft_strdup(value);
 	(*t)->size++;
 }
 

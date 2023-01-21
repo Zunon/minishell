@@ -12,7 +12,6 @@
 
 #include "../../../../inc/minishell.h"
 
-
 /**
  * @brief				Display all environment variables of the current shell
  *

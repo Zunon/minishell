@@ -12,7 +12,6 @@
 
 #include "../../../../inc/dictionary.h"
 
-
 /**
  * @brief					Function to print a key-value pair
  *

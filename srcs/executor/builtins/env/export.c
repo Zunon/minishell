@@ -12,11 +12,10 @@
 
 #include "../../../../inc/minishell.h"
 
-
-t_dict *combine_dictionary(t_dict *d1, t_dict *d2)
+t_dict	*combine_dictionary(t_dict *d1, t_dict *d2)
 {
-	t_dict *d3;
-	int i;
+	t_dict	*d3;
+	int		i;
 
 	d3 = duplicate_dictionary(d1);
 	i = 0;
@@ -38,7 +37,7 @@ t_dict *combine_dictionary(t_dict *d1, t_dict *d2)
 static int	export_no_args(void)
 {
 	t_dict	*merged;
-	t_dict *sorted;
+	t_dict	*sorted;
 	int		i;
 
 	i = 0;
@@ -59,11 +58,11 @@ static int	export_no_args(void)
 	return (EXIT_SUCCESS);
 }
 
-t_bool valid_identifier(char *variable)
+t_bool	valid_identifier(char *variable)
 {
 	if (ft_isalpha(variable[0]) || variable[0] == '_')
 		return (TRUE);
-	ft_printf("minishell: export: `?=hey': not a valid identifier\n");
+	ft_printf("minishell: export: `%s`: not a valid identifier\n", variable);
 	return (FALSE);
 }
 

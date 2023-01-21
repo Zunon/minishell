@@ -21,7 +21,7 @@
  */
 static int	configure_pipes(t_command *cmd)
 {
-	while(cmd)
+	while (cmd)
 	{
 		cmd->pipe_in = cmd->id % 2;
 		cmd->pipe_out = !(cmd->pipe_in);
@@ -103,15 +103,23 @@ static char	**prepare_cmd_args(t_list *word_lst)
 	return (ret);
 }
 
-
-static int get_signal_code(int code)
+static int	get_signal_code(int code)
 {
 	if (code == SIGINT)
 		return (130);
-//	if (code == SIGQUIT)
 	return (131);
 }
 
+void	wait_section(int *status)
+{
+	waitpid(g_krsh.last_child_pid, status, 0);
+	if (WIFSIGNALED((*status)))
+		g_krsh.status_code = get_signal_code(WTERMSIG((*status)));
+	else
+		g_krsh.status_code = WEXITSTATUS((*status));
+	while (waitpid(-1, status, 0) > -1)
+		;
+}
 
 /**
  * @brief			Phase 3 of the shell - execution of commands takes place here
@@ -141,16 +149,7 @@ int	executor(t_command *first_cmd)
 		curr = curr->next;
 	}
 	if (!is_builtin(first_cmd) || g_krsh.num_of_cmds > 1)
-	{
-		waitpid(g_krsh.last_child_pid, &status, 0);
-		if (WIFSIGNALED(status))
-			g_krsh.status_code = get_signal_code(WTERMSIG((status)));
-		else
-			g_krsh.status_code = WEXITSTATUS(status);
-		while (waitpid(-1, &status, 0) > -1)
-			;
-
-	}
+		wait_section(&status);
 	signal(SIGINT, &sig_handler);
 	signal(SIGQUIT, SIG_IGN);
 	return (g_krsh.status_code);

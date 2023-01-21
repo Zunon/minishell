@@ -63,7 +63,8 @@ t_token	*merge_quotation_tokens(t_token *quote)
 	iterator = quote->next;
 	while (iterator->type != type)
 	{
-		final_content = join_and_free(final_content, iterator->contents, TRUE, FALSE);
+		final_content = join_and_free(final_content, iterator->contents, TRUE,
+				FALSE);
 		iterator = iterator->next;
 	}
 	result = malloc(sizeof(t_token));
