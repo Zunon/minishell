@@ -112,7 +112,8 @@ static int	get_signal_code(int code)
 
 void	wait_section(int *status)
 {
-	waitpid(g_krsh.last_child_pid, status, 0);
+	if (waitpid(g_krsh.last_child_pid, status, 0) == -1)
+		return ;
 	if (WIFSIGNALED((*status)))
 		g_krsh.status_code = get_signal_code(WTERMSIG((*status)));
 	else
