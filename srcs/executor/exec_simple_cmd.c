@@ -73,24 +73,6 @@ static int	search_env_path(char **argv)
 	return (EXIT_FAILURE);
 }
 
-/*
- * if (argv[0][0] == '/' && access(argv[0], F_OK))
-	{
-		if (access(argv[0], X_OK) == -1)
-		{
-			perror("No execution permission : ");
-			if (g_krsh.num_of_cmds > 1)
-				exit(NO_EXECUTION_PERMISSION);
-			g_krsh.status_code = NO_EXECUTION_PERMISSION;
-			return (NO_EXECUTION_PERMISSION);
-		}
-		if (execve(argv[0], argv, g_krsh.envp) == -1)
-			perror("Error during execution : ");
-		g_krsh.status_code  = ERROR_DURING_EXECUTION;
-		return (ERROR_DURING_EXECUTION);
-	}
- * */
-
 /**
  * @brief 			Find and execute commands based on current directory
  * 					(Eg. run executables)
@@ -105,7 +87,6 @@ static int	search_for_executable(char **argv)
 {
 	if (ft_strchr(argv[0], '/') != 0 && access(argv[0], F_OK) != -1)
 	{
-		// execve(argv[0], argv, g_krsh.envp) == -1
 		if (access(argv[0], X_OK) == -1)
 		{
 			perror("No execution permission : ");
@@ -116,18 +97,18 @@ static int	search_for_executable(char **argv)
 		}
 		if (execve(argv[0], argv, g_krsh.envp) == -1)
 			perror("Error during execution : ");
-		g_krsh.status_code  = ERROR_DURING_EXECUTION;
+		g_krsh.status_code = ERROR_DURING_EXECUTION;
 		return (ERROR_DURING_EXECUTION);
 	}
 	return (EXIT_FAILURE);
 }
 
-
 static void	ext_not_found(t_command *cmd)
 {
 	if (!cmd->argv[0][0] || (exec_builtin(cmd) == EXIT_FAILURE
-							 && search_env_path(cmd->argv) == EXIT_FAILURE
-							 && search_for_executable(cmd->argv) == EXIT_FAILURE))
+							&& search_env_path(cmd->argv) == EXIT_FAILURE
+							&& search_for_executable(cmd->argv)
+							== EXIT_FAILURE))
 	{
 		write(STDERR_FILENO, cmd->argv[0], ft_strlen(cmd->argv[0]));
 		write(STDERR_FILENO, " :Command not found\n", 21);
@@ -136,7 +117,6 @@ static void	ext_not_found(t_command *cmd)
 	if (g_krsh.num_of_cmds != 1)
 		exit_minishell(cmd, EXIT_SUCCESS);
 }
-
 
 /**
  * @brief			Function to execute a simple command

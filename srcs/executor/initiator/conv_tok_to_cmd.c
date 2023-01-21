@@ -12,7 +12,6 @@
 
 #include "../../../inc/minishell.h"
 
-
 static int	get_pipeline_size(t_command *cmd)
 {
 	t_command	*iterator;

@@ -12,7 +12,6 @@
 
 #include "../../../inc/minishell.h"
 
-
 t_bool	is_builtin(t_command *cmd)
 {
 	if (!cmd->argv || !cmd->argv[0])

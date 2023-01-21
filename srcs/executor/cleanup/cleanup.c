@@ -12,7 +12,6 @@
 
 #include "../../../inc/minishell.h"
 
-
 /**
  * @brief			Function to deallocate memory for the linked list of redirections
  * 					belongin to any command
@@ -71,9 +70,9 @@ void	free_commands(t_command **cmd)
 	(*cmd) = NULL;
 }
 
-void exit_minishell(t_command *cmd, int status)
+void	exit_minishell(t_command *cmd, int status)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	free_commands(&cmd);

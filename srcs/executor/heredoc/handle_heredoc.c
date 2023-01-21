@@ -12,7 +12,7 @@
 
 #include "../../../inc/minishell.h"
 
-static int save_heredoc_to_pipe(int index, char *lines)
+static int	save_heredoc_to_pipe(int index, char *lines)
 {
 	if (pipe(g_krsh.heredocs[index]) == -1)
 	{
@@ -28,12 +28,12 @@ static int save_heredoc_to_pipe(int index, char *lines)
 	return (EXIT_SUCCESS);
 }
 
-static void construct_heredoc_pipes(t_command *pipeline)
+static void	construct_heredoc_pipes(t_command *pipeline)
 {
-	t_command *cmd;
-	t_redirect *iterator;
-	int heredoc_count;
-	int i;
+	t_command	*cmd;
+	t_redirect	*iterator;
+	int			heredoc_count;
+	int			i;
 
 	heredoc_count = 0;
 	cmd = pipeline;
@@ -50,7 +50,7 @@ static void construct_heredoc_pipes(t_command *pipeline)
 	}
 	g_krsh.heredoc_count = heredoc_count;
 	if (heredoc_count == 0)
-		return;
+		return ;
 	g_krsh.heredocs = malloc(sizeof(int *) * heredoc_count);
 	i = 0;
 	while (i < heredoc_count)
@@ -60,12 +60,11 @@ static void construct_heredoc_pipes(t_command *pipeline)
 	}
 }
 
-
-int handle_heredoc(t_command *cmd)
+int	handle_heredoc(t_command *cmd)
 {
-	t_redirect *iterator;
-	char *buffer;
-	int index;
+	t_redirect	*iterator;
+	char		*buffer;
+	int			index;
 
 	index = 0;
 	construct_heredoc_pipes(cmd);

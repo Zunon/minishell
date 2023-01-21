@@ -52,8 +52,8 @@ static t_bool	has_valid_variable(char *string, size_t *offset)
 static char	*expand_and_increment(char *string, size_t *offset)
 {
 	size_t	start;
-	char 	*name;
-	char 	*value;
+	char	*name;
+	char	*value;
 
 	start = *offset;
 	while (string[*offset] && is_valid_id_starter(string[*offset]))
@@ -84,7 +84,7 @@ static char	*expand_all_variables(char *string)
 		result = join_and_free(result, ft_substr(string, begin_off, offset
 					- begin_off - 1), TRUE, TRUE);
 		result = join_and_free(result, expand_and_increment(string, &offset),
-					TRUE, TRUE);
+				TRUE, TRUE);
 		begin_off = offset;
 	}
 	result = join_and_free(result, ft_substr(string, begin_off, offset
@@ -93,7 +93,7 @@ static char	*expand_all_variables(char *string)
 	return (result);
 }
 
-void heredoc_sig_handler(int sig)
+void	heredoc_sig_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
@@ -107,6 +107,28 @@ void heredoc_sig_handler(int sig)
 		ft_printf("Press enter to exit:");
 		g_krsh.status_code = CONTROL_C_INTERRUPT;
 	}
+}
+
+char	*get_heredoc_str(const char *delimiter, char *result,
+	size_t delim_length)
+{
+	char	*buffer;
+	t_bool	found_delimiter;
+
+	found_delimiter = FALSE;
+	while (!found_delimiter && !g_krsh.blocked)
+	{
+		buffer = readline("> ");
+		if (!buffer)
+			break ;
+		found_delimiter = ft_strncmp(delimiter, buffer, delim_length + 1) == 0;
+		if (found_delimiter)
+			break ;
+		buffer = expand_all_variables(buffer);
+		buffer = join_and_free(buffer, "\n", TRUE, FALSE);
+		result = join_and_free(result, buffer, TRUE, TRUE);
+	}
+	return (result);
 }
 
 /**
@@ -124,27 +146,12 @@ void heredoc_sig_handler(int sig)
 char	*construct_heredoc(char *delimiter)
 {
 	char	*result;
-	char	*buffer;
-	char	*temp;
-	t_bool	found_delimiter;
 	size_t	delim_length;
 
-	found_delimiter = FALSE;
 	delim_length = ft_strlen(delimiter);
 	result = ft_strdup("");
 	signal(SIGINT, &heredoc_sig_handler);
-	while (!found_delimiter && !g_krsh.blocked)
-	{
-		buffer = readline("> ");
-		if (!buffer)
-			break ;
-		found_delimiter = ft_strncmp(delimiter, buffer, delim_length + 1) == 0;
-		if (found_delimiter)
-			break ;
-		buffer = expand_all_variables(buffer);
-		buffer = join_and_free(buffer, "\n", TRUE, FALSE);
-		result = join_and_free(result, buffer, TRUE, TRUE);
-	}
+	result = get_heredoc_str(delimiter, result, delim_length);
 	if (g_krsh.blocked)
 	{
 		free(result);
