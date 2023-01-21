@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 22:00:33 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/22 01:04:15 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/22 01:14:03 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,6 @@ int	perform_io_redirections(t_command *cmd)
 		else if (iterator->direction == OUTPUT
 			|| iterator->direction == OUTPUT_APPEND)
 			status = redirect_output(cmd, iterator);
-		;
 		iterator = iterator->next;
 	}
 	return (status);

@@ -12,9 +12,9 @@
 
 #include "../../../inc/minishell.h"
 
-t_bool valid_n_option(char *str)
+t_bool	valid_n_option(char *str)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	while (str[i])
@@ -26,6 +26,21 @@ t_bool valid_n_option(char *str)
 	return (TRUE);
 }
 
+void	check_options(char *const *argv, int *i, t_bool *nl)
+{
+	while (argv[(*i)] && !ft_strncmp(argv[(*i)], "-n", 2))
+	{
+		if (valid_n_option(argv[(*i)]))
+		{
+			if ((*nl) == TRUE)
+				(*nl) = FALSE;
+		}
+		else
+			break ;
+		(*i)++;
+	}
+}
+
 /**
  * @brief		Execute echo command wih option -n for no trailing newline
  *
@@ -34,25 +49,13 @@ t_bool valid_n_option(char *str)
  */
 int	echo(char **argv)
 {
-	int	i;
+	int		i;
 	t_bool	nl;
 
 	nl = TRUE;
 	i = 1;
 	if (argv[1] && ft_strncmp(argv[1], "-n", 2) == 0)
-	{
-		while (argv[i] && !ft_strncmp(argv[i], "-n", 2))
-		{
-			if (valid_n_option(argv[i]))
-			{
-				if (nl == TRUE)
-					nl = FALSE;
-			}
-			else
-				break ;
-			i++;
-		}
-	}
+		check_options(argv, &i, &nl);
 	while (argv[i])
 	{
 		write(1, argv[i], ft_strlen(argv[i]));

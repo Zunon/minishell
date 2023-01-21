@@ -33,3 +33,22 @@ void	sig_handler(int sig)
 		g_krsh.status_code = CONTROL_C_INTERRUPT;
 	}
 }
+
+int	get_signal_code(int code)
+{
+	if (code == SIGINT)
+		return (130);
+	return (131);
+}
+
+void	wait_section(int *status)
+{
+	if (waitpid(g_krsh.last_child_pid, status, 0) == -1)
+		return ;
+	if (WIFSIGNALED((*status)))
+		g_krsh.status_code = get_signal_code(WTERMSIG((*status)));
+	else
+		g_krsh.status_code = WEXITSTATUS((*status));
+	while (waitpid(-1, status, 0) > -1)
+		;
+}
