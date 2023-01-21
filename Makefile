@@ -41,14 +41,12 @@ SRCS		=	srcs/main.c srcs/parser.c srcs/tokenizer.c srcs/expansions.c \
 OBJS		=	${SRCS:.c=.o}
 
 HEADER		=	./lib/libft/libft.h
-CFLAGS		=	-L /usr/local/Cellar/readline/8.1/lib \
-				-I /usr/local/Cellar/readline/8.1/include \
-				# -Wall -Wextra -Werror
+CFLAGS		=	-I/usr/local/opt/readline/include  -Wall -Wextra -Werror
 
 all:	$(NAME)
 
 $(NAME):	$(OBJS) $(LIB)
-		$(CC) $(CFLAGS) -I ../inc/minishell.h -lreadline $(OBJS) $(LIB) -lreadline -o minishell
+		$(CC) $(CFLAGS) -I ../inc/minishell.h  $(OBJS) -L/usr/local/opt/readline/lib -lreadline $(LIB) -o minishell
 
 $(LIB):
 		make -C ./lib/libft/

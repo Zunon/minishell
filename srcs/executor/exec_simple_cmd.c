@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 20:35:27 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/22 00:10:49 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/22 01:13:12 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,19 @@ static int	search_for_executable(t_command *cmd, char **argv)
 
 static void	ext_not_found(t_command *cmd)
 {
-	if ((cmd->argv && !cmd->argv[0][0]) || (exec_builtin(cmd) == EXIT_FAILURE
+	int i;
+	i = 0;
+	while (i < g_krsh.heredoc_count)
+	{
+		close(g_krsh.heredocs[i][0]);
+		close(g_krsh.heredocs[i][1]);
+		free(g_krsh.heredocs[i]);
+		i++;
+	}
+	if (g_krsh.heredoc_count > 0)
+		free(g_krsh.heredocs);
+	g_krsh.heredoc_count = 0;
+	if (!cmd->argv[0][0] || (exec_builtin(cmd) == EXIT_FAILURE
 							&& search_env_path(cmd, cmd->argv) == EXIT_FAILURE
 							&& search_for_executable(cmd, cmd->argv)
 							== EXIT_FAILURE))
