@@ -12,29 +12,53 @@
 
 #include "../../../inc/minishell.h"
 
+t_bool valid_n_option(char *str)
+{
+	int i;
+
+	i = 1;
+	while (str[i])
+	{
+		if (str[i] != 'n')
+			return (FALSE);
+		i++;
+	}
+	return (TRUE);
+}
+
 /**
  * @brief		Execute echo command wih option -n for no trailing newline
  *
- * @param cmd	command to execute with parameters
+ * @param argv	command to execute with parameters
  * @return int	status code of execution
  */
-int	echo(char **cmd)
+int	echo(char **argv)
 {
 	int	i;
-	int	nl;
+	t_bool	nl;
 
-	nl = 1;
-	i = 0;
-	if (cmd[1] && ft_strncmp(cmd[1], "-n", 3) == 0)
+	nl = TRUE;
+	i = 1;
+	if (argv[1] && ft_strncmp(argv[1], "-n", 2) == 0)
 	{
-		nl = 0;
-		i++;
+		while (argv[i] && !ft_strncmp(argv[i], "-n", 2))
+		{
+			if (valid_n_option(argv[i]))
+			{
+				if (nl == TRUE)
+					nl = FALSE;
+			}
+			else
+				break ;
+			i++;
+		}
 	}
-	while (cmd[++i])
+	while (argv[i])
 	{
-		write(1, cmd[i], ft_strlen(cmd[i]));
-		if (cmd[i + 1])
+		write(1, argv[i], ft_strlen(argv[i]));
+		if (argv[i + 1])
 			write(1, " ", 1);
+		i++;
 	}
 	if (nl == 1)
 		write(1, "\n", 1);
