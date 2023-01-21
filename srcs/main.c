@@ -76,6 +76,7 @@ int	main(int argc, char **argv, char **envp)
 	i = -1;
 	g_krsh.env_mngr = generate_env_manager(envp);
 	g_krsh.status_code = EXIT_SUCCESS;
+	cmd = NULL;
 	while (TRUE)
 	{
 		s = readline("〈krsh〉λ ⇾  ");

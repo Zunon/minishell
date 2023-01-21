@@ -6,11 +6,32 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 19:20:41 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/20 23:44:15 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/21 16:05:58 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../inc/minishell.h"
+
+static	void update_env_pwds()
+{
+	t_pair	*oldpwd;
+	t_pair	*pwd;
+	char	*old;
+	char	*newpwd;
+
+	oldpwd = retrieve_from_dict(g_krsh.env_mngr, "OLDPWD");
+	if (oldpwd)
+	{
+		pwd = retrieve_from_dict(g_krsh.env_mngr, "PWD");
+		if (pwd)
+			insert_into_dict(&g_krsh.env_mngr, "OLDPWD", pwd->value);
+		newpwd = malloc(sizeof(char) * 1025);
+		if (!getcwd(newpwd, -1))
+			perror("Error while gettign current working directory: ");
+		insert_into_dict(&g_krsh.env_mngr, "PWD", newpwd);
+		free(newpwd);
+	}
+}
 
 /**
  * @brief 		Function to change from current working directory to another
@@ -20,11 +41,6 @@
  */
 int	cd(char **cmd)
 {
-	t_pair	*oldpwd;
-	t_pair	*pwd;
-	char	*old;
-	char	*newpwd;
-
 	if (!cmd[1])
 		return (EXIT_SUCCESS);
 	if (chdir(cmd[1]) == -1)
@@ -34,16 +50,6 @@ int	cd(char **cmd)
 			exit(1);
 		return (ERROR_DURING_EXECUTION);
 	}
-	oldpwd = retrieve_from_dict(g_krsh.env_mngr, "OLDPWD");
-	if (oldpwd)
-	{
-		pwd = retrieve_from_dict(g_krsh.env_mngr, "PWD");
-		if (pwd)
-			insert_into_dict(&g_krsh.env_mngr, "OLDPWD", pwd->value);
-		newpwd = malloc(sizeof(char) * 1025);
-		newpwd = getcwd(newpwd, -1);
-		insert_into_dict(&g_krsh.env_mngr, "PWD", newpwd);
-		free(newpwd);
-	}
+	update_env_pwds();
 	return (EXIT_SUCCESS);
 }
