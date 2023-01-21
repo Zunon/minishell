@@ -97,6 +97,7 @@ typedef struct s_shell
 	char		**envp;
 	pid_t		last_child_pid;
 	int			stdout_old;
+	int			stdin_old;
 	t_bool		blocked;
 }	t_shell;
 

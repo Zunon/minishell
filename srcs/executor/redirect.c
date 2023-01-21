@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 22:00:33 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/20 20:42:32 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/21 19:59:01 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@ static int	redirect_input(t_command *cmd, t_redirect *current)
 	if (cmd->fd_in == -1)
 	{
 		perror("CHILD - File does not exist!");
+		dup2(g_krsh.stdout_old, STDOUT_FILENO);
+		close(g_krsh.stdout_old);
+		dup2(g_krsh.stdin_old, STDIN_FILENO);
+		close(g_krsh.stdin_old);
 		return (EXIT_FAILURE);
 	}
 	if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
