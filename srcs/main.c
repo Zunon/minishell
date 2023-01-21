@@ -49,9 +49,9 @@ void	display_command(t_command *cmd)
 	}
 }
 
-static void control_d_exit()
+static void	control_d_exit(void)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	destroy_dict(&g_krsh.env_mngr);

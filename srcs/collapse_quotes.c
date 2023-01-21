@@ -39,9 +39,9 @@ t_token	*catch_unclosed_quotes(t_token **list)
 	return (*list);
 }
 
-void splice_quote(t_token **list, t_token *iterator, t_token *remainder, t_token *newtoken)
+void	splice_quote(t_token **list, t_token *iterator, t_token *remainder,
+					t_token *newtoken)
 {
-
 	if (iterator)
 		iterator->next = newtoken;
 	newtoken->prev = iterator;
