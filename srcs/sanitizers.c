@@ -84,6 +84,7 @@ t_token	*discard_whitespace(t_token *list)
 t_token	*expand_variables(t_token *list)
 {
 	t_token	*iterator;
+	char	*temp;
 
 	iterator = list;
 	while (iterator)
@@ -91,7 +92,9 @@ t_token	*expand_variables(t_token *list)
 		if (iterator->type == VARIABLE)
 		{
 			iterator->type = WORD;
+			temp = iterator->contents;
 			iterator->contents = expand(iterator->contents + 1);
+			free(temp);
 		}
 		iterator = iterator->next;
 	}

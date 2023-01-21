@@ -155,6 +155,7 @@ t_bool				is_builtin(t_command *cmd);
 void				wait_section(int *status);
 int					get_signal_code(int code);
 t_bool				is_valid_identifier(char *str);
+void				print_tokens(t_token *list);
 extern t_shell	g_krsh;
 
 #endif

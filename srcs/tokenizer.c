@@ -144,5 +144,6 @@ t_token	*tokenize(char *input)
 	list = disquote(list);
 	list->prev = NULL;
 	token_last(list)->next = NULL;
+	print_tokens(list);
 	return (list);
 }
