@@ -70,6 +70,8 @@ t_command	*conv_tok_to_cmd(t_token *list)
 	i = 0;
 	iterator = list;
 	cmd = ft_calloc(1, sizeof(t_command));
+	cmd->redirects = 0;
+	cmd->argv = 0;
 	pipeline = cmd;
 	while (iterator)
 		construct_command(&i, &iterator, &cmd);
