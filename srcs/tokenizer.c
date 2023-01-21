@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 23:59:18 by kalmheir          #+#    #+#             */
-/*   Updated: 2023/01/21 16:14:18 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/22 00:16:42 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,5 +142,6 @@ t_token	*tokenize(char *input)
 	list = disquote(list);
 	list->prev = NULL;
 	token_last(list)->next = NULL;
+	print_tokens(list);
 	return (list);
 }

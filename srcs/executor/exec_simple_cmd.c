@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 20:35:27 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/22 00:05:19 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/22 00:10:49 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,8 @@ int	exec_simple_cmd(t_command *cmd)
 		signal(SIGQUIT, SIG_DFL);
 		if (perform_io_redirections(cmd) == EXIT_FAILURE)
 			exit_minishell(g_krsh.cmds, EXIT_FAILURE);
-		ext_not_found(cmd);
+		if (cmd->argv)
+			ext_not_found(cmd);
 		exit_minishell(g_krsh.cmds, g_krsh.status_code);
 	}
 	else
