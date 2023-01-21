@@ -58,7 +58,6 @@ void	free_commands(t_command *cmd)
 		if (temp->argv)
 			free(temp->argv);
 		free(temp);
-
 	}
 	i = 0;
 	while (i < g_krsh.heredoc_count)
