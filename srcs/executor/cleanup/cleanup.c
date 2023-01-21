@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 22:04:06 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/21 23:16:52 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/21 23:22:46 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ void	free_commands(t_command *cmd)
 	i = 0;
 	while (i < g_krsh.heredoc_count)
 	{
+		close(g_krsh.heredocs[i][0]);
+		close(g_krsh.heredocs[i][1]);
 		free(g_krsh.heredocs[i]);
 		i++;
 	}
