@@ -12,7 +12,7 @@
 
 #include "../../../inc/minishell.h"
 
-static	void update_env_pwds()
+static void	update_env_pwds(void)
 {
 	t_pair	*oldpwd;
 	t_pair	*pwd;
