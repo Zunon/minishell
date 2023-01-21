@@ -33,7 +33,8 @@ t_token	*find_open_quote(enum e_token_type *quote_type, t_token *iterator)
 
 t_token	*catch_unclosed_quotes(t_token **list)
 {
-	clear_tokenlist(list);
+	if (*list)
+		clear_tokenlist(list);
 	(*list) = ft_calloc(1, sizeof(t_token));
 	*(*list) = (t_token){ERROR, "UNCLOSED QUOTATION", NULL, NULL};
 	return (*list);
