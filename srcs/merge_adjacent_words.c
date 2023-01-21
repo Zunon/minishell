@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   merge_adjacent_words.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
+/*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 00:19:09 by kalmheir          #+#    #+#             */
-/*   Updated: 2023/01/17 01:05:31 by kalmheir         ###   ########.fr       */
+/*   Updated: 2023/01/21 16:14:00 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	merge_found(t_token *new_item, enum e_token_type *merge_type,
 		(*merge_type) = QUOTED;
 	else
 		(*merge_type) = WORD;
-	new_item = malloc(sizeof(t_token));
+	new_item = ft_calloc(1, sizeof(t_token));
 	new_item->type = (*merge_type);
 	new_item->contents = ft_strjoin((*iterator)->contents,
 			(*iterator)->next->contents);

@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 20:10:48 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/20 22:56:22 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/21 16:12:46 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,11 @@ static void	construct_heredoc_pipes(t_command *pipeline)
 	g_krsh.heredoc_count = heredoc_count;
 	if (heredoc_count == 0)
 		return ;
-	g_krsh.heredocs = malloc(sizeof(int *) * heredoc_count);
+	g_krsh.heredocs = ft_calloc(heredoc_count, sizeof(int *));
 	i = 0;
 	while (i < heredoc_count)
 	{
-		g_krsh.heredocs[i] = malloc(sizeof(int) * 2);
+		g_krsh.heredocs[i] = ft_calloc(2, sizeof(int));
 		i++;
 	}
 }

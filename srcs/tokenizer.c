@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
+/*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 23:59:18 by kalmheir          #+#    #+#             */
-/*   Updated: 2023/01/16 23:59:23 by kalmheir         ###   ########.fr       */
+/*   Updated: 2023/01/21 16:14:18 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ t_token	*get_next_token(char *line)
 
 	if (!line || !*line)
 		return (NULL);
-	tok = malloc(sizeof(t_token));
+	tok = ft_calloc(1, sizeof(t_token));
 	first = get_token_type(line[0]);
 	i = 1;
 	if (first == VARIABLE)

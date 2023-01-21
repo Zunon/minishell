@@ -83,11 +83,12 @@ int	main(int argc, char **argv, char **envp)
 		if (s && *s != '\0')
 			add_history(s);
 		if (!s)
-			exit_minishell(cmd, g_krsh.status_code);
+			exit_minishell(&cmd, g_krsh.status_code);
 		cmd = parse_input(s);
 		free(s);
 		g_krsh.blocked = FALSE;
 		executor(cmd);
-		free_commands(&cmd);
+		free_commands(cmd);
+		cmd = NULL;
 	}
 }

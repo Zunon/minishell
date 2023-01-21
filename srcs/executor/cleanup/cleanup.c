@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 22:04:06 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/20 20:26:06 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/21 16:29:06 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,19 @@ static void	free_redirects(t_redirect *redir)
  *
  * @param cmd		Linked list of commands
  */
-void	free_commands(t_command **cmd)
+void	free_commands(t_command *cmd)
 {
 	t_command	*temp;
 	int			i;
 
-	if (!cmd || !*cmd)
+	if (!cmd)
 		return ;
-	while (*cmd)
+	while (cmd)
 	{
-		temp = *cmd;
-		*cmd = (*cmd)->next;
+		temp = cmd;
+		cmd = cmd->next;
 		free_redirects(temp->redirects);
-		ft_lstclear(&(temp->words), free);
+		ft_lstclear(&(temp->words), &free);
 		if (temp->argv)
 			free(temp->argv);
 		free(temp);
@@ -67,15 +67,15 @@ void	free_commands(t_command **cmd)
 	}
 	if (g_krsh.heredoc_count > 0)
 		free(g_krsh.heredocs);
-	(*cmd) = NULL;
 }
 
-void	exit_minishell(t_command *cmd, int status)
+void	exit_minishell(t_command **cmd, int status)
 {
 	int	i;
 
 	i = -1;
-	free_commands(&cmd);
+	free_commands(*cmd);
+	*cmd = NULL;
 	destroy_dict(&g_krsh.env_mngr);
 	destroy_dict(&g_krsh.declared);
 	while (g_krsh.envp[++i])

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tlist_ops.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
+/*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 23:59:46 by kalmheir          #+#    #+#             */
-/*   Updated: 2023/01/16 23:59:52 by kalmheir         ###   ########.fr       */
+/*   Updated: 2023/01/21 16:14:10 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ t_token	*token_split(char *string)
 		return (NULL);
 	array = ft_split(string, ' ');
 	iterator = 0;
-	result = malloc(sizeof(t_token));
+	result = ft_calloc(1, sizeof(t_token));
 	*result = (t_token){WORD, ft_strdup(array[iterator]), NULL, NULL};
 	tracer = result;
 	while (array[++iterator])
 	{
-		tracer->next = malloc(sizeof(t_token));
+		tracer->next = ft_calloc(1, sizeof(t_token));
 		*(tracer->next) = (t_token){WORD, ft_strdup(array[iterator]), NULL,
 			tracer};
 		tracer = tracer->next;
@@ -67,7 +67,7 @@ t_token	*merge_quotation_tokens(t_token *quote)
 				FALSE);
 		iterator = iterator->next;
 	}
-	result = malloc(sizeof(t_token));
+	result = ft_calloc(1, sizeof(t_token));
 	*result = (t_token){QUOTED, final_content};
 	return (result);
 }

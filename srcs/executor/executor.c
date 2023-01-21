@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 18:11:11 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/20 22:50:07 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/21 16:14:38 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static char	**prepare_cmd_args(t_list *word_lst)
 	if (!word_lst)
 		return (NULL);
 	i = 0;
-	ret = malloc(sizeof(char *) * (1 + get_list_length(word_lst)));
+	ret = ft_calloc((1 + get_list_length(word_lst)), sizeof(char *));
 	while (word_lst)
 	{
 		ret[i] = (char *)(word_lst->content);

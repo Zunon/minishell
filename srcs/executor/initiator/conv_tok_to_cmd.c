@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tok_to_cmd.c                                       :+:      :+:    :+:   */
+/*   conv_tok_to_cmd.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 19:23:17 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/19 19:23:17 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/21 16:16:02 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static void	construct_command(int *i, t_token **iterator, t_command **cmd)
 	(*cmd)->redirects = extract_redirects((*iterator));
 	(*cmd)->words = extract_words((*iterator));
 	(*iterator) = get_next_cmd((*iterator));
-	(*cmd)->next = malloc(sizeof(t_command));
+	(*cmd)->next = ft_calloc(1, sizeof(t_command));
 	(*cmd) = (*cmd)->next;
 	*i = *i + 1;
 }
