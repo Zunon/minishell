@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 22:00:33 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/21 19:59:01 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/21 22:46:15 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,21 +25,17 @@ static int	redirect_input(t_command *cmd, t_redirect *current)
 	cmd->fd_in = open(current->redirectee, current->flags, 0644);
 	if (cmd->fd_in == -1)
 	{
-		perror("CHILD - File does not exist!");
-		dup2(g_krsh.stdout_old, STDOUT_FILENO);
-		close(g_krsh.stdout_old);
-		dup2(g_krsh.stdin_old, STDIN_FILENO);
-		close(g_krsh.stdin_old);
+		perror("File does not exist!");
 		return (EXIT_FAILURE);
 	}
 	if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
 	{
-		perror("CHILD - Error while duping pipe to STDIN: ");
+		perror("Error while duping pipe to STDIN: ");
 		return (EXIT_FAILURE);
 	}
 	if (close(cmd->fd_in) == -1)
 	{
-		perror("CHILD - Error while closing input file: ");
+		perror("Error while closing input file: ");
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
@@ -57,17 +53,17 @@ static int	redirect_output(t_command *cmd, t_redirect *current)
 	cmd->fd_out = open(current->redirectee, current->flags, 0644);
 	if (cmd->fd_out == -1)
 	{
-		perror("CHILD - Error while opening file");
+		perror("Error while opening file");
 		return (EXIT_FAILURE);
 	}
 	if (dup2(cmd->fd_out, STDOUT_FILENO) == -1)
 	{
-		perror("CHILD - Error while duping pipe to STDOUT: ");
+		perror("Error while duping pipe to STDOUT: ");
 		return (EXIT_FAILURE);
 	}
 	if (close(cmd->fd_out) == -1)
 	{
-		perror("CHILD - Error while closing output file: ");
+		perror("Error while closing output file: ");
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
@@ -77,12 +73,12 @@ static int	redirect_heredoc(t_command *cmd, t_redirect *current)
 {
 	if (dup2(g_krsh.heredocs[current->here_doc_pipe][0], STDIN_FILENO) == -1)
 	{
-		perror("CHILD - Error while duping pipe to STDIN: ");
+		perror("Error while duping pipe to STDIN: ");
 		return (EXIT_FAILURE);
 	}
 	if (close(g_krsh.heredocs[current->here_doc_pipe][0]) == -1)
 	{
-		perror("CHILD - HEREDOC - Error while closing read pipe end: ");
+		perror("HEREDOC - Error while closing read pipe end: ");
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);

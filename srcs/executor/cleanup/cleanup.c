@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 22:04:06 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/21 19:53:57 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/21 23:16:52 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,13 @@ void	free_commands(t_command *cmd)
 		free(g_krsh.heredocs);
 }
 
-void	exit_minishell(t_command **cmd, int status)
+void	exit_minishell(t_command *cmd, int status)
 {
 	int	i;
 
 	i = -1;
-	free_commands(*cmd);
-	*cmd = NULL;
+	free_commands(cmd);
+	cmd = NULL;
 	destroy_dict(&g_krsh.env_mngr);
 	destroy_dict(&g_krsh.declared);
 	while (g_krsh.envp[++i])

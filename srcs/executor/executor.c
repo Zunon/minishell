@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 18:11:11 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/21 16:14:38 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/21 22:38:50 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,8 +144,7 @@ int	executor(t_command *first_cmd)
 		curr->argv = prepare_cmd_args(curr->words);
 		if (curr->pipe_out != NO_PIPE)
 			pipe(g_krsh.pipes[curr->pipe_out]);
-		if (curr->argv)
-			exec_simple_cmd(curr);
+		exec_simple_cmd(curr);
 		close_used_pipes(curr->pipe_in);
 		curr = curr->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 20:39:38 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/21 19:58:07 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/21 22:36:21 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,13 @@ int	exec_builtin_parent(t_command *cmd)
 		g_krsh.stdout_old = dup(STDOUT_FILENO);
 		g_krsh.stdin_old = dup(STDIN_FILENO);
 		if (perform_io_redirections(cmd) == EXIT_FAILURE)
+		{
+			dup2(g_krsh.stdout_old, STDOUT_FILENO);
+			close(g_krsh.stdout_old);
+			dup2(g_krsh.stdin_old, STDIN_FILENO);
+			close(g_krsh.stdin_old);
 			return (EXIT_FAILURE);
+		}
 		if (exec_builtin(cmd) == EXIT_SUCCESS)
 		{
 			dup2(g_krsh.stdout_old, STDOUT_FILENO);

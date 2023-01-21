@@ -151,7 +151,7 @@ int					exec_builtin_parent(t_command *cmd);
 void				update_env(t_dict *env_manager);
 char				*construct_heredoc(char *delimiter);
 int					handle_heredoc(t_command *cmd);
-void				exit_minishell(t_command **cmd, int status);
+void				exit_minishell(t_command *cmd, int status);
 t_dict				*combine_dictionary(t_dict *d1, t_dict *d2);
 t_bool				is_builtin(t_command *cmd);
 void				display_command(t_command *cmd);
