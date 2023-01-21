@@ -45,7 +45,6 @@ t_command	*parse_input(const char *input)
 	if (list && list->type == ERROR)
 	{
 		write(STDERR_FILENO, "Token Error!\n", 13);
-		clear_tokenlist(&list);
 		return (NULL);
 	}
 	else if (!parse_pipeline(list))
