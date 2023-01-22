@@ -33,11 +33,19 @@ t_token	*find_open_quote(enum e_token_type *quote_type, t_token *iterator)
 
 t_token	*catch_unclosed_quotes(t_token **list)
 {
+	t_token	*head;
+	t_token	*error;
+	t_token	*tail;
+
 	if (*list)
 		clear_tokenlist(list);
-	(*list) = ft_calloc(1, sizeof(t_token));
-	*(*list) = (t_token){ERROR, ft_strdup("UNCLOSED QUOTATION"), NULL, NULL};
-	return (*list);
+	head = ft_calloc(1, sizeof(t_token));
+	error = ft_calloc(1, sizeof(t_token));
+	tail = ft_calloc(1, sizeof(t_token));
+	*head = (t_token){HEAD, ft_strdup("head"), error, NULL};
+	*error = (t_token){ERROR, ft_strdup("UNCLOSED QUOTATION"), tail, head};
+	*tail = (t_token){TAIL, ft_strdup("tail"), NULL, error};
+	return (head);
 }
 
 void	splice_quote(t_token **list, t_token *iterator, t_token *remainder,
