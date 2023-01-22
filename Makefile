@@ -21,7 +21,9 @@ SRCS		=	srcs/main.c srcs/parser.c srcs/tokenizer.c srcs/expansions.c \
 				srcs/executor/exec_simple_cmd.c \
 				srcs/executor/exec_simple_cmd_utils.c \
 				srcs/executor/executor.c \
-				srcs/executor/redirect.c srcs/executor/signals.c \
+				srcs/executor/redirect.c \
+				srcs/executor/redirect_utils.c \
+				srcs/executor/signals.c \
 				srcs/executor/initiator/conv_tok_to_cmd.c \
 				srcs/executor/initiator/extract_redirects.c \
 				srcs/executor/initiator/extract_words.c \
@@ -39,6 +41,7 @@ SRCS		=	srcs/main.c srcs/parser.c srcs/tokenizer.c srcs/expansions.c \
 				srcs/executor/builtins/env/env_initiate.c \
 				srcs/executor/builtins/env/env.c \
 				srcs/executor/builtins/env/export.c \
+				srcs/executor/builtins/env/export_utils.c \
 				srcs/executor/builtins/env/unset.c \
 				srcs/executor/builtins/env/update_env.c
 OBJS		=	${SRCS:.c=.o}

@@ -162,6 +162,12 @@ t_token				*clear_ends(t_token *list, t_token *head, t_token *tail);
 t_token				*init_ends(t_token *list);
 void				ext_if_cmd_not_found(t_command *cmd);
 char				*expand_all_variables(char *string);
+int					redirect_input(t_command *cmd, t_redirect *current);
+int					redirect_output(t_command *cmd, t_redirect *current);
+int					redirect_heredoc(t_redirect *current);
+void				set_in_dict(const char *argument, int pos);
+int					piper(t_command *cmd);
+
 extern t_shell	g_krsh;
 
 #endif
