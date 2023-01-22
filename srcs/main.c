@@ -55,6 +55,22 @@ t_token	*clear_ends(t_token *list, t_token *head, t_token *tail)
 	return (list);
 }
 
+void	set_in_dict(const char *argument, int pos)
+{
+	char	*key;
+	char	*value;
+
+	key = ft_substr(argument, 0, pos);
+	value = ft_substr(argument, pos + 1, -1);
+	if (retrieve_from_dict(g_krsh.declared, key))
+		remove_from_dict(g_krsh.declared, key);
+	insert_into_dict(&g_krsh.env_mngr, key, value);
+	free(key);
+	if (value)
+		free(value);
+	update_env(g_krsh.env_mngr);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char		*s;
