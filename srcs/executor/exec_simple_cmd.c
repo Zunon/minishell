@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 20:35:27 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/22 01:13:12 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/22 06:21:45 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,20 @@ static void	ext_no_perms(const char *exec_path)
 	g_krsh.status_code = NO_EXECUTION_PERMISSION;
 }
 
+static int	exec_env_path(int i, char **argv, char **paths, char *exec_path)
+{
+	if (access(exec_path, F_OK) != -1 && execve(exec_path, argv,
+			g_krsh.envp) == -1)
+	{
+		while (paths[i])
+			free(paths[i++]);
+		ext_no_perms(exec_path);
+		g_krsh.status_code = NO_EXECUTION_PERMISSION;
+		free(exec_path);
+		return (ERROR_DURING_EXECUTION);
+	}
+}
+
 /**
  * @brief			Find and execute commands from the PATH environment variable
  *
@@ -39,7 +53,6 @@ static int	search_env_path(char **argv)
 	char	*exec_path;
 	char	**paths;
 	t_pair	*path;
-	char	*temp;
 
 	path = retrieve_from_dict(g_krsh.env_mngr, "PATH");
 	if (!path || !path->value || argv[0][0] == '/')
@@ -48,22 +61,12 @@ static int	search_env_path(char **argv)
 	i = 0;
 	while (paths[i])
 	{
-		temp = ft_strjoin(paths[i], "/");
-		exec_path = ft_strjoin(temp, argv[0]);
-		if (access(exec_path, F_OK) != -1 && execve(exec_path, argv,
-				g_krsh.envp) == -1)
-		{
-			free(temp);
-			while (paths[i])
-				free(paths[i++]);
-			ext_no_perms(exec_path);
-			g_krsh.status_code = NO_EXECUTION_PERMISSION;
-			free(exec_path);
+		exec_path = join_and_free(ft_strjoin(paths[i], "/"), argv[0],
+				TRUE, FALSE);
+		if (exec_env_path(i, argv, paths, exec_path) == ERROR_DURING_EXECUTION)
 			return (ERROR_DURING_EXECUTION);
-		}
 		free(exec_path);
 		free(paths[i]);
-		free(temp);
 		i++;
 	}
 	free(paths);
@@ -101,7 +104,8 @@ static int	search_for_executable(char **argv)
 
 static void	ext_not_found(t_command *cmd)
 {
-	int i;
+	int	i;
+
 	i = 0;
 	while (i < g_krsh.heredoc_count)
 	{

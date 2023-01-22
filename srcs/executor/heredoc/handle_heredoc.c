@@ -6,37 +6,38 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 20:10:48 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/21 16:12:46 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/22 06:41:36 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../inc/minishell.h"
 
-static int	save_heredoc_to_pipe(int index, char *lines)
+static int	save_heredoc_to_pipe(t_redirect *iterator, int *index, char **lines)
 {
-	if (pipe(g_krsh.heredocs[index]) == -1)
+	iterator->here_doc_pipe = *index;
+	iterator->redirectee = NULL;
+	if (pipe(g_krsh.heredocs[*index]) == -1)
 	{
 		perror("HEREDOC - Failed to create pipe: ");
 		return (EXIT_FAILURE);
 	}
-	write(g_krsh.heredocs[index][1], lines, ft_strlen(lines));
-	if (close(g_krsh.heredocs[index][1]) == -1)
+	write(g_krsh.heredocs[*index][1], *lines, ft_strlen(lines));
+	if (close(g_krsh.heredocs[*index][1]) == -1)
 	{
 		perror("HEREDOC - Failed to close pipe write end: ");
 		return (EXIT_FAILURE);
 	}
+	free(*lines);
+	(*index)++;
 	return (EXIT_SUCCESS);
 }
 
-static void	construct_heredoc_pipes(t_command *pipeline)
+static int	get_num_of_heredocs(t_command *cmd)
 {
-	t_command	*cmd;
 	t_redirect	*iterator;
 	int			heredoc_count;
-	int			i;
 
 	heredoc_count = 0;
-	cmd = pipeline;
 	while (cmd)
 	{
 		iterator = cmd->redirects;
@@ -48,6 +49,18 @@ static void	construct_heredoc_pipes(t_command *pipeline)
 		}
 		cmd = cmd->next;
 	}
+	return (heredoc_count);
+}
+
+static void	construct_heredoc_pipes(t_command *pipeline)
+{
+	t_command	*cmd;
+	t_redirect	*iterator;
+	int			heredoc_count;
+	int			i;
+
+	cmd = pipeline;
+	heredoc_count = get_num_of_heredocs(pipeline);
 	g_krsh.heredoc_count = heredoc_count;
 	if (heredoc_count == 0)
 		return ;
@@ -78,11 +91,7 @@ int	handle_heredoc(t_command *cmd)
 				buffer = construct_heredoc(iterator->here_doc_delim);
 				if (g_krsh.blocked)
 					break ;
-				iterator->here_doc_pipe = index;
-				iterator->redirectee = NULL;
-				save_heredoc_to_pipe(index, buffer);
-				free(buffer);
-				index++;
+				save_heredoc_to_pipe(iterator, &index, &buffer);
 			}
 			iterator = iterator->next;
 		}

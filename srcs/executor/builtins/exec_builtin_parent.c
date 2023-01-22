@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 20:39:38 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/21 23:27:37 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/22 06:26:17 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,14 @@ t_bool	is_builtin(t_command *cmd)
 	return (FALSE);
 }
 
+static void	reset_stdfds_to_default(void)
+{
+	dup2(g_krsh.stdout_old, STDOUT_FILENO);
+	close(g_krsh.stdout_old);
+	dup2(g_krsh.stdin_old, STDIN_FILENO);
+	close(g_krsh.stdin_old);
+}
+
 int	exec_builtin_parent(t_command *cmd)
 {
 	if (g_krsh.num_of_cmds == 1 && is_builtin(cmd))
@@ -41,25 +49,16 @@ int	exec_builtin_parent(t_command *cmd)
 		g_krsh.stdin_old = dup(STDIN_FILENO);
 		if (perform_io_redirections(cmd) == EXIT_FAILURE)
 		{
-			dup2(g_krsh.stdout_old, STDOUT_FILENO);
-			close(g_krsh.stdout_old);
-			dup2(g_krsh.stdin_old, STDIN_FILENO);
-			close(g_krsh.stdin_old);
+			reset_stdfds_to_default();
 			return (EXIT_FAILURE);
 		}
 		if (exec_builtin(cmd) == EXIT_SUCCESS)
 		{
-			dup2(g_krsh.stdout_old, STDOUT_FILENO);
-			close(g_krsh.stdout_old);
-			dup2(g_krsh.stdin_old, STDIN_FILENO);
-			close(g_krsh.stdin_old);
+			reset_stdfds_to_default();
 			g_krsh.status_code = EXIT_SUCCESS;
 			return (EXIT_SUCCESS);
 		}
-		dup2(g_krsh.stdout_old, STDOUT_FILENO);
-		close(g_krsh.stdout_old);
-		dup2(g_krsh.stdin_old, STDIN_FILENO);
-		close(g_krsh.stdin_old);
+		reset_stdfds_to_default();
 		return (EXIT_SUCCESS);
 	}
 	return (EXIT_FAILURE);

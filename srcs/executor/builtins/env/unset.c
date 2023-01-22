@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 19:27:22 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/20 13:54:39 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/22 06:27:19 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ int	unset(char **argv)
 	{
 		if (!is_valid_identifier(argv[i]))
 		{
-			fd_printf(STDERR_FILENO, "minishell: unset: '%s': not a valid identifier\n", argv[i]);
+			fd_printf(STDERR_FILENO,
+				"minishell: unset: '%s': not a valid identifier\n", argv[i]);
 			i++;
 			g_krsh.status_code = 1;
 			continue ;
