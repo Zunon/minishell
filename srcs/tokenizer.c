@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 23:59:18 by kalmheir          #+#    #+#             */
-/*   Updated: 2023/01/22 07:18:49 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/22 08:04:31 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	go_to_eov(int *i, const char *str, enum e_token_type *type)
 	if (!*str || (!is_valid_id_starter(*str) && *str != '\'' && *str != '"'))
 		*type = WORD;
 	if (*str != '?')
-		while (str[*i - 1] && get_token_type(str[*i - 1]) == WORD)
+		while (str[*i - 1] && (ft_isalnum(str[*i - 1]) || str[*i - 1] == '_'))
 			*i = *i + 1;
 	else
 		*i = 3;

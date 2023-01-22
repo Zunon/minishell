@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 06:56:05 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/22 07:11:05 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/22 08:04:19 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static int	exec_env_path(int i, char **argv, char **paths, char *exec_path)
 	{
 		while (paths[i])
 			free(paths[i++]);
+		free(paths);
 		ext_no_perms(exec_path);
 		g_krsh.status_code = NO_EXECUTION_PERMISSION;
 		free(exec_path);

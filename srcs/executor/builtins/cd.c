@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 19:20:41 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/22 02:55:15 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/22 08:13:53 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,7 @@ int	cd(char **cmd)
 	{
 		perror(cmd[1]);
 		if (g_krsh.num_of_cmds > 1)
-			exit(1);
-		return (ERROR_DURING_EXECUTION);
+			exit_minishell(g_krsh.cmds, ERROR_DURING_EXECUTION);
 	}
 	update_env_pwds();
 	return (EXIT_SUCCESS);
