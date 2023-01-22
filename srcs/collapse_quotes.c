@@ -57,7 +57,8 @@ void	splice_quote(t_token **list, t_token *iterator, t_token *remainder,
 	newtoken->next = remainder;
 	if (remainder)
 		remainder->prev = newtoken;
-	if (!newtoken->prev) {
+	if (!newtoken->prev)
+	{
 		fd_printf(STDERR_FILENO, "newtoken->prev is NULL");
 		*list = newtoken;
 	}
@@ -104,7 +105,7 @@ t_token	*collapse_quotes(enum e_token_type quote_type, t_token *list)
 		tokens[2]->next = NULL;
 		if (tokens[3])
 			tokens[3]->prev = NULL;
-		tokens[4] = merge_quotation_tokens(tokens[1]); //quoted w empty str
+		tokens[4] = merge_quotation_tokens(tokens[1]);
 		if (!tokens[0])
 			list = tokens[4];
 		clear_tokenlist(&(tokens[1]));

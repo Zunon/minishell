@@ -158,6 +158,9 @@ void				wait_section(int *status);
 int					get_signal_code(int code);
 t_bool				is_valid_identifier(char *str);
 void				print_tokens(t_token *list);
+t_bool				can_i_expand(t_token *variable);
+t_token				*clear_ends(t_token *list, t_token *head, t_token *tail);
+t_token				*init_ends(t_token *list, t_token *pretail, t_token *tail);
 extern t_shell	g_krsh;
 
 #endif

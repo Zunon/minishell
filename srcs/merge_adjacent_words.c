@@ -75,3 +75,20 @@ t_token	*merge_words(t_token *list)
 	}
 	return (list);
 }
+
+t_bool	can_i_expand(t_token *variable)
+{
+	t_token	*tracer;
+
+	tracer = variable->prev;
+	while (tracer)
+	{
+		if (tracer->type != WHITESPACE)
+			break ;
+		tracer = tracer->prev;
+	}
+	if (tracer && tracer->type == REDIRECTION && !ft_strncmp(tracer->contents,
+			"<<", 3))
+		return (FALSE);
+	return (TRUE);
+}

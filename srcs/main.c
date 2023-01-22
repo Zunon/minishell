@@ -33,20 +33,42 @@ static void	print_cmd_redirs(t_command *cmd, t_list *iter)
 	}
 }
 
-void	display_command(t_command *cmd)
+t_token	*init_ends(t_token *list, t_token *pretail, t_token *tail)
 {
-	if (!cmd)
+	list->prev = ft_calloc(1, sizeof(t_token));
+	pretail = token_last(list);
+	pretail->next = ft_calloc(1, sizeof(t_token));
+	tail = pretail->next;
+	*(list->prev) = (t_token){HEAD, ft_strdup("head"), list, NULL};
+	*tail = (t_token){TAIL, ft_strdup("tail"), NULL, pretail};
+	return (tail);
+}
+
+t_token	*clear_ends(t_token *list, t_token *head, t_token *tail)
+{
+	if (head == list)
 	{
-		ft_printf("EMPTY COMMAND!\n");
-		return ;
+		list = list->next;
+		(tail->prev)->next = NULL;
+		free(head->contents);
+		free(head);
+		free(tail->contents);
+		free(tail);
 	}
-	while (cmd)
+	else
 	{
-		ft_printf("id: %d", cmd->id);
-		ft_printf("\nWords: %p\n", cmd->words);
-		print_cmd_redirs(cmd, cmd->words);
-		cmd = cmd->next;
+		head = list;
+		tail = token_last(list);
+		list = head->next;
+		tail->prev->next = NULL;
+		free(head->contents);
+		free(head);
+		free(tail->contents);
+		free(tail);
 	}
+	list->prev = NULL;
+	token_last(list)->next = NULL;
+	return (list);
 }
 
 int	main(int argc, char **argv, char **envp)
