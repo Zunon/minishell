@@ -47,15 +47,21 @@ static t_token	*get_next_cmd(t_token *list)
 	return (list);
 }
 
-static void	construct_command(int *i, t_token **iterator, t_command **cmd)
+static void	construct_command(t_token **iterator, t_command **cmd)
 {
-	(*cmd)->id = *i;
-	(*cmd)->redirects = extract_redirects((*iterator));
-	(*cmd)->words = extract_words((*iterator));
-	(*iterator) = get_next_cmd((*iterator));
-	(*cmd)->next = ft_calloc(1, sizeof(t_command));
-	(*cmd) = (*cmd)->next;
-	*i = *i + 1;
+	int	i;
+
+	i = 0;
+	while (*iterator)
+	{
+		(*cmd)->id = i;
+		(*cmd)->redirects = extract_redirects((*iterator));
+		(*cmd)->words = extract_words((*iterator));
+		(*iterator) = get_next_cmd((*iterator));
+		(*cmd)->next = ft_calloc(1, sizeof(t_command));
+		(*cmd) = (*cmd)->next;
+		i++;
+	}
 }
 
 t_command	*conv_tok_to_cmd(t_token *list)
@@ -63,18 +69,15 @@ t_command	*conv_tok_to_cmd(t_token *list)
 	t_token		*iterator;
 	t_command	*cmd;
 	t_command	*pipeline;
-	int			i;
 
 	if (!list)
 		return (NULL);
-	i = 0;
 	iterator = list;
 	cmd = ft_calloc(1, sizeof(t_command));
 	cmd->redirects = 0;
 	cmd->argv = 0;
 	pipeline = cmd;
-	while (iterator)
-		construct_command(&i, &iterator, &cmd);
+	construct_command(&iterator, &cmd);
 	if (cmd == pipeline)
 	{
 		free(pipeline);
