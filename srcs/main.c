@@ -50,6 +50,8 @@ t_token	*clear_ends(t_token *list, t_token *head, t_token *tail)
 		free(tail->contents);
 		free(tail);
 	}
+	if (list == tail)
+		return (NULL);
 	list->prev = NULL;
 	token_last(list)->next = NULL;
 	return (list);

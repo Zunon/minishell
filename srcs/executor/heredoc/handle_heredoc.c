@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 20:10:48 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/22 06:53:46 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/22 07:10:33 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,9 @@ static int	get_num_of_heredocs(t_command *cmd)
 
 static void	construct_heredoc_pipes(t_command *pipeline)
 {
-	t_command	*cmd;
 	int			heredoc_count;
 	int			i;
 
-	cmd = pipeline;
 	heredoc_count = get_num_of_heredocs(pipeline);
 	g_krsh.heredoc_count = heredoc_count;
 	if (heredoc_count == 0)

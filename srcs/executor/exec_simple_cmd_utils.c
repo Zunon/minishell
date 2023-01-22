@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 06:56:05 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/22 06:58:06 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/22 07:11:05 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void	ext_if_cmd_not_found(t_command *cmd)
 		search_for_executable(cmd->argv) == EXIT_FAILURE))
 	{
 		write(STDERR_FILENO, cmd->argv[0], ft_strlen(cmd->argv[0]));
-		write(STDERR_FILENO, " :Command not founddddd\n", 21);
+		write(STDERR_FILENO, " :Command not found\n", 21);
 		exit_minishell(g_krsh.cmds, ERROR_COMMAND_NOT_FOUND);
 	}
 }
