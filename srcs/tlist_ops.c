@@ -75,39 +75,3 @@ t_token	*merge_quotation_tokens(t_token *quote)
 	*result = (t_token){QUOTED, final_content, NULL, NULL};
 	return (result);
 }
-
-void	print_token_type(const t_token *list)
-{
-	if (list->type == VARIABLE)
-		ft_printf("VARIABLE, ");
-	else if (list->type == WORD)
-		ft_printf("WORD, ");
-	else if (list->type == REDIRECTION)
-		ft_printf("REDIRECTION, ");
-	else if (list->type == PIPE)
-		ft_printf("PIPE, ");
-	else if (list->type == WHITESPACE)
-		ft_printf("WHITESPACE, ");
-	else if (list->type == SINGLE_QUOTE)
-		ft_printf("SINGLE_QUOTE, ");
-	else if (list->type == DOUBLE_QUOTE)
-		ft_printf("DOUBLE_QUOTE, ");
-	else if (list->type == ERROR)
-		ft_printf("ERROR, ");
-	else if (list->type == QUOTED)
-		ft_printf("QUOTED, ");
-}
-
-void	print_tokens(t_token *list)
-{
-	ft_printf("HEAD\n");
-	while (list)
-	{
-		ft_printf("TYPE: ");
-		print_token_type(list);
-		ft_printf("CONTENTS: %s, PREV: %p, NEXT: %p\n", list->contents,
-			list->prev, list->next);
-		list = list->next;
-	}
-	ft_printf("TAIL\n");
-}

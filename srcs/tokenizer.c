@@ -148,6 +148,5 @@ t_token	*tokenize(char *input)
 	list = discard_whitespace(list);
 	list = disquote(list);
 	list = clear_ends(list, head, tail);
-	print_tokens(list);
 	return (list);
 }
