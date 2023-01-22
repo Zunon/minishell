@@ -130,14 +130,13 @@ t_token	*preprocess_input(char *input)
 t_token	*tokenize(char *input)
 {
 	t_token	*list;
-	t_token	*pretail;
 	t_token	*head;
 	t_token	*tail;
 
 	if (!input || !*input)
 		return (NULL);
 	list = preprocess_input(input);
-	tail = init_ends(list, pretail, tail);
+	tail = init_ends(list);
 	list = list->prev;
 	head = list;
 	list = collapse_quotes(SINGLE_QUOTE, list);

@@ -14,27 +14,11 @@
 
 t_shell	g_krsh;
 
-static void	print_cmd_redirs(t_command *cmd, t_list *iter)
+t_token	*init_ends(t_token *list)
 {
-	t_redirect	*redir;
+	t_token	*pretail;
+	t_token	*tail;
 
-	while (iter)
-	{
-		ft_printf("\t%s\n", (char *)(iter->content));
-		iter = iter->next;
-	}
-	redir = cmd->redirects;
-	ft_printf("\nRedirects: %p\n", redir);
-	while (redir)
-	{
-		ft_printf("\t%d : ", redir->direction);
-		ft_printf("%s\n", redir->redirectee);
-		redir = redir->next;
-	}
-}
-
-t_token	*init_ends(t_token *list, t_token *pretail, t_token *tail)
-{
 	list->prev = ft_calloc(1, sizeof(t_token));
 	pretail = token_last(list);
 	pretail->next = ft_calloc(1, sizeof(t_token));

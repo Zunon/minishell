@@ -31,6 +31,7 @@ int	unset(char **argv)
 		{
 			fd_printf(STDERR_FILENO, "minishell: unset: '%s': not a valid identifier\n", argv[i]);
 			i++;
+			g_krsh.status_code = 1;
 			continue ;
 		}
 		remove_from_dict(g_krsh.env_mngr, argv[i]);

@@ -68,6 +68,7 @@ static void	export_var(char *argument, int pos)
 		if (!is_valid_identifier(argument))
 		{
 			fd_printf(STDERR_FILENO, "export: '%s': not a valid identifier\n", argument);
+			g_krsh.status_code = 1;
 			return ;
 		}
 		pos = find_pos(argument, '=');
