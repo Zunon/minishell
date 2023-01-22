@@ -60,14 +60,12 @@ static int	export_no_args(void)
 
 static void	export_var(char *argument, int pos)
 {
-	char	*key;
-	char	*value;
-
 	if (argument)
 	{
 		if (!is_valid_identifier(argument))
 		{
-			fd_printf(STDERR_FILENO, "export: '%s': not a valid identifier\n", argument);
+			fd_printf(STDERR_FILENO, "export: '%s': not a valid identifier\n",
+				argument);
 			g_krsh.status_code = 1;
 			return ;
 		}
@@ -79,17 +77,7 @@ static void	export_var(char *argument, int pos)
 					insert_into_dict(&g_krsh.declared, argument, NULL);
 		}
 		else
-		{
-			key = ft_substr(argument, 0, pos);
-			value = ft_substr(argument, pos + 1, -1);
-			if (retrieve_from_dict(g_krsh.declared, key))
-				remove_from_dict(g_krsh.declared, key);
-			insert_into_dict(&g_krsh.env_mngr, key, value);
-			free(key);
-			if (value)
-				free(value);
-			update_env(g_krsh.env_mngr);
-		}
+			set_in_dict(argument, pos);
 	}
 }
 
