@@ -53,7 +53,9 @@ enum e_token_type
 	SINGLE_QUOTE,
 	DOUBLE_QUOTE,
 	QUOTED,
-	ERROR
+	ERROR,
+	HEAD,
+	TAIL
 };
 
 /**

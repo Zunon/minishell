@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 23:59:18 by kalmheir          #+#    #+#             */
-/*   Updated: 2023/01/22 00:24:11 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/22 04:52:08 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,10 +130,21 @@ t_token	*preprocess_input(char *input)
 t_token	*tokenize(char *input)
 {
 	t_token	*list;
+	t_token	*pretail;
+	t_token *head;
+	t_token *tail;
 
 	if (!input || !*input)
 		return (NULL);
 	list = preprocess_input(input);
+	list->prev = ft_calloc(1, sizeof(t_token));
+	pretail = token_last(list);
+	pretail->next = ft_calloc(1, sizeof(t_token));
+	tail = pretail->next;
+	*(list->prev) = (t_token){HEAD, ft_strdup("head"), list, NULL};
+	*tail = (t_token){TAIL, ft_strdup("tail"), NULL, pretail};
+	list = list->prev;
+	head = list;
 	list = collapse_quotes(SINGLE_QUOTE, list);
 	list = discard_dollar(list);
 	list = expand_variables(list);
@@ -142,6 +153,26 @@ t_token	*tokenize(char *input)
 	list = split_words_on_whitespace(list);
 	list = discard_whitespace(list);
 	list = disquote(list);
+	if (head == list)
+	{
+		list = list->next;
+		(tail->prev)->next = NULL;
+		free(head->contents);
+		free(head);
+		free(tail->contents);
+		free(tail);
+	}
+	else
+	{
+		head = list;
+		tail = token_last(list);
+		list = head->next;
+		tail->prev->next = NULL;
+		free(head->contents);
+		free(head);
+		free(tail->contents);
+		free(tail);
+	}
 	list->prev = NULL;
 	token_last(list)->next = NULL;
 	print_tokens(list);
