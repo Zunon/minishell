@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 22:00:33 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/22 01:52:22 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/22 06:24:33 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,28 +94,16 @@ static int	close_child_pipes(t_command *cmd)
 	if (cmd->pipe_in != NO_PIPE)
 	{
 		if (close(g_krsh.pipes[cmd->pipe_in][0]) == -1)
-		{
-			perror("CHILD - Error while closing pipe read end: ");
 			return (EXIT_FAILURE);
-		}
 		if (close(g_krsh.pipes[cmd->pipe_in][1]) == -1)
-		{
-			perror("CHILD - Error while closing pipe write end: ");
 			return (EXIT_FAILURE);
-		}
 	}
 	if (cmd->pipe_out != NO_PIPE)
 	{
 		if (close(g_krsh.pipes[cmd->pipe_out][0]) == -1)
-		{
-			perror("CHILD - Error while closing pipe read end: ");
 			return (EXIT_FAILURE);
-		}
 		if (close(g_krsh.pipes[cmd->pipe_out][1]) == -1)
-		{
-			perror("CHILD - Error while closing pipe write end: ");
 			return (EXIT_FAILURE);
-		}
 	}
 	return (EXIT_SUCCESS);
 }
