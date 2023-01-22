@@ -18,13 +18,16 @@ RM			=	rm -rf
 SRCS		=	srcs/main.c srcs/parser.c srcs/tokenizer.c srcs/expansions.c \
 				srcs/sanitizers.c srcs/tlist_ops.c \
 				srcs/merge_adjacent_words.c srcs/collapse_quotes.c \
-				srcs/executor/exec_simple_cmd.c srcs/executor/executor.c \
+				srcs/executor/exec_simple_cmd.c \
+				srcs/executor/exec_simple_cmd_utils.c \
+				srcs/executor/executor.c \
 				srcs/executor/redirect.c srcs/executor/signals.c \
 				srcs/executor/initiator/conv_tok_to_cmd.c \
 				srcs/executor/initiator/extract_redirects.c \
 				srcs/executor/initiator/extract_words.c \
 				srcs/executor/heredoc/construct_heredoc.c \
 				srcs/executor/heredoc/handle_heredoc.c \
+				srcs/executor/heredoc/expand_heredoc.c \
 				srcs/executor/cleanup/cleanup.c \
 				srcs/executor/builtins/cd.c srcs/executor/builtins/echo.c \
 				srcs/executor/builtins/exit.c srcs/executor/builtins/pwd.c \

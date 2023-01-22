@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 20:10:48 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/22 06:41:36 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/22 06:53:46 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	save_heredoc_to_pipe(t_redirect *iterator, int *index, char **lines)
 		perror("HEREDOC - Failed to create pipe: ");
 		return (EXIT_FAILURE);
 	}
-	write(g_krsh.heredocs[*index][1], *lines, ft_strlen(lines));
+	write(g_krsh.heredocs[*index][1], *lines, ft_strlen(*lines));
 	if (close(g_krsh.heredocs[*index][1]) == -1)
 	{
 		perror("HEREDOC - Failed to close pipe write end: ");
@@ -55,7 +55,6 @@ static int	get_num_of_heredocs(t_command *cmd)
 static void	construct_heredoc_pipes(t_command *pipeline)
 {
 	t_command	*cmd;
-	t_redirect	*iterator;
 	int			heredoc_count;
 	int			i;
 

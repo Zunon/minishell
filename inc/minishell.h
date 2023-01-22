@@ -160,6 +160,8 @@ t_bool				is_valid_identifier(char *str);
 t_bool				can_i_expand(t_token *variable);
 t_token				*clear_ends(t_token *list, t_token *head, t_token *tail);
 t_token				*init_ends(t_token *list);
+void				ext_if_cmd_not_found(t_command *cmd);
+char				*expand_all_variables(char *string);
 extern t_shell	g_krsh;
 
 #endif
