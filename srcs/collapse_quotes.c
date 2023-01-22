@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 01:05:14 by kalmheir          #+#    #+#             */
-/*   Updated: 2023/01/21 17:11:02 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/22 05:39:53 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,11 @@ void	find_closed_quote(enum e_token_type *quote_type, t_token **iterator,
 	(*close_quote) = (*open_quote)->next;
 	while ((*close_quote) && (*close_quote)->type != (*quote_type))
 		(*close_quote) = (*close_quote)->next;
+	if (!(*close_quote))
+	{
+		(*iterator)->next = (*open_quote);
+		(*open_quote)->prev = (*iterator);
+	}
 }
 
 /**
@@ -99,10 +104,10 @@ t_token	*collapse_quotes(enum e_token_type quote_type, t_token *list)
 		tokens[2]->next = NULL;
 		if (tokens[3])
 			tokens[3]->prev = NULL;
-		tokens[4] = merge_quotation_tokens(tokens[1]);
+		tokens[4] = merge_quotation_tokens(tokens[1]); //quoted w empty str
 		if (!tokens[0])
 			list = tokens[4];
-		clear_tokenlist(&tokens[1]);
+		clear_tokenlist(&(tokens[1]));
 		splice_quote(&list, tokens[0], tokens[3], tokens[4]);
 		tokens[0] = tokens[3];
 	}

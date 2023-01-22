@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sanitizers.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kalmheir <kalmheir@student.42abudhabi.ae>  +#+  +:+       +#+        */
+/*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 00:00:02 by kalmheir          #+#    #+#             */
-/*   Updated: 2023/01/17 00:00:07 by kalmheir         ###   ########.fr       */
+/*   Updated: 2023/01/22 06:06:13 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,22 @@ t_token	*discard_whitespace(t_token *list)
 	return (list);
 }
 
+t_bool	can_i_expand(t_token *variable)
+{
+	t_token	*tracer;
+
+	tracer = variable->prev;
+	while(tracer)
+	{
+		if (tracer->type != WHITESPACE)
+			break ;
+		tracer = tracer->prev;
+	}
+	if (tracer && tracer->type == REDIRECTION && !ft_strncmp(tracer->contents, "<<", 3))
+		return (FALSE);
+	return (TRUE);
+}
+
 /**
  * @brief Expand all variable tokens and replace them with the respective word
  * @param list linked list of all tokens
@@ -89,13 +105,15 @@ t_token	*expand_variables(t_token *list)
 	iterator = list;
 	while (iterator)
 	{
-		if (iterator->type == VARIABLE)
+		if (iterator->type == VARIABLE && can_i_expand(iterator))
 		{
 			iterator->type = WORD;
 			temp = iterator->contents;
 			iterator->contents = expand(iterator->contents + 1);
 			free(temp);
 		}
+		else if (iterator->type == VARIABLE)
+			iterator->type = WORD;
 		iterator = iterator->next;
 	}
 	return (list);
