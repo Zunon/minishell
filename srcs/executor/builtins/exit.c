@@ -27,12 +27,14 @@ static int	valid_exit_args(char *args)
 }
 
 
-static void	dup_stdout_and_exit(int status)
+static void	dup_std_fds_and_exit(int status)
 {
 	if (g_krsh.num_of_cmds == 1)
 	{
 		dup2(g_krsh.stdout_old, STDOUT_FILENO);
 		close(g_krsh.stdout_old);
+		dup2(g_krsh.stdin_old, STDIN_FILENO);
+		close(g_krsh.stdin_old);
 	}
 	exit_minishell(g_krsh.cmds, status);
 }
@@ -46,7 +48,7 @@ int	ft_exit(t_command *cmd)
 
 	ft_printf("exit\n");
 	if (!(cmd->argv[1]))
-		dup_stdout_and_exit(g_krsh.status_code);
+		dup_std_fds_and_exit(g_krsh.status_code);
 	if (cmd->argv[2])
 	{
 		fd_printf(STDERR_FILENO, "exit: too many arguments!\n");
@@ -61,7 +63,7 @@ int	ft_exit(t_command *cmd)
 				cmd->argv[1]);
 			x = ERROR_NUMERIC_ARG_REQUIRED;
 		}
-		dup_stdout_and_exit(x);
+		dup_std_fds_and_exit(x);
 	}
 	return (ERROR_NUMERIC_ARG_REQUIRED);
 }
