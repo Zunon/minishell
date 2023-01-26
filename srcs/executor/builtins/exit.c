@@ -12,33 +12,56 @@
 
 #include "../../../inc/minishell.h"
 
+static int	valid_exit_args(char *args)
+{
+	int i;
+
+	i = 0;
+	while (args[i])
+	{
+		if (!ft_isdigit(args[i]))
+			return (EXIT_FAILURE);
+		i++;
+	}
+	return (EXIT_SUCCESS);
+}
+
+
+static void	dup_stdout_and_exit(int status)
+{
+	if (g_krsh.num_of_cmds == 1)
+	{
+		dup2(g_krsh.stdout_old, STDOUT_FILENO);
+		close(g_krsh.stdout_old);
+	}
+	exit_minishell(g_krsh.cmds, status);
+}
 /**
  * @brief		Exit from minishell safely
  *
  */
-void	ft_exit(t_command *cmd)
+int	ft_exit(t_command *cmd)
 {
 	int	x;
 
-	if (!(cmd->argv) || !(cmd->argv[1]))
+	ft_printf("exit\n");
+	if (!(cmd->argv[1]))
+		dup_stdout_and_exit(g_krsh.status_code);
+	if (cmd->argv[2])
 	{
-		if (g_krsh.num_of_cmds == 1)
-		{
-			dup2(g_krsh.stdout_old, STDOUT_FILENO);
-			close(g_krsh.stdout_old);
-		}
-		exit_minishell(g_krsh.cmds, g_krsh.status_code);
+		fd_printf(STDERR_FILENO, "exit: too many arguments!\n");
+		return (ERROR_DURING_BUILTIN_EXEC);
 	}
 	if (cmd->argv[1])
 	{
 		x = ft_atoi(cmd->argv[1]);
-		if (g_krsh.num_of_cmds == 1)
+		if (valid_exit_args(cmd->argv[1]))
 		{
-			dup2(g_krsh.stdout_old, STDOUT_FILENO);
-			close(g_krsh.stdout_old);
+			fd_printf(STDERR_FILENO, "exit: %s: numeric argument required\n",
+				cmd->argv[1]);
+			x = ERROR_NUMERIC_ARG_REQUIRED;
 		}
-		exit_minishell(g_krsh.cmds, x);
+		dup_stdout_and_exit(x);
 	}
-	if (cmd->argv[2])
-		write(STDERR_FILENO, "exit: too many arguments!\n", 27);
+	return (ERROR_NUMERIC_ARG_REQUIRED);
 }

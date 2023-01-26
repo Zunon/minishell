@@ -12,12 +12,19 @@
 
 #include "../../../../inc/minishell.h"
 
-void	set_in_dict(const char *argument, int pos)
+void	add_to_env_mngr(const char *argument, int pos)
 {
 	char	*key;
 	char	*value;
 
 	key = ft_substr(argument, 0, pos);
+	if (!key || !*key)
+	{
+		fd_printf(STDERR_FILENO, "export: '%s': not a valid identifier\n",
+				argument);
+		g_krsh.status_code = 1;
+		return ;
+	}		
 	value = ft_substr(argument, pos + 1, -1);
 	if (retrieve_from_dict(g_krsh.declared, key))
 		remove_from_dict(g_krsh.declared, key);

@@ -31,7 +31,10 @@
 # define ERROR_DURING_EXECUTION (126)
 # define NO_EXECUTION_PERMISSION 126
 # define ERROR_COMMAND_NOT_FOUND 127
+# define ERROR_DURING_BUILTIN_EXEC 1
+# define ERROR_NUMERIC_ARG_REQUIRED 2
 # define CONTROL_C_INTERRUPT 1
+# define PARSE_ERROR 2
 # define NO_PIPE (-666)
 
 /* Instructions describing what kind of thing to do for a redirection. */
@@ -113,7 +116,7 @@ typedef struct s_token
 int					echo(char **argv);
 int					cd(char **cmd);
 int					pwd(char **cmd);
-void				ft_exit(t_command *cmd);
+int					ft_exit(t_command *cmd);
 int					exec_builtin(t_command *cmd);
 void				free_commands(t_command *cmd);
 t_dict				*generate_env_manager(char **envp);
@@ -165,7 +168,7 @@ char				*expand_all_variables(char *string);
 int					redirect_input(t_command *cmd, t_redirect *current);
 int					redirect_output(t_command *cmd, t_redirect *current);
 int					redirect_heredoc(t_redirect *current);
-void				set_in_dict(const char *argument, int pos);
+void				add_to_env_mngr(const char *argument, int pos);
 int					piper(t_command *cmd);
 
 extern t_shell	g_krsh;

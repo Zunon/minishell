@@ -77,7 +77,7 @@ static void	export_var(char *argument, int pos)
 					insert_into_dict(&g_krsh.declared, argument, NULL);
 		}
 		else
-			set_in_dict(argument, pos);
+			add_to_env_mngr(argument, pos);
 	}
 }
 
@@ -108,5 +108,5 @@ int	export(t_command *cmd)
 			i++;
 		}
 	}
-	return (EXIT_SUCCESS);
+	return (g_krsh.status_code);
 }

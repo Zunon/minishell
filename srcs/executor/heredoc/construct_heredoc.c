@@ -23,7 +23,10 @@ static char	*get_heredoc_str(const char *delimiter, char *result,
 	{
 		buffer = readline("> ");
 		if (!buffer)
+		{
+			fd_printf(STDERR_FILENO, "warning: here-document at line 50 delimited by end-of-file (wanted `%s')\n", delimiter);
 			break ;
+		}
 		found_delimiter = ft_strncmp(delimiter, buffer, delim_length + 1) == 0;
 		if (found_delimiter)
 			break ;

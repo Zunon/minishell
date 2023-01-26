@@ -27,8 +27,8 @@ int	pwd(char **cmd)
 	path = getcwd(path, 0);
 	if (!path)
 	{
-		perror("Error while getting current working directory: ");
-		return (ERROR_DURING_EXECUTION);
+		perror("cd: error retrieving current directory: getcwd: ");
+		return (EXIT_SUCCESS);
 	}
 	write(1, path, ft_strlen(path));
 	write(1, "\n", 1);

@@ -34,7 +34,7 @@ int	exec_builtin(t_command *cmd)
 	if (ft_strncmp(cmd->argv[0], "pwd", 4) == 0)
 		status = pwd(cmd->argv);
 	if (ft_strncmp(cmd->argv[0], "exit", 5) == 0)
-		ft_exit(cmd);
+		status = ft_exit(cmd);
 	if (ft_strncmp(cmd->argv[0], "env", 4) == 0)
 		status = env();
 	if (ft_strncmp(cmd->argv[0], "unset", 6) == 0)

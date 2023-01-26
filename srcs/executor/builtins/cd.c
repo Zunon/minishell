@@ -43,11 +43,18 @@ int	cd(char **cmd)
 {
 	if (!cmd[1])
 		return (EXIT_SUCCESS);
+	if (cmd[2])
+	{
+		fd_printf(STDERR_FILENO, "cd: Too many arguments\n");
+		return (ERROR_DURING_BUILTIN_EXEC);
+	}
 	if (chdir(cmd[1]) == -1)
 	{
 		perror(cmd[1]);
+		g_krsh.status_code = 1;
 		if (g_krsh.num_of_cmds > 1)
 			exit_minishell(g_krsh.cmds, ERROR_DURING_EXECUTION);
+		return (ERROR_DURING_BUILTIN_EXEC);
 	}
 	update_env_pwds();
 	return (EXIT_SUCCESS);

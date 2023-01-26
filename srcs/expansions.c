@@ -51,6 +51,7 @@ t_command	*parse_input(const char *input)
 	else if (!parse_pipeline(list))
 	{
 		write(STDERR_FILENO, "Parse Error!\n", 14);
+		g_krsh.status_code = PARSE_ERROR;
 		clear_tokenlist(&list);
 		return (NULL);
 	}

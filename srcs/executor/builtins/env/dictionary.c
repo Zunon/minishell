@@ -116,7 +116,7 @@ void	remove_from_dict(t_dict *t, char *key)
 	while (index <= t->capacity)
 	{
 		if (t->table[index] && ft_strncmp(t->table[index]->key, key,
-				ft_strlen(key)) == 0)
+				1 + ft_strlen(key)) == 0)
 		{
 			destroy_pair(t->table[index]);
 			t->table[index] = NULL;
