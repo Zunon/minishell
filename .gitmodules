@@ -1,6 +1,0 @@
-[submodule "lib/-f"]
-	path = lib/-f
-	url = git@github.com:Zunon/libft.git
-[submodule "lib/lib/libft"]
-	path = lib/lib/libft
-	url = git@github.com:Zunon/libft.git
