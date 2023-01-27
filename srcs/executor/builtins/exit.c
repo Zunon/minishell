@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 19:19:25 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/21 23:07:26 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/27 11:36:41 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	valid_exit_args(char *args)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (args[i])
@@ -25,7 +25,6 @@ static int	valid_exit_args(char *args)
 	}
 	return (EXIT_SUCCESS);
 }
-
 
 static void	dup_std_fds_and_exit(int status)
 {
@@ -38,6 +37,7 @@ static void	dup_std_fds_and_exit(int status)
 	}
 	exit_minishell(g_krsh.cmds, status);
 }
+
 /**
  * @brief		Exit from minishell safely
  *

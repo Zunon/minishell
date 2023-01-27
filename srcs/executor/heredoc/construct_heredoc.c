@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 06:46:51 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/22 07:48:41 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/27 11:39:48 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,7 @@ static char	*get_heredoc_str(const char *delimiter, char *result,
 	{
 		buffer = readline("> ");
 		if (!buffer)
-		{
-			fd_printf(STDERR_FILENO, "warning: here-document at line 50 delimited by end-of-file (wanted `%s')\n", delimiter);
 			break ;
-		}
 		found_delimiter = ft_strncmp(delimiter, buffer, delim_length + 1) == 0;
 		if (found_delimiter)
 			break ;

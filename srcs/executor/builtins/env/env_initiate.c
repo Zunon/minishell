@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/31 11:51:12 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/22 01:03:44 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/27 11:37:01 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,9 @@ static void	update_shlvl(t_dict *env_manager)
 	curr_val = ft_atoi(temp) + 1;
 	if (curr_val >= 10000)
 	{
-		fd_printf(STDERR_FILENO, 
-			"krsh:: warning: shell level (%d) too high, resetting to 1\n", curr_val);
+		fd_printf(STDERR_FILENO,
+			"krsh:: warning: shell level (%d) too high, resetting to 1\n",
+			curr_val);
 		curr_val = 1;
 	}
 	shlvl->value = ft_itoa(curr_val);
