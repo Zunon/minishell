@@ -43,7 +43,8 @@ SRCS		=	srcs/main.c srcs/parser.c srcs/tokenizer.c srcs/expansions.c \
 				srcs/executor/builtins/env/export.c \
 				srcs/executor/builtins/env/export_utils.c \
 				srcs/executor/builtins/env/unset.c \
-				srcs/executor/builtins/env/update_env.c
+				srcs/executor/builtins/env/update_env.c \
+				srcs/ambiguous.c srcs/utils.c
 OBJS		=	${SRCS:.c=.o}
 
 HEADER		=	./lib/libft/libft.h
@@ -60,7 +61,7 @@ $(LIB):
 fd_leaks:
 		make && valgrind --track-fds=yes ./minishell
 leaks:
-		make && valgrind --trace-children=yes --show-leak-kinds=all --leak-check=full --show-reachable=yes --error-limit=no --suppressions=inc/readline.supp ./minishell
+		make && valgrind --trace-children=yes --show-leak-kinds=all --leak-check=full --show-reachable=yes --track-fds=yes --error-limit=no --suppressions=inc/readline.supp ./minishell
 		# make && valgrind --show-leak-kinds=all --leak-check=full --show-reachable=yes --error-limit=no --gen-suppressions=all --log-file=minimalraw.log ./minishell
 clean:
 		${RM} $(OBJS)

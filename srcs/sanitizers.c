@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 00:00:02 by kalmheir          #+#    #+#             */
-/*   Updated: 2023/01/22 06:07:21 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/27 17:05:54 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,8 @@ t_token	*discard_whitespace(t_token *list)
 	iterator = list;
 	while (iterator)
 	{
-		if (iterator->type == WHITESPACE || !(iterator->contents))
+		if (iterator->type == WHITESPACE || !(iterator->contents)
+			|| (!(iterator->contents[0]) && iterator->type != QUOTED))
 			del_token(&list, &iterator);
 		else
 			iterator = iterator->next;

@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 07:06:16 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/27 11:37:13 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/27 19:15:23 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@ void	add_to_env_mngr(const char *argument, int pos)
 	{
 		fd_printf(STDERR_FILENO, "export: '%s': not a valid identifier\n",
 			argument);
-		g_krsh.status_code = 1;
+		if (key)
+			free(key);
+		g_krsh.status_code = ERROR_DURING_BUILTIN_EXEC;
 		return ;
 	}
 	value = ft_substr(argument, pos + 1, -1);

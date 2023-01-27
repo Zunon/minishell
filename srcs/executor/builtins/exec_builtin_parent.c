@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 20:39:38 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/22 06:26:17 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/27 16:43:39 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,5 +61,5 @@ int	exec_builtin_parent(t_command *cmd)
 		reset_stdfds_to_default();
 		return (EXIT_SUCCESS);
 	}
-	return (EXIT_FAILURE);
+	return (ERROR_COMMAND_NOT_FOUND);
 }

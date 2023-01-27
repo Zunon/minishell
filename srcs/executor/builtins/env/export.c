@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 19:27:24 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/22 06:26:44 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/27 19:15:41 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static void	export_var(char *argument, int pos)
 		{
 			fd_printf(STDERR_FILENO, "export: '%s': not a valid identifier\n",
 				argument);
-			g_krsh.status_code = 1;
+			g_krsh.status_code = ERROR_DURING_BUILTIN_EXEC;
 			return ;
 		}
 		pos = find_pos(argument, '=');

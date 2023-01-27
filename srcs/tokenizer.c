@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 23:59:18 by kalmheir          #+#    #+#             */
-/*   Updated: 2023/01/22 08:04:31 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/27 19:57:12 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	go_to_eov(int *i, const char *str, enum e_token_type *type)
 		while (str[*i - 1] && (ft_isalnum(str[*i - 1]) || str[*i - 1] == '_'))
 			*i = *i + 1;
 	else
-		*i = 3;
+		*i = 2;
 }
 
 /**
@@ -61,19 +61,22 @@ t_token	*get_next_token(char *line)
 	char				*token_string;
 	t_token				*tok;
 	enum e_token_type	first;
+	char				initial_char;
 	int					i;
 
 	if (!line || !*line)
 		return (NULL);
 	tok = ft_calloc(1, sizeof(t_token));
 	first = get_token_type(line[0]);
+	initial_char = *line;
 	i = 1;
 	if (first == VARIABLE)
 		go_to_eov(&i, line + 1, &first);
 	else if (first == WORD || first == WHITESPACE)
 		while (line[i] && get_token_type(line[i]) == first)
 			i++;
-	else if (first == REDIRECTION && get_token_type(line[i]) == first)
+	else if (first == REDIRECTION && get_token_type(line[i]) == first
+		&& initial_char == line[i])
 		i++;
 	if (!i)
 		i++;
@@ -141,6 +144,7 @@ t_token	*tokenize(char *input)
 	head = list;
 	list = collapse_quotes(SINGLE_QUOTE, list);
 	list = discard_dollar(list);
+	list = throw_and_skip_pipe(list);
 	list = expand_variables(list);
 	list = collapse_quotes(DOUBLE_QUOTE, list);
 	list = merge_words(list);

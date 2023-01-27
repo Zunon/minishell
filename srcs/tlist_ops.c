@@ -6,13 +6,13 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 23:59:46 by kalmheir          #+#    #+#             */
-/*   Updated: 2023/01/27 15:11:35 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/27 16:24:24 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static char	**handle_empty_string(char **array, char *string)
+static char	**handle_empty_string(char **array)
 {
 	if (!array)
 		return (NULL);
@@ -20,7 +20,7 @@ static char	**handle_empty_string(char **array, char *string)
 		return (array);
 	free(array);
 	array = ft_calloc(2, sizeof(char *));
-	array[0] = ft_strdup(string);
+	array[0] = ft_strdup("");
 	array[1] = 0;
 	return (array);
 }
@@ -36,7 +36,7 @@ t_token	*token_split(char *string)
 		return (NULL);
 	array = ft_split(string, ' ');
 	iterator = 0;
-	array = handle_empty_string(array, string);
+	array = handle_empty_string(array);
 	result = ft_calloc(1, sizeof(t_token));
 	*result = (t_token){WORD, ft_strdup(array[0]), NULL, NULL};
 	tracer = result;

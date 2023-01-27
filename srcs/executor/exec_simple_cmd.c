@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/22 20:35:27 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/22 06:58:01 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/27 16:43:30 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	exec_simple_cmd(t_command *cmd)
 {
 	pid_t	pid;
 
-	if (exec_builtin_parent(cmd) == EXIT_SUCCESS)
+	if (exec_builtin_parent(cmd) != ERROR_COMMAND_NOT_FOUND)
 		return (EXIT_SUCCESS);
 	pid = fork();
 	if (pid == -1)

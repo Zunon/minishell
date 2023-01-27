@@ -32,9 +32,9 @@
 # define NO_EXECUTION_PERMISSION 126
 # define ERROR_COMMAND_NOT_FOUND 127
 # define ERROR_DURING_BUILTIN_EXEC 1
-# define ERROR_NUMERIC_ARG_REQUIRED 2
+# define ERROR_NUMERIC_ARG_REQUIRED 255
 # define CONTROL_C_INTERRUPT 1
-# define PARSE_ERROR 2
+# define PARSE_ERROR 258
 # define NO_PIPE (-666)
 
 /* Instructions describing what kind of thing to do for a redirection. */
@@ -170,6 +170,13 @@ int					redirect_output(t_command *cmd, t_redirect *current);
 int					redirect_heredoc(t_redirect *current);
 void				add_to_env_mngr(const char *argument, int pos);
 int					piper(t_command *cmd);
+void				freesplit(char **split);
+size_t				length_of_arr(char **split);
+t_bool				check_redir_var(t_token *node, t_token **var);
+t_token				*first_ambiguous_redirect(t_token *list);
+t_token				*go_to_adjacent_command(t_token *mid, t_bool go_right);
+void				splice_out_command(t_token *ambi);
+t_token				*throw_and_skip_pipe(t_token *list);
 
 extern t_shell	g_krsh;
 
