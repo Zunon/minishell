@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/04 22:00:33 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/22 07:04:26 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/27 15:44:29 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	redirect_output(t_command *cmd, t_redirect *current)
 	cmd->fd_out = open(current->redirectee, current->flags, 0644);
 	if (cmd->fd_out == -1)
 	{
-		perror("Error while opening file");
+		perror("Error while opening file: ");
 		return (EXIT_FAILURE);
 	}
 	if (dup2(cmd->fd_out, STDOUT_FILENO) == -1)

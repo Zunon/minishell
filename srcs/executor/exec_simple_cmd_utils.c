@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 06:56:05 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/22 08:04:19 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/27 15:15:56 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ static int	search_for_executable(char **argv)
 			return (NO_EXECUTION_PERMISSION);
 		}
 		if (execve(argv[0], argv, g_krsh.envp) == -1)
-			perror("Error during execution : ");
+			perror("Error during execution : is a directory");
 		g_krsh.status_code = ERROR_DURING_EXECUTION;
 		return (ERROR_DURING_EXECUTION);
 	}
