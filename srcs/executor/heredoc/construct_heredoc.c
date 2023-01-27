@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 06:46:51 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/27 11:41:13 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/27 21:16:40 by kalmheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,11 @@ char	*construct_heredoc(char *delimiter)
 
 	delim_length = ft_strlen(delimiter);
 	result = ft_strdup("");
-	signal(SIGINT, SIG_IGN);
 	result = get_heredoc_str(delimiter, result, delim_length);
 	if (g_krsh.blocked)
 	{
 		free(result);
 		result = NULL;
 	}
-	signal(SIGINT, &sig_handler);
 	return (result);
 }
