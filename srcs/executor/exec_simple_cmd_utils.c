@@ -6,7 +6,7 @@
 /*   By: rriyas <rriyas@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/22 06:56:05 by rriyas            #+#    #+#             */
-/*   Updated: 2023/01/27 15:15:56 by rriyas           ###   ########.fr       */
+/*   Updated: 2023/01/29 19:04:29 by rriyas           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static int	search_env_path(char **argv)
  */
 static int	search_for_executable(char **argv)
 {
-	if (ft_strchr(argv[0], '/') != 0 && access(argv[0], F_OK) != -1)
+	if (ft_strchr(argv[0], '.') != 0 && access(argv[0], F_OK) != -1)
 	{
 		if (access(argv[0], X_OK) == -1)
 		{
